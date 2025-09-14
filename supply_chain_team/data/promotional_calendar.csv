@@ -1,0 +1,23 @@
+PromotionName,SKU,StartDate,EndDate,Discount,Channel
+New Year Deal,NOVA-P1,2025-01-31,2025-02-02,0.08,Downtown Store
+New Year Deal,NOVA-P1,2025-01-31,2025-02-02,0.08,Westside Store
+Winter Wellness,MODE-S2,2025-02-19,2025-02-25,0.15,All Locations
+Winter Wellness,LYRA-X1,2025-02-19,2025-02-25,0.15,All Locations
+Big Game Snacks,AURA-T4,2025-04-15,2025-05-15,0.2,All Locations 
+Valentine's Sweet Treat,ECHO-F8,2025-03-12,2025-03-16,0.1,Downtown Store
+Valentine's Sweet Treat,ECHO-F8,2025-03-12,2025-03-16,0.1,Westside Store
+Valentine's Sweet Treat,ECHO-F8,2025-03-12,2025-03-16,0.1,NorthMall Store
+Valentine's Gift Promo,LYRA-X1,2025-03-12,2025-03-16,0.1,All Locations
+Fresh Start Promo,VOLT-A5,2025-04-09,2025-04-15,0.15,Downtown Store
+Fresh Start Promo,VOLT-A5,2025-04-09,2025-04-15,0.15,Westside Store
+Spring Refresh Sale,ZEN-C7,2025-04-16,2025-04-22,0.05,Downtown Store
+Spring Refresh Sale,AURA-T4,2025-04-16,2025-04-22,0.05,Westside Store
+Spring Refresh Sale,APEX-M5,2025-04-16,2025-05-14,0.2,Westside Store
+May Power Deal,NOVA-P1,2025-05-01,2025-05-30,0.25,All Locations
+Spring Cleaning Savings,ONYX-B3,2025-05-07,2025-05-20,0.25,All Locations
+Spring Cleaning Savings,ONYX-B3,2025-05-07,2025-05-20,0.25,All Locations
+Memorial Day BBQ,SOL-U5,2025-06-18,2025-06-25,0.15,All Locations
+Memorial Day BBQ,AURA-T4,2025-06-18,2025-06-25,0.15,All Locations
+Summer Style Kickoff,ZEN-C7,2025-07-02,2025-07-15,0.2,All Locations
+Summer Style Kickoff,APEX-M5,2025-07-02,2025-07-15,0.2,All Locations
+Summer Style Kickoff,APEX-M5,2025-07-02,2025-07-15,0.2,All Locations
