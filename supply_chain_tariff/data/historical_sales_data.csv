@@ -1,0 +1,181 @@
+Date,SKU,Location,Quantity Sold,Price,Promotion
+2025-02-02,NOVA-P1,Downtown Store,82,3.49,New Year Deal
+2025-02-01,SOL-U5,Downtown Store,8,149.99,None
+2025-02-01,APEX-M5,Westside Store,25,12.5,None
+2025-02-02,NOVA-P1,Westside Store,70,3.49,New Year Deal
+2025-02-02,APEX-M5,Midtown DC,300,12.5,None
+2025-02-02,AURA-T4,NorthMall Store,2,4.29,None
+2025-02-03,NOVA-P1,Downtown Store,65,3.49,None
+2025-02-03,AURA-T4,Westside Store,3,4.29,None
+2025-02-04,AURA-T4,Downtown Store,3,4.29,None
+2025-02-04,MODE-S2,NorthMall Store,15,18.99,None
+2025-02-05,NOVA-P1,Westside Store,50,3.79,None
+2025-02-05,APEX-M5,Downtown Store,40,12.5,None
+2025-02-06,MODE-S2,NorthMall Store,12,18.99,None
+2025-02-06,LYRA-X1,Westside Store,10,10.99,None
+2025-02-07,NOVA-P1,Downtown Store,48,3.79,None
+2025-02-07,AURA-T4,NorthMall Store,3,4.29,None
+2025-02-08,APEX-M5,Westside Store,30,12.5,None
+2025-02-08,ONYX-B3,Downtown Store,5,24.95,None
+2025-02-09,NOVA-P1,Downtown Store,55,3.79,None
+2025-02-09,AURA-T4,Westside Store,2,4.29,None
+2025-02-10,APEX-M5,NorthMall Store,20,12.5,None
+2025-02-10,MODE-S2,Downtown Store,8,18.99,None
+2025-02-11,ZEN-C7,Harbor DC,350,28,Bulk Order Discount
+2025-02-11,NOVA-P1,Westside Store,60,3.79,None
+2025-02-12,AURA-T4,Downtown Store,3,4.29,None
+2025-02-12,APEX-M5,Westside Store,35,12.5,None
+2025-02-13,NOVA-P1,NorthMall Store,45,3.79,None
+2025-02-13,MODE-S2,Downtown Store,10,18.99,None
+2025-02-14,ONYX-B3,Westside Store,15,24.95,None
+2025-02-14,LYRA-X1,NorthMall Store,12,10.99,None
+2025-02-15,NOVA-P1,Westside Store,40,3.79,None
+2025-02-15,AURA-T4,Downtown Store,3,4.29,None
+2025-02-16,APEX-M5,NorthMall Store,25,12.5,None
+2025-02-16,SOL-U5,Downtown Store,5,149.99,None
+2025-02-17,SOL-U5,NorthMall Store,10,149.99,None
+2025-02-17,NOVA-P1,Downtown Store,50,3.79,None
+2025-02-18,AURA-T4,Westside Store,3,4.29,None
+2025-02-18,APEX-M5,Downtown Store,30,12.5,None
+2025-02-19,NOVA-P1,NorthMall Store,58,3.79,None
+2025-02-19,MODE-S2,Westside Store,15,18.99,None
+2025-02-20,AURA-T4,Downtown Store,3,4.29,None
+2025-02-20,LYRA-X1,NorthMall Store,10,10.99,None
+2025-02-21,APEX-M5,Westside Store,28,19.99,None
+2025-02-21,ONYX-B3,Downtown Store,8,24.95,None
+2025-02-22,NOVA-P1,Westside Store,45,3.79,None
+2025-02-22,AURA-T4,NorthMall Store,2,4.29,None
+2025-02-23,MODE-S2,Downtown Store,12,18.99,None
+2025-02-23,APEX-M5,Westside Store,22,19.99,None
+2025-02-24,APEX-M5,Westside Store,28,19.99,None
+2025-02-24,NOVA-P1,Downtown Store,62,3.79,None
+2025-02-25,AURA-T4,NorthMall Store,3,4.29,None
+2025-02-25,LYRA-X1,Westside Store,15,10.99,None
+2025-02-26,NOVA-P1,Westside Store,50,3.79,None
+2025-02-26,APEX-M5,Downtown Store,35,19.99,None
+2025-02-27,NOVA-P1,Midtown DC,1500,2.95,Q1 Volume Agreement
+2025-02-27,AURA-T4,NorthMall Store,2,4.29,None
+2025-02-28,APEX-M5,Westside Store,20,19.99,None
+2025-02-28,ONYX-B3,Downtown Store,10,24.95,None
+2025-03-01,NOVA-P1,Downtown Store,58,3.79,None
+2025-03-01,MODE-S2,NorthMall Store,11,18.99,None
+2025-03-02,AURA-T4,Westside Store,3,4.29,None
+2025-03-02,APEX-M5,Downtown Store,40,19.99,None
+2025-03-03,MODE-S2,Downtown Store,9,18.99,None
+2025-03-03,NOVA-P1,NorthMall Store,48,3.79,None
+2025-03-04,LYRA-X1,Westside Store,38,10.99,None
+2025-03-04,AURA-T4,Downtown Store,3,4.29,None
+2025-03-05,APEX-M5,NorthMall Store,22,19.99,None
+2025-03-05,ONYX-B3,Westside Store,12,24.95,None
+2025-03-06,NOVA-P1,Downtown Store,65,3.79,None
+2025-03-06,MODE-S2,NorthMall Store,14,18.99,None
+2025-03-07,NOVA-P1,NorthMall Store,52,3.79,None
+2025-03-07,AURA-T4,Downtown Store,3,4.29,None
+2025-03-08,APEX-M5,Westside Store,25,19.99,None
+2025-03-08,LYRA-X1,NorthMall Store,18,10.99,None
+2025-03-09,NOVA-P1,Downtown Store,70,3.79,None
+2025-03-09,MODE-S2,Westside Store,10,18.99,None
+2025-03-10,AURA-T4,NorthMall Store,3,4.29,None
+2025-03-10,APEX-M5,Downtown Store,30,19.99,None
+2025-03-11,NOVA-P1,Westside Store,55,3.79,None
+2025-03-11,ONYX-B3,NorthMall Store,11,24.95,None
+2025-03-12,ECHO-F8,Downtown Store,75,5.49,Valentine's Sweet Treat
+2025-03-12,AURA-T4,Downtown Store,3,4.29,None
+2025-03-13,ECHO-F8,Westside Store,88,5.49,Valentine's Sweet Treat
+2025-03-13,APEX-M5,NorthMall Store,22,19.99,None
+2025-03-14,LYRA-X1,Westside Store,42,10.99,Valentine's Gift Promo
+2025-03-14,NOVA-P1,Downtown Store,60,3.79,None
+2025-03-15,MODE-S2,NorthMall Store,12,18.99,None
+2025-03-15,AURA-T4,Westside Store,3,4.29,None
+2025-03-16,ECHO-F8,NorthMall Store,65,5.49,Valentine's Sweet Treat
+2025-03-16,APEX-M5,Downtown Store,35,19.99,None
+2025-03-17,NOVA-P1,Westside Store,50,3.79,None
+2025-03-17,LYRA-X1,NorthMall Store,18,10.99,None
+2025-03-18,NOVA-P1,Downtown Store,58,3.79,None
+2025-03-18,AURA-T4,NorthMall Store,3,4.29,None
+2025-03-19,APEX-M5,Westside Store,28,19.99,None
+2025-03-19,SOL-U5,Downtown Store,8,149.99,None
+2025-03-20,SOL-U5,Harbor DC,150,115,None
+2025-03-20,NOVA-P1,NorthMall Store,55,3.79,None
+2025-03-21,MODE-S2,Downtown Store,10,18.99,None
+2025-03-21,AURA-T4,Westside Store,2,4.29,None
+2025-03-22,ONYX-B3,NorthMall Store,11,24.95,None
+2025-03-22,APEX-M5,Downtown Store,40,19.99,None
+2025-03-23,NOVA-P1,Westside Store,60,3.79,None
+2025-03-23,LYRA-X1,NorthMall Store,12,10.99,None
+2025-03-24,AURA-T4,Downtown Store,3,4.29,None
+2025-03-24,MODE-S2,Westside Store,14,18.99,None
+2025-03-25,APEX-M5,NorthMall Store,25,19.99,None
+2025-03-25,NOVA-P1,Downtown Store,68,3.79,None
+2025-03-26,AURA-T4,Westside Store,3,4.29,None
+2025-03-26,ONYX-B3,NorthMall Store,15,24.95,None
+2025-03-27,APEX-M5,Westside Store,22,19.99,None
+2025-03-27,LYRA-X1,Downtown Store,20,10.99,None
+2025-03-28,NOVA-P1,NorthMall Store,52,3.79,None
+2025-03-28,MODE-S2,Westside Store,11,18.99,None
+2025-03-29,AURA-T4,Downtown Store,3,4.29,None
+2025-03-29,APEX-M5,NorthMall Store,30,19.99,None
+2025-03-30,MODE-S2,Downtown Store,10,18.99,None
+2025-03-30,NOVA-P1,Westside Store,55,3.79,None
+2025-03-31,NOVA-P1,Westside Store,55,3.79,None
+2025-03-31,AURA-T4,NorthMall Store,3,4.29,None
+2025-04-01,APEX-M5,Downtown Store,38,19.99,None
+2025-04-01,LYRA-X1,Westside Store,22,10.99,None
+2025-04-02,SOL-U5,NorthMall Store,7,149.99,None
+2025-04-02,NOVA-P1,Downtown Store,62,3.79,None
+2025-04-03,MODE-S2,Westside Store,12,18.99,None
+2025-04-03,AURA-T4,NorthMall Store,3,4.29,None
+2025-04-04,SOL-U5,NorthMall Store,7,149.99,None
+2025-04-04,APEX-M5,Downtown Store,28,19.99,None
+2025-04-05,NOVA-P1,Westside Store,50,3.79,None
+2025-04-05,LYRA-X1,NorthMall Store,18,10.99,None
+2025-04-06,AURA-T4,Downtown Store,4,4.29,None
+2025-04-06,MODE-S2,Westside Store,11,18.99,None
+2025-04-07,ZEN-C7,Downtown Store,35,34.99,None
+2025-04-07,APEX-M5,NorthMall Store,20,19.99,None
+2025-04-08,NOVA-P1,Downtown Store,70,3.79,None
+2025-04-08,ONYX-B3,Westside Store,10,24.95,None
+2025-04-09,VOLT-A5,Midtown DC,800,1.5,Early Spring Stock Up
+2025-04-09,AURA-T4,NorthMall Store,3,4.29,None
+2025-04-10,APEX-M5,Downtown Store,32,19.99,None
+2025-04-10,LYRA-X1,Westside Store,15,10.99,None
+2025-04-11,VOLT-A5,Westside Store,95,2.49,Fresh Start Promo
+2025-04-11,NOVA-P1,NorthMall Store,600,3.79,None
+2025-04-12,MODE-S2,Downtown Store,12,18.99,None
+2025-04-12,AURA-T4,Westside Store,3,4.29,None
+2025-04-13,APEX-M5,NorthMall Store,25,19.99,None
+2025-04-13,ONYX-B3,Downtown Store,8,24.95,None
+2025-04-14,LYRA-X1,NorthMall Store,18,11.99,None
+2025-04-14,NOVA-P1,Westside Store,55,3.79,None
+2025-04-15,AURA-T4,Downtown Store,4,4.29,None
+2025-04-15,APEX-M5,NorthMall Store,30,19.99,None
+2025-04-16,MODE-S2,Westside Store,11,18.99,None
+2025-04-16,NOVA-P1,Downtown Store,850,3.59,Spring Refresh Sale
+2025-04-17,NOVA-P1,Downtown Store,95,3.59,Spring Refresh Sale
+2025-04-17,AURA-T4,NorthMall Store,3,4.29,None
+2025-04-18,APEX-M5,Westside Store,22,19.99,None
+2025-04-18,LYRA-X1,Downtown Store,28,10.99,None
+2025-04-19,APEX-M5,Downtown Store,55,15.99,Spring Refresh Sale
+2025-04-19,NOVA-P1,NorthMall Store,62,3.59,Spring Refresh Sale
+2025-04-20,MODE-S2,Westside Store,14,18.99,None
+2025-04-20,AURA-T4,NorthMall Store,3,4.29,None
+2025-04-21,NOVA-P1,Westside Store,88,3.59,Spring Refresh Sale
+2025-04-21,APEX-M5,Downtown Store,35,15.99,Spring Refresh Sale
+2025-04-22,ONYX-B3,NorthMall Store,12,24.95,None
+2025-04-22,LYRA-X1,Westside Store,18,11.99,None
+2025-04-23,NOVA-P1,Downtown Store,75,3.59,None
+2025-04-23,AURA-T4,NorthMall Store,4,4.29,None
+2025-04-24,SOL-U5,Westside Store,9,149.99,None
+2025-04-24,APEX-M5,Downtown Store,40,15.99,None
+2025-04-25,MODE-S2,NorthMall Store,11,18.99,None
+2025-04-25,NOVA-P1,Westside Store,650,3.59,None
+2025-04-26,AURA-T4,Downtown Store,3,4.29,None
+2025-04-26,LYRA-X1,Westside Store,22,11.99,None
+2025-04-27,MODE-S2,NorthMall Store,11,18.99,None
+2025-04-27,APEX-M5,Downtown Store,28,15.99,None
+2025-04-28,NOVA-P1,Westside Store,705,3.59,None
+2025-04-28,ONYX-B3,NorthMall Store,15,24.95,None
+2025-04-29,AURA-T4,Downtown Store,3,4.29,None
+2025-04-29,LYRA-X1,Westside Store,20,11.99,None
+2025-04-30,NOVA-P1,Harbor DC,2200,2.9,End Qtr Inventory Load
+2025-04-30,APEX-M5,Downtown Store,35,15.99,None

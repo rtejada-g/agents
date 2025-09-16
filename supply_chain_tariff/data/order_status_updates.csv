@@ -1,0 +1,23 @@
+OrderID,SKU,StatusDate,Status,Details,Quantity
+PO-884512-20250503,MODE-S2,2025-05-03,Placed,None,100
+PO-884512-20250503,MODE-S2,2025-05-04,Acknowledged,Confirmed ESD: 2025-05-09,100
+PO-884512-20250503,MODE-S2,2025-05-07,Shipped,Carrier: FastFreight Pro # 7758912,100
+PO-20250414-011,LYRA-X1,2025-04-14,Placed,None,200
+PO-20250414-011,LYRA-X1,2025-04-15,Acknowledged,None,200
+PO-20250414-011,LYRA-X1,2025-04-19,Shipped,Carrier: ReliableTrans Bill # RT99812,200
+PO-20250414-011,LYRA-X1,2025-04-23,Delivered,Received at Harbor DC,200
+PO-773109-20250427,ZEN-C7,2025-04-27,Placed,None,300
+PO-773109-20250427,ZEN-C7,2025-04-28,Acknowledged,None,300
+PO-773109-20250427,ZEN-C7,2025-05-02,Exception,Potential 2-day production delay,300
+PO-773109-20250427,ZEN-C7,2025-05-05,Shipped,Partial Ship. ZEN-C7 backordered. ESD 2025-05-12,150
+PO-773109-20250427,ZEN-C7,2025-05-08,Delivered,Partial delivery received at Downtown Store,150
+PO-91055A-20250431,APEX-M5,2025-04-31,Placed,None,50
+PO-91055A-20250431,SOL-U5,2025-05-02,Exception,Minor component mismatch resolved,400
+PO-91055A-20250431,SOL-U5,2025-05-02,Acknowledged,Full Qty Confirmed. ESD 2025-05-10,400
+PO-91055A-20250431,SOL-U5,2025-05-08,Shipped,Carrier: Overland Exp BOL # OVX55144,400
+PO-11200B-20250505,ZEN-C7,2025-05-05,Placed,None,500
+PO-11200B-20250505,ZEN-C7,2025-05-06,Acknowledged,Confirmed ESD: 2025-05-15,500
+PO-NVP1-250428,NOVA-P1,2025-04-28,Placed,Qty: 150 units for DC replenishment,150
+PO-NVP1-250428,NOVA-P1,2025-04-29,Acknowledged,Confirmed ESD: 2025-05-16 (Slightly extended lead time noted),250
+PO-APX5-250429,APEX-M5,2025-04-29,Placed,Qty: 50 units for DC replenishment,50
+PO-APX5-250429,SOL-U5,2025-04-30,Acknowledged,Confirmed ESD: 2025-05-07 (Standard lead time),100

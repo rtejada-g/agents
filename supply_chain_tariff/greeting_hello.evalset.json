@@ -1,0 +1,161 @@
+{
+  "eval_set_id": "greeting_hello_test",
+  "name": "Agent Greeting Test",
+  "description": "A minimal test case to verify the agent's response to a simple greeting. Expects no tool calls and a static textual response.",
+  "eval_cases": [
+    {
+      "eval_id": "hi_greeting_v1",
+      "conversation": [
+        {
+          "invocation_id": "eval-hi-greeting-v1-turn1",
+          "user_content": {
+            "parts": [
+              {
+                "video_metadata": null,
+                "thought": null,
+                "inline_data": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "text": "hi"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "video_metadata": null,
+                "thought": null,
+                "inline_data": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "text": "Hello! I'm a McLane Supply Chain Agent. How can I assist you today?"
+              }
+            ],
+            "role": null
+          },
+          "intermediate_data": {
+            "tool_uses": [],
+            "intermediate_responses": []
+          },
+          "creation_timestamp": 0.0
+        }
+      ],
+      "session_input": {
+        "app_name": "supply_chain_team",
+        "user_id": "eval_user_greeting_v1",
+        "state": {}
+      },
+      "creation_timestamp": 0.0
+    },
+    {
+      "eval_id": "case3bdd62",
+      "conversation": [
+        {
+          "invocation_id": "e-e6288e3d-dcfd-4001-95ca-6b903f726cea",
+          "user_content": {
+            "parts": [
+              {
+                "video_metadata": null,
+                "thought": null,
+                "inline_data": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "text": "hi"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "video_metadata": null,
+                "thought": null,
+                "inline_data": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "text": "Hello! I'm a McLane Supply Chain Agent. How can I assist you today?"
+              }
+            ],
+            "role": null
+          },
+          "intermediate_data": {
+            "tool_uses": [],
+            "intermediate_responses": []
+          },
+          "creation_timestamp": 1748234665.665737
+        }
+      ],
+      "session_input": {
+        "app_name": "supply_chain_team",
+        "user_id": "user",
+        "state": {}
+      },
+      "creation_timestamp": 1748234677.444146
+    },
+    {
+      "eval_id": "cased2cb9c",
+      "conversation": [
+        {
+          "invocation_id": "e-5ba513b4-fd57-49f9-87ce-ff84d085506a",
+          "user_content": {
+            "parts": [
+              {
+                "video_metadata": null,
+                "thought": null,
+                "inline_data": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "text": "hi"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "video_metadata": null,
+                "thought": null,
+                "inline_data": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "text": "Hello! I'm a McLane Supply Chain Agent. How can I assist you today?"
+              }
+            ],
+            "role": null
+          },
+          "intermediate_data": {
+            "tool_uses": [],
+            "intermediate_responses": []
+          },
+          "creation_timestamp": 1748284019.799383
+        }
+      ],
+      "session_input": {
+        "app_name": "supply_chain_team",
+        "user_id": "user",
+        "state": {}
+      },
+      "creation_timestamp": 1748284027.9067678
+    }
+  ],
+  "creation_timestamp": 0.0
+}

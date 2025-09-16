@@ -1,2 +1,1 @@
-# Ignore all .env files in any subdirectory
-**/.env
+__pycache__/

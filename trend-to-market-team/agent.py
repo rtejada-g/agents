@@ -55,15 +55,15 @@ def get_product_data(sku_id: str) -> dict:
         "7890": {
             "displayName": "The Autumn Cardigan",
             "description": "A stylish and comfortable cardigan, perfect for the autumn season.",
-            "price": 68.00,
-            "inventory": 2500,
-            "margin": 0.60
+            "price": 120.00,
+            "inventory": 12500,
+            "margin": 0.65
         },
         "5670": {
             "displayName": "The City Handbag",
             "description": "An elegant and versatile handbag, ideal for any urban adventure.",
-            "price": 1200.00,
-            "inventory": 50,
+            "price": 3000.00,
+            "inventory": 3300,
             "margin": 0.80
         }
     }
@@ -234,7 +234,7 @@ OpportunityAgent = Agent(
 1.  Extract the trend description from the user prompt.
 2.  Call the `find_visual_match` tool with the trend description to get the product SKU.
 3.  Call the `get_product_data` tool with the SKU to get its business data.
-4.  Call the `get_product_image` tool with the SKU. This will save the product image as an artifact, which will be automatically displayed to the user.
+4.  Call the `get_product_image` tool with the SKU. This will save the product image as an artifact, which will be automatically displayed to the user. Absolutely avoid placeholders in the text.
 5.  Your final output MUST be a single string containing a summary of your findings for the orchestrator. Example:
     'Product Summary: SKU: 7890, Name: The Autumn Cardigan, Inventory: 2500, Margin: 0.60'""",
     tools=[find_visual_match_tool, get_product_data_tool, get_product_image_tool],
@@ -263,7 +263,8 @@ ProposalAgent = Agent(
 2.  Create a compelling proposal for the user that includes:
     - A catchy campaign slogan.
     - A brief summary of the target audience.
-    - A calculation of the projected revenue increase (assuming a 10% lift in sales), using the product's price and margin.
+    - A final figure of projected revenue increase (assuming a 10% lift in sales), using the product's price and margin.
+    - The final figure must be strictly formatted concisely as "Projected Revenue Increase: $X". This should be the first and only mention of "Projected Revenue Increase" in the text.
     - A summary of the potential risks (e.g., inventory shortages, low engagement), considering the product's inventory.
 3.  Your final output MUST be a single string containing the full proposal for the orchestrator.""",
 )
@@ -280,7 +281,7 @@ root_agent = Agent(
 1.  **Opportunity Analysis:**
     a. Call the `OpportunityAgent` with the user's initial request about a trend.
     b. **Capture the full `Product Summary` from the result.**
-    c. Present the findings and the product image to the user. Ask if they want to proceed.
+    c. Present the findings and ask if they want to proceed.
 
 2.  **Creative Development:**
     a. If the user agrees, ask for the desired campaign style (Fall, Christmas, Beach) and image types (Website Hero, Instagram Post, Email Header).
