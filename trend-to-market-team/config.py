@@ -1,0 +1,36 @@
+COMPANY_NAME = "Google"
+
+PRODUCT_CATALOG = {
+    "7890": {
+        "displayName": "The Autumn Cardigan",
+        "description": "A stylish and comfortable cardigan, perfect for the autumn season.",
+        "price": 120.00,
+        "inventory": 12500,
+        "margin": 0.65,
+        "category": "apparel"
+    },
+    "5670": {
+        "displayName": "The City Handbag",
+        "description": "An elegant and versatile handbag, ideal for any urban adventure.",
+        "price": 3000.00,
+        "inventory": 3300,
+        "margin": 0.80,
+        "category": "apparel"
+    },
+    "1234": {
+        "displayName": "HydraBoost Moisturizer",
+        "description": "A deeply hydrating moisturizer for all skin types.",
+        "price": 27.00,
+        "inventory": 10000,
+        "margin": 0.85,
+        "category": "beauty"
+    },
+    "9876": {
+        "displayName": "Multi-Active Glow Serum",
+        "description": "A luxurious serum that refines skin",
+        "price": 70.00,
+        "inventory": 1500,
+        "margin": 0.8,
+        "category": "beauty"
+    }
+}

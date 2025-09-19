@@ -27,74 +27,19 @@ from google.genai import types
 from google.genai.types import Content, Part, Blob
 from PIL import Image
 from io import BytesIO
+from .config import PRODUCT_CATALOG
+from .matching_agent import MatchingAgent
+from .competitor_analysis_agent import CompetitorAnalysisAgent
 
 load_dotenv()
 
 
 # --- Tools ---
 
-def find_visual_match(trend_description: str) -> str:
-    """Finds a product SKU that visually matches the described trend."""
-    VISUAL_MATCH_DATA = {
-        "cherry red cardigan": "7890",
-        "red cardigan": "7890",
-        "autumn cardigan": "7890",
-        "cozy cardigan": "7890",
-        "black louis vuitton bag": "5670",
-        "black handbag": "5670",
-        "city handbag": "5670",
-        "crossover handbag": "5670",
-        "crossover bag": "5670",
-        "designer bag": "5670",
-        "hydrating moisturizer": "1234",
-        "hydrating cream": "1234",
-        "hydrating face cream": "1234",
-        "face cream": "1234",
-        "luxury serum": "9876",
-        "glow serum": "9876",
-        "anti-aging serum": "9876"
-    }
-    return VISUAL_MATCH_DATA.get(trend_description, "SKU not found")
-
 def get_product_data(sku_id: str) -> dict:
     """Gets the inventory, margin, and other data for a given product SKU."""
-    PRODUCT_CATALOG = {
-        "7890": {
-            "displayName": "The Autumn Cardigan",
-            "description": "A stylish and comfortable cardigan, perfect for the autumn season.",
-            "price": 120.00,
-            "inventory": 12500,
-            "margin": 0.65,
-            "category": "apparel"
-        },
-        "5670": {
-            "displayName": "The City Handbag",
-            "description": "An elegant and versatile handbag, ideal for any urban adventure.",
-            "price": 3000.00,
-            "inventory": 3300,
-            "margin": 0.80,
-            "category": "apparel"
-        },
-        "1234": {
-            "displayName": "HydraBoost Moisturizer",
-            "description": "A deeply hydrating moisturizer for all skin types.",
-            "price": 27.00,
-            "inventory": 10000,
-            "margin": 0.85,
-            "category": "beauty"
-        },
-        "9876": {
-            "displayName": "Multi-Active Glow Serum",
-            "description": "A luxurious serum that refines skin",
-            "price": 70.00,
-            "inventory": 1500,
-            "margin": 0.8,
-            "category": "beauty"
-        }
-    }
     return PRODUCT_CATALOG.get(sku_id, {"error": "Product not found"})
 
-find_visual_match_tool = FunctionTool(func=find_visual_match)
 get_product_data_tool = FunctionTool(func=get_product_data)
 
 async def get_product_image(tool_context: ToolContext, sku_id: str) -> dict:
@@ -220,12 +165,14 @@ OpportunityAgent = Agent(
     description="Analyzes market trends to identify product opportunities.",
     instruction="""You are the first agent in the trend-to-market team. Your input is a user prompt about a social media trend.
 1.  Extract the trend description from the user prompt.
-2.  Call the `find_visual_match` tool with the trend description to get the product SKU.
-3.  Call the `get_product_data` tool with the SKU to get its business data.
-4.  Call the `get_product_image` tool with the SKU. This will save the product image as an artifact, which will be automatically displayed to the user. Absolutely avoid placeholders in the text.
-5.  Your final output MUST be a single string containing a summary of your findings for the orchestrator. Example:
-    'Product Summary: SKU: 7890, Name: The Autumn Cardigan, Inventory: 2500, Margin: 0.60, Category: apparel'""",
-    tools=[find_visual_match_tool, get_product_data_tool, get_product_image_tool],
+2.  Call the `MatchingAgent` with the trend description to get a list of matching product SKUs.
+3.  For each SKU, call the `get_product_data` tool to get its business data.
+4.  For each SKU, call the `get_product_image` tool. This will save the product image as an artifact, which will be automatically displayed to the user. Absolutely avoid placeholders in the text.
+5.  Your final output MUST be a single string containing a summary of your findings for the orchestrator. The user will be asked to select one of these products. Example:
+    'Product Options:
+    1. SKU: 7890, Name: The Autumn Cardigan, Inventory: 2500, Margin: 0.60, Category: apparel
+    2. SKU: 5670, Name: The City Handbag, Inventory: 3300, Margin: 0.80, Category: apparel'""",
+    tools=[AgentTool(agent=MatchingAgent), get_product_data_tool, get_product_image_tool],
 )
 
 # Agent 2: Ideation Agent
@@ -245,8 +192,8 @@ CreativeAgent = Agent(
     name="CreativeAgent",
     model="gemini-2.5-flash",
     description="Develops marketing campaign assets.",
-    instruction="""You are the second agent in a sequence. Your input is a product summary, a desired style description, and a list of image types.
-    1.  Parse the input to identify the SKU and product name.
+    instruction="""You are the second agent in a sequence. Your input is a product SKU, a product name, a competitive landscape summary, a desired style description, and a list of image types.
+    1.  Incorporate insights from the competitive landscape to generate more strategic and differentiated creative prompts.
     2.  For each image type in the list, call the `IdeationAgent` to generate a prompt. You MUST pass the `style_description`, `product_name`, and `image_type`.
     3.  For each generated prompt, call the `generate_campaign_images` tool. You MUST pass the `sku_id`, `prompt`, and `image_type`.
     4.  Your final output MUST be a single string confirming that the images have been generated. Example:
@@ -259,14 +206,14 @@ ProposalAgent = Agent(
     name="ProposalAgent",
     model="gemini-2.5-flash",
     description="Develops a campaign proposal for user review.",
-    instruction="""You are the third agent in a sequence. Your input is a campaign brief and the original product summary.
-1.  Analyze the campaign brief and the product's business data (margin, inventory) from the summary.
+    instruction="""You are the third agent in a sequence. Your input is a campaign brief, the original product summary, and the competitive landscape summary.
+1.  Analyze the campaign brief, the product's business data (margin, inventory), and the competitive landscape.
 2.  Create a compelling proposal for the user that includes:
-    - A catchy campaign slogan.
+    - A catchy campaign slogan that is differentiated from the competition.
     - A brief summary of the target audience.
     - A final figure of projected revenue increase (assuming a 10% lift in sales), using the product's price and margin.
     - The final figure must be strictly formatted concisely as "Projected Revenue Increase: $X". This should be the first and only mention of "Projected Revenue Increase" in the text.
-    - A summary of the potential risks (e.g., inventory shortages, low engagement), considering the product's inventory.
+    - A summary of the potential risks (e.g., inventory shortages, low engagement), considering the product's inventory and the competitive landscape.
 3.  Your final output MUST be a single string containing the full proposal for the orchestrator.""",
 )
 
@@ -281,34 +228,38 @@ root_agent = Agent(
 
 1.  **Opportunity Analysis:**
     a. Call the `OpportunityAgent` with the user's initial request about a trend.
-    b. **Capture the full `Product Summary` from the result.**
-    c. Present the findings and ask if they want to proceed.
+    b. **Capture the `Product Options` from the result.**
+    c. Present the findings and ask the user to select a product.
 
-2.  **Creative Development:**
-    a. If the user agrees, ask for a freeform description of the desired campaign style (e.g., "a cozy fall afternoon"). Also ask for image types (Website Hero, Instagram Post, Email Header).
+2.  **Competitive Analysis:**
+    a. Once the user selects a product, **capture the selected `sku_id` and `product_name`**.
+    b. Call the `CompetitorAnalysisAgent` with the selected product's name.
+    c. **Capture the `Competitive Landscape` summary from the result.**
+    d. Present the summary to the user.
+
+3.  **Creative Development:**
+    a. Ask for a freeform description of the desired campaign style (e.g., "a cozy fall afternoon"). Also ask for image types (Website Hero, Instagram Post, Email Header).
     b. **Capture the user's selected `style_description` and `image_types`.**
-    c. **Interpret the user's response flexibly.** You MUST map natural language requests to the correct tool parameters. For example:
-        - "a cozy fall afternoon, and only for social media" should be mapped to style_description='a cozy fall afternoon' and image_types=['instagram_post'].
-        - "website and social media" should be mapped to image_types=['website_hero', 'instagram_post'].
-        - "all of them" should be mapped to image_types=['website_hero', 'instagram_post', 'email_header'].
-    d. Call the `CreativeAgent` tool. You MUST pass a `request` that includes the captured `Product Summary`, the user's selected `style_description`, and `image_types`.
+    c. **Interpret the user's response flexibly.** You MUST map natural language requests to the correct tool parameters.
+    d. Call the `CreativeAgent` tool. You MUST pass a `request` that includes the captured `sku_id`, `product_name`, `Competitive Landscape`, the user's selected `style_description`, and `image_types`.
     e. **Capture the full `Campaign Brief` from the result.**
     f. Ask if they are ready for a proposal.
 
-3.  **Proposal:**
-    a. If the user agrees, call the `ProposalAgent` tool. You MUST pass a `request` that includes the captured `Product Summary`, the `Campaign Brief`, and the selected `style`.
+4.  **Proposal:**
+    a. If the user agrees, call the `ProposalAgent` tool. You MUST pass a `request` that includes the captured `Product Summary`, the `Campaign Brief`, and the `Competitive Landscape`.
     b. **Capture the full `Campaign Proposal` from the result.**
     c. Present the full proposal to the user.
 
-4.  **Activation:**
+5.  **Activation:**
     a. Ask the user for final approval to launch the campaign.
     b. **You MUST wait for an explicit "yes" or "approve" from the user.**
     c. Once approval is given, call the `launch_marketing_campaign` tool, passing the captured `Campaign Proposal` as the `campaign_brief`. This will trigger the final HITL confirmation.
 
-5.  **Error Handling:** If any agent or tool returns an error, stop the entire process and inform the user about the error.
+6.  **Error Handling:** If any agent or tool returns an error, stop the entire process and inform the user about the error.
 """,
     tools=[
         AgentTool(agent=OpportunityAgent),
+        AgentTool(agent=CompetitorAnalysisAgent),
         AgentTool(agent=CreativeAgent),
         AgentTool(agent=ProposalAgent),
         launch_marketing_campaign_tool,
