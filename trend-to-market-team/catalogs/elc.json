@@ -1,0 +1,128 @@
+{
+    "EL-001": {
+        "displayName": "Advanced Night Repair Synchronized Multi-Recovery Complex",
+        "description": "A powerful nighttime serum that visibly reduces the look of multiple signs of aging for a smoother, younger, more radiant look.",
+        "price": 85.00,
+        "inventory": 150000,
+        "margin": 0.82,
+        "category": "Skincare",
+        "brand": "Estée Lauder"
+    },
+    "EL-002": {
+        "displayName": "Double Wear Stay-in-Place Makeup",
+        "description": "A 24-hour, long-wearing, matte foundation that provides flawless, full coverage and feels lightweight and comfortable on the skin.",
+        "price": 52.00,
+        "inventory": 250000,
+        "margin": 0.78,
+        "category": "Makeup",
+        "brand": "Estée Lauder"
+    },
+    "EL-003": {
+        "displayName": "Revitalizing Supreme+ Youth Power Creme",
+        "description": "A multi-action creme that significantly improves firmness, density, and elasticity for a more lifted look and firmer feel.",
+        "price": 105.00,
+        "inventory": 120000,
+        "margin": 0.85,
+        "category": "Skincare",
+        "brand": "Estée Lauder"
+    },
+    "EL-004": {
+        "displayName": "Pure Color Envy Sculpting Lipstick",
+        "description": "A high-intensity lip color that saturates lips with statement-making, wearable color designed to flatter all skintones.",
+        "price": 36.00,
+        "inventory": 180000,
+        "margin": 0.75,
+        "category": "Makeup",
+        "brand": "Estée Lauder"
+    },
+    "EL-005": {
+        "displayName": "Sumptuous Extreme Lash Multiplying Volume Mascara",
+        "description": "Creates outrageous volume, lift, and curves for an audacious, false-lash effect. Lashes seem to multiply and magnify.",
+        "price": 35.00,
+        "inventory": 200000,
+        "margin": 0.76,
+        "category": "Makeup",
+        "brand": "Estée Lauder"
+    },
+    "CL-001": {
+        "displayName": "Moisture Surge 100H Auto-Replenishing Hydrator",
+        "description": "An oil-free gel-cream moisturizer that provides deep, lasting hydration for up to 100 hours, leaving skin plump and glowing.",
+        "price": 46.00,
+        "inventory": 300000,
+        "margin": 0.79,
+        "category": "Skincare",
+        "brand": "Clinique"
+    },
+    "CL-002": {
+        "displayName": "Almost Lipstick in Black Honey",
+        "description": "A transparent pigment that merges with the unique, natural tone of your lips to create a shade that's all your own. Sheer, glossy, and lightweight.",
+        "price": 25.00,
+        "inventory": 450000,
+        "margin": 0.72,
+        "category": "Makeup",
+        "brand": "Clinique"
+    },
+    "CL-003": {
+        "displayName": "Take The Day Off Cleansing Balm",
+        "description": "A silky, lightweight makeup remover that quickly dissolves tenacious eye and face makeups, as well as sunscreens.",
+        "price": 44.00,
+        "inventory": 280000,
+        "margin": 0.78,
+        "category": "Skincare",
+        "brand": "Clinique"
+    },
+    "LM-001": {
+        "displayName": "Crème de la Mer",
+        "description": "An ultra-rich cream that delivers healing moisture, daily protection, and energized repair. It helps soothe dryness and irritation for a renewed, youthful look.",
+        "price": 390.00,
+        "inventory": 75000,
+        "margin": 0.88,
+        "category": "Skincare",
+        "brand": "La Mer"
+    },
+    "LM-002": {
+        "displayName": "The Concentrate",
+        "description": "A potent barrier serum with Concentrated Miracle Broth™ that strengthens, stabilizes, and visibly soothes the skin against daily irritants.",
+        "price": 440.00,
+        "inventory": 60000,
+        "margin": 0.90,
+        "category": "Skincare",
+        "brand": "La Mer"
+    },
+    "LM-003": {
+        "displayName": "The Eye Concentrate",
+        "description": "A hydrating eye cream that helps to reduce the look of dark circles, lines, and wrinkles for a brighter, healthier-looking eye area.",
+        "price": 275.00,
+        "inventory": 65000,
+        "margin": 0.89,
+        "category": "Skincare",
+        "brand": "La Mer"
+    },
+    "MAC-001": {
+        "displayName": "Studio Fix Fluid SPF 15 Foundation",
+        "description": "A modern foundation that combines a natural matte finish and medium-to-full buildable coverage with broad spectrum UVA/UVB SPF 15 protection.",
+        "price": 42.00,
+        "inventory": 400000,
+        "margin": 0.78,
+        "category": "Makeup",
+        "brand": "MAC"
+    },
+    "MAC-002": {
+        "displayName": "MACximal Silky Matte Lipstick",
+        "description": "An iconic, rich, and creamy matte lipstick formula with high color payoff in a no-shine matte finish. Available in timeless shades like Ruby Woo and Velvet Teddy.",
+        "price": 25.00,
+        "inventory": 500000,
+        "margin": 0.74,
+        "category": "Makeup",
+        "brand": "MAC"
+    },
+    "MAC-003": {
+        "displayName": "MACStack Mascara",
+        "description": "A continuously buildable, clump-resistant mascara that stacks on infinite layers of volume and length. Customize your lash look from natural to next-level.",
+        "price": 31.00,
+        "inventory": 350000,
+        "margin": 0.75,
+        "category": "Makeup",
+        "brand": "MAC"
+    }
+}

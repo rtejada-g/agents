@@ -1,6 +1,4 @@
-COMPANY_NAME = "Google"
-
-PRODUCT_CATALOG = {
+{
     "7890": {
         "displayName": "The Autumn Cardigan",
         "description": "A stylish and comfortable cardigan, perfect for the autumn season.",

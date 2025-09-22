@@ -12,7 +12,7 @@ from google.genai import types
 from google.genai.types import Content, Part, Blob
 from PIL import Image
 from io import BytesIO
-from .config import PRODUCT_CATALOG
+from .config_loader import PRODUCT_CATALOG, COMPANY_NAME, IMAGE_DATA_PATH
 from .matching_agent import MatchingAgent
 from .competitor_analysis_agent import CompetitorAnalysisAgent
 
@@ -37,7 +37,7 @@ get_product_data_tool = FunctionTool(func=get_product_data)
 async def get_product_image(tool_context: ToolContext, sku_id: str) -> dict:
     """Gets the product image for a given product SKU and saves it as an artifact."""
 
-    image_path = os.path.join(os.path.dirname(__file__), f"data/{sku_id}.png")
+    image_path = os.path.join(os.path.dirname(__file__), f"{IMAGE_DATA_PATH}/{sku_id}.png")
     if not os.path.exists(image_path):
         return {"error": f"Image for SKU {sku_id} not found at {image_path}"}
 
@@ -62,7 +62,7 @@ async def generate_campaign_images(tool_context: ToolContext, sku_id: str, promp
         start_time = time.time()
 
         # --- 2. Get SKU Image ---
-        image_path = os.path.join(os.path.dirname(__file__), f"data/{sku_id}.png")
+        image_path = os.path.join(os.path.dirname(__file__), f"{IMAGE_DATA_PATH}/{sku_id}.png")
         if not os.path.exists(image_path):
             return {"error": f"Image for SKU {sku_id} not found at {image_path}"}
 
@@ -223,7 +223,7 @@ OpportunityAgent = Agent(
     - It is critical that you only output the JSON object and nothing else. No preamble or explanations, just the JSON.
 
     Example Success Output:
-    `{"status": "success", "output": "Product Options:\n1. SKU: 7890, Name: The Autumn Cardigan, Inventory: 2500, Margin: 0.60, Category: apparel\n2. SKU: 5670, Name: The City Handbag, Inventory: 3300, Margin: 0.80, Category: apparel"}`""",
+    `{"status": "success", "output": "Product Options:\n1. SKU: SL-7890, Brand: Clinique, Name: The Autumn Cardigan, Inventory: 2500, Margin: 0.60, Category: apparel\n2. SKU: 5670, Brand: Estée Lauder, Name: The City Handbag, Inventory: 3300, Margin: 0.80, Category: apparel"}`""",
     tools=[AgentTool(agent=MatchingAgent), get_product_data_tool, get_product_image_tool],
 )
 
@@ -282,9 +282,12 @@ root_agent = Agent(
     name="MarketingAgent",
     model="gemini-2.5-flash",
     description="An orchestrator agent that manages the trend-to-market team.",
-    instruction="""You are the orchestrator of a multi-agent team. Your goal is to guide the user through a step-by-step process of identifying a market trend, creating a campaign, and launching it. You MUST manage the context between steps.
+    instruction=f"""You are the orchestrator of a multi-agent trend-to-market team at {COMPANY_NAME}. Your goal is to guide the user through a step-by-step process of identifying a market trend, creating a campaign, and launching it. You MUST manage the context between steps.
 
 **Workflow & State Management:**
+
+0.  **Greeting:**
+    a. If the user greets you, introduce yourself including a simplified title (Trend-to-Market Agent is fine), the company you're with, and a very concise sentence outlining your purpose.
 
 1.  **Opportunity Analysis:**
     a. Call the `OpportunityAgent` with the user's initial request about a trend.

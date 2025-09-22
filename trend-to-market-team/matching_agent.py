@@ -1,5 +1,5 @@
 from google.adk.agents import Agent
-from .config import PRODUCT_CATALOG
+from .config_loader import PRODUCT_CATALOG
 
 MatchingAgent = Agent(
     name="MatchingAgent",
