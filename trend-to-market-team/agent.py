@@ -62,7 +62,7 @@ async def generate_campaign_images(tool_context: ToolContext, sku_id: str, promp
         start_time = time.time()
 
         # --- 2. Get SKU Image ---
-        image_path = os.path.join(os.path.dirname(__file__), f"{IMAGE_DATA_PATH}/{sku_id}.png")
+        image_path = os.path.join(os.path.dirname(__file__), f"{IMAGE_DATA_PATH}/{sku_id}.jpeg")
         if not os.path.exists(image_path):
             return {"error": f"Image for SKU {sku_id} not found at {image_path}"}
 
@@ -71,7 +71,7 @@ async def generate_campaign_images(tool_context: ToolContext, sku_id: str, promp
         
         # Mimic the console's base64 handling
         image_data = base64.b64decode(base64.b64encode(image_bytes))
-        image_part = Part.from_bytes(data=image_data, mime_type="image/png")
+        image_part = Part.from_bytes(data=image_data, mime_type="image/jpeg")
 
         # --- 3. Call Generative AI API and Save Artifacts ---
         try:
@@ -115,7 +115,7 @@ async def generate_campaign_images(tool_context: ToolContext, sku_id: str, promp
                             mime_type=part.inline_data.mime_type,
                             data=part.inline_data.data
                         ))
-                        artifact_name = f"generated_{image_type}_{sku_id}.png"
+                        artifact_name = f"generated_{image_type}_{sku_id}.jpeg"
                         artifact_uri = await tool_context.save_artifact(artifact_name, generated_part)
                         end_time = time.time()
                         print(f"[{time.time()}] Finished generating image for {image_type} in {end_time - start_time:.2f}s")
@@ -182,15 +182,18 @@ async def generate_prompt(style_description: str, product_name: str, image_type:
             model="gemini-2.5-flash",
             contents=f"""You are a creative assistant. Your task is to generate a detailed, evocative prompt for an image generation model, based on the style_description provided.
             - Your input will be a high-level style description, the product name, and the desired image type (e.g., website_hero, instagram_post).
+            - The prompt must always include the product being featured in the image (see examples)
+            - The prompt must always be photorealistic, professional-quality
+            - The image_type also influences the type of prompt (e.g. website_hero are usually wide, cinematic. instagram_post are usually lifestyle, email_header are super product-centric, clean background)
             - Your output MUST be a single string containing the generated prompt. No preamble or explanations, just a prompt under 250 characters. Here are a few examples:
             Example 1 Input: style_description='a chic city night', product_name='The City Handbag', image_type='website_hero'
-            Example 1 Output: 'A wide, photorealistic shot of a model holding the product at a rooftop bar, with the sparkling city skyline blurred in the background.'
+            Example 1 Output: 'A photorealistic, professional-quality, wide, and cinematic shot of a model holding the product at a rooftop bar, with the sparkling city skyline blurred in the background.'
 
             Example 2 Input: style_description='cozy fall couch', product_name='The Autumn Cardigan', image_type='instagram_post'
-            Example 2 Output: 'A lifestyle shot of the product draped over a plush couch, with soft, warm light and autumnal decor in the background.'
+            Example 2 Output: 'A photorealistic, professional-quality, lifestyle shot of the product draped over a plush couch, with soft, warm light and autumnal decor in the background.'
 
             Example 3 Input: style_description='minimalist morning vanity', product_name='Multi-Active Glow Serum', image_type='email_header'
-            Example 3 Output: 'A product-centric shot of the product on a clean, white marble vanity table surface'
+            Example 3 Output: 'A photorealistic, professional-quality, product-centric shot of the product on a clean, white marble vanity table surface'
             
             Input: style_description='{style_description}', product_name='{product_name}', image_type='{image_type}'"""
         )
@@ -296,7 +299,7 @@ root_agent = Agent(
     d. If the `status` is `failure`, you MUST stop and present the `output` (which will be the error message) to the user.
 
 2.  **Competitive Analysis:**
-    a. Once the user selects a product, **capture the selected `sku_id` and `product_name`**.
+    a. Once the user selects a product, you MUST **capture the full `Product Summary` for that selected product, including SKU, name, price, margin, and inventory.**
     b. Call the `CompetitorAnalysisAgent` with the selected product's name.
     c. **Capture the `Competitive Recommendations` summary from the result.**
     d. Present a one liner on the search results, a short sentence on how they lead to the recommendations, and the recommended themes to the user
@@ -306,7 +309,7 @@ root_agent = Agent(
     b. **Capture the user's selected `style_description` and `image_types`.**
     c. Call the `IdeationAgent` tool. You MUST format the `request` as a single string that includes the captured `product_name`, `Competitive Landscape`, the user's selected `style_description`, and `image_types`.
     d. **Capture the `Generated Prompts` from the result.**
-    e. Summarize the prompts as "Concepts" under 12 words, present them to the user and ask the user to approve them.
+    e. Summarize the prompts as "Concepts" under 12 words, present the concept for each image type to the user, and ask the user to approve them.
 
 4.  **Creative Generation:**
     a. If the user approves, call the `GenerationAgent` tool. You MUST pass a `request` that includes the captured `sku_id` and the full `Generated Prompts`.
