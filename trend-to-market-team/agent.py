@@ -37,16 +37,16 @@ get_product_data_tool = FunctionTool(func=get_product_data)
 async def get_product_image(tool_context: ToolContext, sku_id: str) -> dict:
     """Gets the product image for a given product SKU and saves it as an artifact."""
 
-    image_path = os.path.join(os.path.dirname(__file__), f"{IMAGE_DATA_PATH}/{sku_id}.png")
+    image_path = os.path.join(os.path.dirname(__file__), f"{IMAGE_DATA_PATH}/{sku_id}.jpeg")
     if not os.path.exists(image_path):
         return {"error": f"Image for SKU {sku_id} not found at {image_path}"}
 
     with open(image_path, "rb") as f:
         image_bytes = f.read()
 
-    image_part = Part.from_bytes(data=image_bytes, mime_type="image/png")
+    image_part = Part.from_bytes(data=image_bytes, mime_type="image/jpeg")
 
-    artifact_name = f"product_{sku_id}.png"
+    artifact_name = f"product_{sku_id}.jpeg"
     await tool_context.save_artifact(artifact_name, image_part)
     return {"status": f"Image for SKU {sku_id} saved as artifact {artifact_name}"}
 
