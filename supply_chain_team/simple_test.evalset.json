@@ -1,0 +1,37 @@
+{
+  "eval_set_id": "simple_test",
+  "name": "Simple Test Evaluation Set",
+  "description": "Basic functionality test for supply chain agent",
+  "eval_cases": [
+    {
+      "eval_id": "hi_1",
+      "conversation": [
+        {
+          "invocation_id": "e-58f62601-d831-4076-be5f-917b679706c6",
+          "user_content": {
+            "parts": [
+              {
+                "text": "hi"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "Hello! I'm a Sysco Supply Chain Agent. How can I assist you today?"
+              }
+            ]
+          },
+          "intermediate_data": {},
+          "creation_timestamp": 1760809639.313514
+        }
+      ],
+      "session_input": {
+        "app_name": "supply_chain_team",
+        "user_id": "user"
+      },
+      "creation_timestamp": 1760809649.592993
+    }
+  ]
+}

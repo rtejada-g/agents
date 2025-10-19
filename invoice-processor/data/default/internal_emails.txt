@@ -1,0 +1,7 @@
+From: procurement@company.com
+To: accounts.payable@company.com
+Date: 2025-09-20
+Subject: RE: PO #8901307 - Price Adjustment Notice
+---
+RE: PO #8901307 - The discrepancy is due to the 7% FL sales tax which was not included in the original PO amount. Please approve the updated total.
+---

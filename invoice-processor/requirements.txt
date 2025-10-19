@@ -1,0 +1,18 @@
+# Core ADK dependencies (inherited from parent project)
+# google-adk>=1.16.0
+
+# Data processing
+pandas>=2.0.0
+
+# Data validation and schema
+pydantic>=2.0.0
+
+# PDF handling
+PyPDF2>=3.0.0
+fpdf>=1.7.2
+
+# Image processing for Gemini Vision
+Pillow>=10.0.0
+
+# HTTP requests (for external APIs if needed)
+requests>=2.31.0

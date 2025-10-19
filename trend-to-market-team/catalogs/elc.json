@@ -124,5 +124,32 @@
         "margin": 0.75,
         "category": "Makeup",
         "brand": "MAC"
+    },
+    "LL-001": {
+        "displayName": "Santal 33 Eau de Parfum",
+        "description": "An iconic, unisex fragrance that captures the spirit of the American West. A defining cult classic with notes of cardamom, iris, sandalwood, and leather.",
+        "price": 230.00,
+        "inventory": 85000,
+        "margin": 0.88,
+        "category": "Fragrance",
+        "brand": "Le Labo"
+    },
+    "LL-002": {
+        "displayName": "Another 13 Eau de Parfum",
+        "description": "A hypnotic and unique musk scent composed of ambroxan and blended with twelve other ingredients such as jasmine and moss. Creates an addictive, personal scent.",
+        "price": 230.00,
+        "inventory": 70000,
+        "margin": 0.89,
+        "category": "Fragrance",
+        "brand": "Le Labo"
+    },
+    "LL-003": {
+        "displayName": "Thé Noir 29 Eau de Parfum",
+        "description": "An ode to the noble leaf and the craft that surrounds it. A sophisticated scent with notes of black tea, fig, bergamot, and cedar wood that is both fresh and addictive.",
+        "price": 230.00,
+        "inventory": 75000,
+        "margin": 0.88,
+        "category": "Fragrance",
+        "brand": "Le Labo"
     }
 }

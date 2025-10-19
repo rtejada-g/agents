@@ -209,6 +209,7 @@ class SupplyChainAgent(BaseAgent):
             resolved_customer_name = config.CUSTOMER_NAME or config.DEFAULT_NAME
             yield Event(
                 author=self.name,
+                invocation_id=ctx.invocation_id,
                 content=types.Content(parts=[types.Part(text=f"Hello! I'm a {resolved_customer_name} Supply Chain Agent. How can I assist you today?")])
             )
             return
@@ -220,6 +221,7 @@ class SupplyChainAgent(BaseAgent):
             # Yield an event BEFORE calling the tool
             yield Event(
                 author=self.name,
+                invocation_id=ctx.invocation_id,
                 content=types.Content(parts=[types.Part(text=f"Getting weather forecast for {location}")])
             )
             weather_forecast_result = get_weather_forecast(location)
@@ -227,11 +229,13 @@ class SupplyChainAgent(BaseAgent):
                 weather_forecast = weather_forecast_result["weather"]
                 yield Event(
                     author=self.name,
+                    invocation_id=ctx.invocation_id,
                     content=types.Content(parts=[types.Part(text=f"The weather in {location} is: {weather_forecast['current']['temperature_2m']}°C, wind speed {weather_forecast['current']['wind_speed_10m']} m/s.")])
                 )
             else:
                 yield Event(
                     author=self.name,
+                    invocation_id=ctx.invocation_id,
                     content=types.Content(parts=[types.Part(text=f"Could not retrieve weather for {location}. Error: {weather_forecast_result.get('error_message', 'Unknown error')}")])
                 )
             print("End of WEATHER QUERY")
@@ -240,6 +244,7 @@ class SupplyChainAgent(BaseAgent):
         # 1. Forecasting
         yield Event(
             author=self.name,
+            invocation_id=ctx.invocation_id,
             content=types.Content(parts=[types.Part(text="Running Forecasting Agent... ")]))
 
         # Call the forecasting agent's run method
@@ -265,6 +270,7 @@ class SupplyChainAgent(BaseAgent):
         if is_critical_spike:
             yield Event(
                 author=self.name,
+                invocation_id=ctx.invocation_id,
                 content=types.Content(parts=[types.Part(text="Critical spike detected. Running Inventory Agent...")])
             )
 
@@ -343,6 +349,7 @@ class SupplyChainAgent(BaseAgent):
                             print(f"Event actions before yielding: {event_actions.model_dump_json()}")
                             yield Event(
                                 author=self.name,
+                                invocation_id=ctx.invocation_id,
                                 actions=event_actions,
                                 content=types.Content(parts=[types.Part()])
                             )
@@ -351,18 +358,21 @@ class SupplyChainAgent(BaseAgent):
                             logger.error("Artifact service not available in InvocationContext.")
                             yield Event(
                                 author=self.name,
+                                invocation_id=ctx.invocation_id,
                                 content=types.Content(parts=[types.Part(text="Error: Artifact service not available.")])
                             )
                     except FileNotFoundError:
                         logger.error(f"PDF file not found at path: {pdf_path}")
                         yield Event(
                             author=self.name,
+                            invocation_id=ctx.invocation_id,
                             content=types.Content(parts=[types.Part(text=f"Error: PDF file not found at {pdf_path}.")]) # noqa: E501
                         )
                     except Exception as e:
                         logger.error(f"Error saving PDF artifact from path {pdf_path}: {e}")
                         yield Event(
                             author=self.name,
+                            invocation_id=ctx.invocation_id,
                             content=types.Content(parts=[types.Part(text=f"Error saving PDF artifact: {e}.")])
                         )
                 else:
@@ -383,6 +393,7 @@ class SupplyChainAgent(BaseAgent):
         if trigger_marketing:
             yield Event(
                 author=self.name,
+                invocation_id=ctx.invocation_id,
                 content=types.Content(parts=[types.Part(text="System strain detected. Running Marketing Agent... ")])
             )
             
@@ -391,6 +402,7 @@ class SupplyChainAgent(BaseAgent):
         else:
             yield Event(
                 author=self.name,
+                invocation_id=ctx.invocation_id,
                 content=types.Content(parts=[types.Part(text="No system strain detected. No further action required.")])
             )
 
@@ -407,3 +419,7 @@ supplychain_agent = SupplyChainAgent(
     marketing_agent=marketing_agent,
 )
 root_agent = supplychain_agent
+
+# Note: Evaluation metrics are configured through the UI when running evaluations,
+# not hardcoded in the agent. This allows flexibility to test different metrics
+# and thresholds without modifying agent code.

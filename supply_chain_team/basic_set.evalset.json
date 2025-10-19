@@ -1,0 +1,597 @@
+{
+  "eval_set_id": "basic_set",
+  "name": "basic_set",
+  "eval_cases": [
+    {
+      "eval_id": "weather_1",
+      "conversation": [
+        {
+          "invocation_id": "e-12291923-ffcf-4063-8754-5d6677c2a88f",
+          "user_content": {
+            "parts": [
+              {
+                "text": "weather in NYC"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "The weather in nyc is: 18.4°C, wind speed 8.7 m/s."
+              }
+            ],
+            "role": "model"
+          },
+          "intermediate_data": {},
+          "creation_timestamp": 1760813593.277773
+        }
+      ],
+      "session_input": {
+        "app_name": "supply_chain_team",
+        "user_id": "user"
+      },
+      "creation_timestamp": 1760813603.950646
+    },
+    {
+      "eval_id": "AURA-T5",
+      "conversation": [
+        {
+          "invocation_id": "e-750fa43e-137c-4be0-a6d0-85cc3ae9d85c",
+          "user_content": {
+            "parts": [
+              {
+                "text": "forecast AURA-T5"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "No system strain detected. No further action required."
+              }
+            ]
+          },
+          "intermediate_data": {
+            "invocation_events": [
+              {
+                "author": "ForecastingAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "adk-43f3cff7-6b78-4e3e-a745-0580c5a987d8",
+                        "args": {
+                          "sku": "AURA-T5"
+                        },
+                        "name": "get_base_sales_data"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "ForecastingAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "adk-43f3cff7-6b78-4e3e-a745-0580c5a987d8",
+                        "name": "get_base_sales_data",
+                        "response": {
+                          "result": 0.0
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              },
+              {
+                "author": "ForecastingAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "adk-ed8839d9-1fb5-4fc9-bd1c-e2eb6df9be79",
+                        "args": {
+                          "sku": "AURA-T5",
+                          "end_date": "2025-05-14",
+                          "start_date": "2025-05-01"
+                        },
+                        "name": "get_sku_promotions"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "ForecastingAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "adk-ed8839d9-1fb5-4fc9-bd1c-e2eb6df9be79",
+                        "name": "get_sku_promotions",
+                        "response": {
+                          "status": "success",
+                          "promotions_summary": "None"
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              },
+              {
+                "author": "ForecastingAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "adk-86d5f749-6f15-4d90-bf25-7e45e267d343",
+                        "args": {
+                          "location": "Los Angeles"
+                        },
+                        "name": "get_weather_forecast"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "ForecastingAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "adk-86d5f749-6f15-4d90-bf25-7e45e267d343",
+                        "name": "get_weather_forecast",
+                        "response": {
+                          "status": "success",
+                          "weather": {
+                            "current": {
+                              "temperature_2m": 28.1,
+                              "wind_speed_10m": 13.2
+                            },
+                            "is_favorable": false
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              },
+              {
+                "author": "ForecastingAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "adk-91c36d38-779c-483c-bbc6-d5c544e97024",
+                        "args": {
+                          "promotions_summary": "None",
+                          "base_forecast": 0,
+                          "weather": {
+                            "current": {
+                              "temperature_2m": 28.1,
+                              "wind_speed_10m": 13.2
+                            },
+                            "is_favorable": false
+                          }
+                        },
+                        "name": "calculate_final_forecast"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "ForecastingAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "adk-91c36d38-779c-483c-bbc6-d5c544e97024",
+                        "name": "calculate_final_forecast",
+                        "response": {
+                          "forecasted_demand": 0,
+                          "is_critical_spike": false
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              }
+            ]
+          },
+          "creation_timestamp": 1760830408.104213
+        }
+      ],
+      "session_input": {
+        "app_name": "supply_chain_team",
+        "user_id": "user"
+      },
+      "creation_timestamp": 1760830427.551321
+    },
+    {
+      "eval_id": "apex",
+      "conversation": [
+        {
+          "invocation_id": "e-5dc75bae-44c4-431a-8503-2edd73baac77",
+          "user_content": {
+            "parts": [
+              {
+                "text": "forecast APEX-M5"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "No system strain detected. No further action required."
+              }
+            ]
+          },
+          "intermediate_data": {
+            "invocation_events": [
+              {
+                "author": "ForecastingAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "adk-44f44e16-056d-4a85-813c-100df2a7664e",
+                        "args": {
+                          "sku": "APEX-M5"
+                        },
+                        "name": "get_base_sales_data"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "ForecastingAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "adk-44f44e16-056d-4a85-813c-100df2a7664e",
+                        "name": "get_base_sales_data",
+                        "response": {
+                          "result": 206
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              },
+              {
+                "author": "ForecastingAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "adk-90d68afb-ee04-479d-b934-51cfd28c3d08",
+                        "args": {
+                          "start_date": "2025-05-01",
+                          "sku": "APEX-M5",
+                          "end_date": "2025-05-14"
+                        },
+                        "name": "get_sku_promotions"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "ForecastingAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "adk-90d68afb-ee04-479d-b934-51cfd28c3d08",
+                        "name": "get_sku_promotions",
+                        "response": {
+                          "status": "success",
+                          "promotions_summary": "Spring Refresh Sale"
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              },
+              {
+                "author": "ForecastingAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "adk-3139391f-e7eb-40a8-992c-53872c697a4c",
+                        "args": {
+                          "location": "Los Angeles"
+                        },
+                        "name": "get_weather_forecast"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "ForecastingAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "adk-3139391f-e7eb-40a8-992c-53872c697a4c",
+                        "name": "get_weather_forecast",
+                        "response": {
+                          "status": "success",
+                          "weather": {
+                            "current": {
+                              "temperature_2m": 27.7,
+                              "wind_speed_10m": 11.6
+                            },
+                            "is_favorable": false
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              },
+              {
+                "author": "ForecastingAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "adk-4005ec6f-88dc-49a3-aae8-093151ab01bd",
+                        "args": {
+                          "weather": {
+                            "is_favorable": false,
+                            "current": {
+                              "wind_speed_10m": 11.6,
+                              "temperature_2m": 27.7
+                            }
+                          },
+                          "promotions_summary": "Spring Refresh Sale",
+                          "base_forecast": 206
+                        },
+                        "name": "calculate_final_forecast"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "ForecastingAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "adk-4005ec6f-88dc-49a3-aae8-093151ab01bd",
+                        "name": "calculate_final_forecast",
+                        "response": {
+                          "forecasted_demand": 206,
+                          "is_critical_spike": true
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              },
+              {
+                "author": "InventoryAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "adk-c4c5ecd3-3707-416c-a921-d38e4f31e913",
+                        "args": {
+                          "sku": "APEX-M5"
+                        },
+                        "name": "get_inventory_for_sku"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "InventoryAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "adk-c4c5ecd3-3707-416c-a921-d38e4f31e913",
+                        "name": "get_inventory_for_sku",
+                        "response": {
+                          "status": "success",
+                          "on_hand": 120
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              },
+              {
+                "author": "InventoryAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "adk-12ffb278-3449-4248-b577-56951b00543e",
+                        "args": {
+                          "sku": "APEX-M5"
+                        },
+                        "name": "check_open_orders"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "InventoryAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "adk-12ffb278-3449-4248-b577-56951b00543e",
+                        "name": "check_open_orders",
+                        "response": {
+                          "status": "success",
+                          "open_orders_quantity": 100
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              },
+              {
+                "author": "InventoryAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "adk-6e70d9bd-e57a-4cb0-a15e-ef729de3098c",
+                        "args": {
+                          "open_orders_quantity": 100,
+                          "forecasted_demand": 206,
+                          "total_on_hand": 120
+                        },
+                        "name": "calculate_replenishment_need"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "InventoryAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "adk-6e70d9bd-e57a-4cb0-a15e-ef729de3098c",
+                        "name": "calculate_replenishment_need",
+                        "response": {
+                          "result": 186
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              },
+              {
+                "author": "InventoryAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "adk-9d977908-dc53-40f8-b9c1-f7978ab22545",
+                        "args": {
+                          "sku": "APEX-M5"
+                        },
+                        "name": "get_supplier_capacity"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "InventoryAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "adk-9d977908-dc53-40f8-b9c1-f7978ab22545",
+                        "name": "get_supplier_capacity",
+                        "response": {
+                          "status": "success",
+                          "max_units_per_day": 1500,
+                          "supplier_name": "Fashion Forward Textiles"
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              },
+              {
+                "author": "InventoryAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "adk-2325b5cd-3248-45d7-b2e0-c04f4343953f",
+                        "args": {
+                          "supplier_name": "Fashion Forward Textiles",
+                          "sku": "APEX-M5",
+                          "max_units_per_day": 1500,
+                          "replenishment_needed": 186
+                        },
+                        "name": "place_po"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "InventoryAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "adk-2325b5cd-3248-45d7-b2e0-c04f4343953f",
+                        "name": "place_po",
+                        "response": {
+                          "status": "success",
+                          "message": "Placed PO for SKU 'APEX-M5', quantity 186.",
+                          "action_taken": "NEW_PO_PLACED",
+                          "quantity": 186,
+                          "pdf_path": "/Users/rtejada/Workspace/agents/supply_chain_team/output/PO-APEX-M5-20251018194746.pdf"
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              }
+            ]
+          },
+          "creation_timestamp": 1760831254.340235
+        }
+      ],
+      "session_input": {
+        "app_name": "supply_chain_team",
+        "user_id": "user"
+      },
+      "creation_timestamp": 1760831278.911752
+    }
+  ],
+  "creation_timestamp": 1760416302.7086122
+}

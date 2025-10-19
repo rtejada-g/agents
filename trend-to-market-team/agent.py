@@ -184,7 +184,7 @@ async def generate_prompt(style_description: str, product_name: str, image_type:
             - Your input will be a high-level style description, the product name, and the desired image type (e.g., website_hero, instagram_post).
             - The prompt must always include the product being featured in the image (see examples)
             - The prompt must always be photorealistic, professional-quality
-            - The image_type also influences the type of prompt (e.g. website_hero are usually wide, cinematic. instagram_post are usually lifestyle, email_header are super product-centric, clean background)
+            - The image_type also influences the type of prompt (e.g. website_hero are usually wide, and feature a real life model, cinematic. instagram_post are usually lifestyle, cozy scene. email_header are very product-centric, clean background)
             - Your output MUST be a single string containing the generated prompt. No preamble or explanations, just a prompt under 250 characters. Here are a few examples:
             Example 1 Input: style_description='a chic city night', product_name='The City Handbag', image_type='website_hero'
             Example 1 Output: 'A photorealistic, professional-quality, wide, and cinematic shot of a model holding the product at a rooftop bar, with the sparkling city skyline blurred in the background.'
@@ -217,16 +217,16 @@ OpportunityAgent = Agent(
     description="Analyzes market trends to identify product opportunities.",
     instruction="""You are the first agent in the trend-to-market team. Your input is a user prompt about a social media trend.
 1.  Extract the trend description from the user prompt.
-2.  Call the `MatchingAgent` with the trend description to get a list of matching product SKUs.
-3.  For each SKU, call the `get_product_data` tool to get its business data.
-4.  For each SKU, call the `get_product_image` tool. This will save the product image as an artifact, which will be automatically displayed to the user. Absolutely avoid placeholders in the text.
+2.  Use the `MatchingAgent` with the trend description to get a list of matching product SKUs.
+3.  For each SKU, use the `get_product_data` tool to get its business data.
+4.  For each SKU, use the `get_product_image` tool. This will save the product image as an artifact, which will be automatically displayed to the user. Absolutely avoid placeholders in the text.
 5.  Your final output MUST be a single, valid JSON object.
     - If you find products, the JSON should be: `{"status": "success", "output": "Product Options: ..."}`. The "output" value MUST be a string that starts with "Product Options:" followed by a numbered list of the products.
     - If you cannot find any matching products, the JSON should be: `{"status": "failure", "output": "I could not find any products matching that trend."}`.
     - It is critical that you only output the JSON object and nothing else. No preamble or explanations, just the JSON.
 
     Example Success Output:
-    `{"status": "success", "output": "Product Options:\n1. SKU: SL-7890, Brand: Clinique, Name: The Autumn Cardigan, Inventory: 2500, Margin: 0.60, Category: apparel\n2. SKU: 5670, Brand: Estée Lauder, Name: The City Handbag, Inventory: 3300, Margin: 0.80, Category: apparel"}`""",
+    `{"status": "success", "output": "Product Options:\n1. SKU: SL-7890, Brand: Clinique, Name: The Autumn Cardigan, Price: 120, Inventory: 2500, Margin: 0.60, Category: apparel\n2. SKU: 5670, Brand: Estée Lauder, Name: The City Handbag, Inventory: 3300, Margin: 0.80, Category: apparel"}`""",
     tools=[AgentTool(agent=MatchingAgent), get_product_data_tool, get_product_image_tool],
 )
 
@@ -238,7 +238,7 @@ IdeationAgent = Agent(
     instruction="""You are the ideation agent. Your input is a product name, a competitive landscape summary, a desired style description, and a list of image types.
     1.  Your primary goal is to generate creative concepts based on the user's desired `style_description`.
     2.  You should use the `Competitive Landscape` for strategic inspiration to ensure your concepts are differentiated, but the user's `style_description` MUST be the core theme.
-    3.  Call the `generate_prompt` tool in parallel to generate a prompt for the image_types. You MUST pass the `style_description`, `product_name`, and `image_type`.
+    3.  Use the `generate_prompt` tool in parallel to generate a prompt for the image_types. You MUST pass the `style_description`, `product_name`, and `image_type`.
     4.  Your final output MUST be a single string containing the generated prompts for the orchestrator to review. Example:
         'Generated Prompts:
         - Website Hero: A landscape, photorealistic shot of a model wearing the product in...
@@ -253,7 +253,7 @@ GenerationAgent = Agent(
     model="gemini-2.5-flash-lite",
     description="Develops marketing campaign assets.",
     instruction="""You are the generation agent. Your input is a product SKU and a list of concepts.
-    1.  For each concept in the list, call the `generate_campaign_images` tool in parallel using the concept as a prompt. You MUST pass the `sku_id` and `prompt`.
+    1.  For each concept in the list, use the `generate_campaign_images` tool in parallel using the concept as a prompt. You MUST pass the `sku_id` and `prompt`.
     2.  Your final output MUST be a structured summary of the results. Example for a mix of success and failure:
         'Image Generation Results:
         - Website Hero: Success
@@ -276,7 +276,7 @@ ProposalAgent = Agent(
     - A brief summary of the target audience.
     - A final figure of projected revenue increase (assuming a 10% lift in sales), using the product's price and margin.
     - The final figure must be strictly formatted concisely as "Projected Revenue Increase: $X". This should be the first and only mention of "Projected Revenue Increase" in the text.
-    - A summary of the potential risks (e.g., inventory shortages, low engagement), considering the product's inventory and the competitive landscape.
+    - A one or two sentences on the potential risks (e.g., inventory shortages, low engagement, competitive, etc.), and possible mitigation strategies.
 3.  Your final output MUST be a single string containing the full proposal for the orchestrator.""",
 )
 
@@ -313,8 +313,7 @@ root_agent = Agent(
 
 4.  **Creative Generation:**
     a. If the user approves, call the `GenerationAgent` tool. You MUST pass a `request` that includes the captured `sku_id` and the full `Generated Prompts`.
-    b. **Capture the full `Campaign Brief` from the result.**
-    c. Ask if they are ready for a proposal.
+    b. Ask if they are ready for a proposal.
 
 5.  **Proposal:**
     a. If the user agrees, call the `ProposalAgent` tool. You MUST pass a `request` that includes the captured `Product Summary`, the `Campaign Brief`, and the `Competitive Landscape`.
@@ -324,7 +323,7 @@ root_agent = Agent(
 6.  **Activation:**
     a. Ask the user for final approval to launch the campaign.
     b. **You MUST wait for an explicit "yes" or "approve" from the user.**
-    c. Once approval is given, call the `launch_marketing_campaign` tool, passing the captured `Campaign Proposal` as the `campaign_brief`. This will trigger the final HITL confirmation.
+    c. Once approval is given, use the `launch_marketing_campaign` tool, passing the captured `Campaign Proposal` as the `campaign_brief`. This will trigger the final HITL confirmation.
 
 7.  **Error Handling:**
     a. If the `OpportunityAgent` does not return a "Product Options:" string, you MUST stop and inform the user with a friendly message. Example: "I couldn't find a specific product for that trend. Could you try being more specific?"
