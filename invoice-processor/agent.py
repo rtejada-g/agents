@@ -5,10 +5,14 @@ A multi-agent system that demonstrates end-to-end invoice processing using Gemin
 native PDF processing capabilities.
 """
 
-from google.adk.agents import Agent
+from google.adk.agents import LlmAgent, BaseAgent
 from google.adk.apps import App
-from google.adk.tools import AgentTool
+from google.adk.events import Event, EventActions
 from google.adk.plugins.save_files_as_artifacts_plugin import SaveFilesAsArtifactsPlugin
+from google.genai import types
+from pydantic import Field, ConfigDict
+from typing import AsyncGenerator, Any, List
+from typing_extensions import override
 from . import config
 from .tools import (
     read_invoice_pdf_tool,
@@ -22,39 +26,42 @@ from .tools import (
 # AGENT 1: Invoice Extraction Agent
 # ============================================================================
 
-InvoiceExtractionAgent = Agent(
+invoice_extraction_agent = LlmAgent(
     name="InvoiceExtractionAgent",
     model="gemini-2.0-flash",
     description=f"Extracts structured invoice data from uploaded PDF files for {config.COMPANY_NAME}",
     instruction=f"""You are an expert invoice data extraction specialist for {config.COMPANY_NAME}.
 
 **Your Task:**
-Extract structured data from uploaded invoice PDF files using the `read_invoice_pdf` tool.
-
-**How to find the filename:**
-The request will mention the PDF filename - look for:
-- Text ending in .pdf
-- Text that looks like a filename (may have spaces, underscores, numbers)
-- If you see square brackets like [filename.pdf], use the text inside
-
-**Examples:**
-- "Extract data from Invoice_123.pdf" → use "Invoice_123.pdf"
-- "Process this: [Publix Inv 41599 PO 8901307.pdf]" → use "Publix Inv 41599 PO 8901307.pdf"
-- "[My Document.pdf] uploaded" → use "My Document.pdf"
+Extract structured data from uploaded invoice PDF files and present a clean summary.
 
 **Process:**
-1. Identify the PDF filename from the request (include .pdf extension)
+1. Identify the PDF filename from the request (look for .pdf files, text in brackets, etc.)
 2. Call read_invoice_pdf with that exact filename
-3. Return the extracted JSON data
+3. The tool will return JSON with invoice data
+4. Present a brief, executive-friendly summary to the user
+
+**Output Format (for user):**
+📋 **Invoice Extracted**
+
+**Invoice #:** [invoice_number]
+**Vendor:** [vendor_name]
+**Amount:** $[total_amount]
+**PO Reference:** [po_number]
+**Date:** [invoice_date]
+
+*Extraction complete. Proceeding to validation...*
 
 **Important:**
-- Use the EXACT filename as mentioned (don't modify it)
-- Include spaces, underscores, and numbers exactly as they appear
-- If the tool fails, check the error message for available artifact names
+- Use EXACT filename as mentioned (don't modify it)
+- Keep summary concise (5-6 lines max)
+- DO NOT output raw JSON to the user
+- The JSON will be automatically saved to state for the next agent
 
 Available tool:
 - read_invoice_pdf(filename) - Loads PDF artifact and extracts invoice data using Gemini Vision""",
-    tools=[read_invoice_pdf_tool]
+    tools=[read_invoice_pdf_tool],
+    output_key="invoice_data"
 )
 
 
@@ -62,44 +69,52 @@ Available tool:
 # AGENT 2: Invoice Validation Agent  
 # ============================================================================
 
-InvoiceValidationAgent = Agent(
+invoice_validation_agent = LlmAgent(
     name="InvoiceValidationAgent",
     model="gemini-2.0-flash",
     description="Validates invoices against purchase orders and delivery receipts",
     instruction=f"""You are an invoice validation specialist for {config.COMPANY_NAME}.
 
-Your job is to cross-reference invoice data with internal records to ensure accuracy before payment.
+Your job is to cross-reference invoice data with internal records and present results clearly.
 
 **Validation Process:**
-1. Receive the extracted invoice JSON from the previous agent
-2. Use get_po_details tool to look up the referenced PO number
-3. Use get_delivery_details tool to confirm delivery occurred
-4. Compare invoice details against PO:
-   - Verify vendor name matches
-   - Check quantity matches (within {config.QUANTITY_TOLERANCE_PERCENT}% tolerance)
-   - Check total amount matches (within {config.PRICE_TOLERANCE_PERCENT}% tolerance)
-5. Return validation result as JSON
+1. Parse the invoice JSON from the request
+2. Use get_po_details to look up the PO
+3. Use get_delivery_details to confirm delivery
+4. Compare invoice vs PO (vendor, quantity within {config.QUANTITY_TOLERANCE_PERCENT}%, amount within {config.PRICE_TOLERANCE_PERCENT}%)
+5. Determine validation_status: "PASSED" or "FAILED"
+6. Create validation JSON with added fields (validation_status, failure_reason, po_verified, delivery_confirmed)
+7. Present user-friendly summary
 
-**Validation Rules:**
-- If ALL checks pass → validation_status: "PASSED"
-- If ANY check fails → validation_status: "FAILED" with specific failure_reason
+**Output Format for PASSED:**
+✅ **Validation Complete**
 
-**Output Format:**
-Return the original invoice data WITH added fields:
-{{
-    ...original invoice fields...,
-    "validation_status": "PASSED" or "FAILED",
-    "failure_reason": "description of what failed (if FAILED)",
-    "po_verified": true/false,
-    "delivery_confirmed": true/false
-}}
+**Invoice #:** [invoice_number] **Amount:** $[total_amount]
+**Vendor:** [vendor_name]
+**PO Match:** ✓ Verified against PO #[po_number]
+**Delivery:** ✓ Confirmed
+
+*All checks passed. Ready for ERP posting.*
+
+**Output Format for FAILED:**
+⚠️ **Validation Issues Detected**
+
+**Invoice #:** [invoice_number]
+**Issue:** [Brief description of failure]
+**PO Reference:** [po_number]
+
+*Routing to exception handling for investigation...*
+
+**Important:**
+- Present ONLY the summary above (no raw JSON)
+- Keep it concise and scannable
+- The full JSON with validation_status will be automatically saved to state
 
 Available tools:
 - get_po_details(po_number) - Look up PO in our system
-- get_delivery_details(invoice_number) - Check if goods were delivered
-
-Be thorough and precise in your validation.""",
-    tools=[get_po_details_tool, get_delivery_details_tool]
+- get_delivery_details(invoice_number) - Check if goods were delivered""",
+    tools=[get_po_details_tool, get_delivery_details_tool],
+    output_key="validation_result"
 )
 
 
@@ -107,29 +122,40 @@ Be thorough and precise in your validation.""",
 # AGENT 3: ERP Posting Agent
 # ============================================================================
 
-ERPAgent = Agent(
+erp_agent = LlmAgent(
     name="ERPAgent",
     model="gemini-2.0-flash",
     description=f"Posts validated invoices to {config.ERP_SYSTEM_NAME}",
     instruction=f"""You are the {config.ERP_SYSTEM_NAME} integration specialist for {config.COMPANY_NAME}.
 
-Your role is to post successfully validated invoices to our ERP system for payment processing.
+Your role is to post validated invoices to ERP and confirm to executives.
 
 **Your Task:**
-1. Receive the validated invoice data (validation_status must be "PASSED")
-2. Use the post_invoice_to_erp tool to submit the invoice
-3. Return the ERP posting confirmation to the user
+1. Parse the validated invoice JSON from the request
+2. Verify validation_status is "PASSED"
+3. Use post_invoice_to_erp tool to submit
+4. Present executive-friendly confirmation
+
+**Output Format:**
+✅ **Posted to {config.ERP_SYSTEM_NAME}**
+
+**Invoice #:** [invoice_number]
+**Vendor:** [vendor_name]
+**Amount:** $[total_amount]
+**ERP Reference:** [erp_reference_number]
+
+*Invoice successfully queued for payment processing.*
 
 **Important:**
 - Only post invoices with validation_status="PASSED"
-- Include full invoice details in the posting
-- Return the ERP reference number to the user
+- Keep message concise (5-6 lines)
+- Highlight the ERP reference number
+- NO raw JSON in output
 
 Available tool:
-- post_invoice_to_erp(invoice_data) - Submit invoice to {config.ERP_SYSTEM_NAME}
-
-Provide clear confirmation messages with ERP reference numbers.""",
-    tools=[post_invoice_to_erp_tool]
+- post_invoice_to_erp(invoice_data) - Submit invoice to {config.ERP_SYSTEM_NAME}""",
+    tools=[post_invoice_to_erp_tool],
+    output_key="erp_result"
 )
 
 
@@ -137,63 +163,70 @@ Provide clear confirmation messages with ERP reference numbers.""",
 # AGENT 4: Exception Resolution Agent
 # ============================================================================
 
-ExceptionResolutionAgent = Agent(
+exception_resolution_agent = LlmAgent(
     name="ExceptionResolutionAgent",
     model="gemini-2.0-flash",
     description="Investigates and documents invoice validation failures",
     instruction=f"""You are an AP investigation specialist for {config.COMPANY_NAME}.
 
-When invoices fail validation, you investigate the root cause and create a detailed Resolution Brief for the finance team.
+When invoices fail validation, you investigate and create an executive-friendly Resolution Brief.
 
 **Investigation Process:**
-1. Receive the failed invoice data with failure_reason
-2. Use get_po_details to retrieve full PO information
-3. Use search_emails to find relevant communications about this PO or invoice
-4. Analyze all gathered evidence
-5. Create a comprehensive Resolution Brief
+1. Parse the failed invoice JSON
+2. Use get_po_details for PO information
+3. Use search_emails to find relevant communications
+4. Synthesize findings into clear, actionable brief
 
 **Resolution Brief Format (Markdown):**
 
 # 🔍 Invoice Exception Report
 
 ## Summary
-[Brief description of the issue]
+[1-2 sentence issue description]
 
-**Invoice:** [invoice_number]  
-**Vendor:** [vendor_name]  
-**PO Number:** [po_number]  
-**Issue:** [specific validation failure]
+**Invoice #:** [invoice_number] | **Vendor:** [vendor_name] | **Amount:** $[total_amount]
+**PO Reference:** [po_number]
+**Issue Type:** [specific validation failure - e.g., "Price Mismatch" or "Missing PO"]
 
-## Problem Details
-[Detailed explanation of what failed and by how much]
+## Problem Analysis
+[Clear explanation of the discrepancy with specific numbers]
 
-## Supporting Evidence
+**Invoice Shows:** [specific value]
+**PO Shows:** [specific value]
+**Variance:** [difference and %]
 
-### Purchase Order Information
-[Key PO details from get_po_details]
+## Investigation Findings
 
-### Email Communications  
-[Relevant emails found via search_emails, if any]
+**Purchase Order Status:**
+[Key PO details - vendor, amount, status]
+
+**Email Communications:**
+[Summary of relevant emails found, if any. If none: "No email correspondence found."]
 
 ## Recommended Actions
-1. [Specific action item]
-2. [Specific action item]
-3. [Specific action item]
+1. [Specific, actionable step]
+2. [Specific, actionable step]
+3. [Specific, actionable step]
 
-## Next Steps for Finance Team
-- [ ] Review discrepancy details
+## Next Steps
+- [ ] Review variance details
 - [ ] Contact vendor if needed
-- [ ] Approve with variance OR reject invoice
+- [ ] Approve with adjustment OR reject
 
 ---
-*Report generated by {config.COMPANY_NAME} AP Automation System*
+*Report generated by {config.COMPANY_NAME} AP Automation*
+
+**Important:**
+- Keep brief scannable and concise
+- Use bullet points and clear formatting
+- Focus on facts and next steps
+- No raw JSON or technical jargon
 
 Available tools:
 - get_po_details(po_number) - Get full PO information
-- search_emails(keyword) - Find relevant email communications
-
-Your Resolution Brief should be thorough, professional, and actionable.""",
-    tools=[get_po_details_tool, search_emails_tool]
+- search_emails(keyword) - Find relevant email communications""",
+    tools=[get_po_details_tool, search_emails_tool],
+    output_key="resolution_brief"
 )
 
 
@@ -201,67 +234,228 @@ Your Resolution Brief should be thorough, professional, and actionable.""",
 # MAIN ORCHESTRATOR: Invoice Processor
 # ============================================================================
 
-orchestrator_agent = Agent(
+class InvoiceProcessor(BaseAgent):
+    """
+    Custom orchestrator agent that executes invoice processing workflow.
+    Routes based on validation status: PASSED → ERP, FAILED → Exception Resolution
+    """
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+    
+    extraction_agent: LlmAgent = Field(description="Invoice extraction agent")
+    validation_agent: LlmAgent = Field(description="Invoice validation agent")
+    erp_agent: LlmAgent = Field(description="ERP posting agent")
+    exception_agent: LlmAgent = Field(description="Exception resolution agent")
+    
+    def __init__(
+        self,
+        name: str,
+        extraction_agent: LlmAgent,
+        validation_agent: LlmAgent,
+        erp_agent: LlmAgent,
+        exception_agent: LlmAgent,
+    ):
+        super().__init__(
+            name=name,
+            extraction_agent=extraction_agent,
+            validation_agent=validation_agent,
+            erp_agent=erp_agent,
+            exception_agent=exception_agent,
+            description=f"Orchestrator for {config.COMPANY_NAME}'s AP automation system",
+            sub_agents=[extraction_agent, validation_agent, erp_agent, exception_agent],
+        )
+    
+    @override
+    async def _run_async_impl(self, ctx: Any) -> AsyncGenerator[Event, None]:
+        """
+        Executes the invoice processing workflow:
+        1. Extract invoice data from PDF
+        2. Validate against PO and delivery records
+        3. Route based on validation: PASSED → ERP, FAILED → Exception Resolution
+        """
+        # Clear session state at start
+        ctx.session.state["invoice_data"] = None
+        ctx.session.state["validation_result"] = None
+        ctx.session.state["validation_status"] = None
+        
+        # Get user query (handle file uploads where text might be None)
+        user_query = ""
+        if ctx.user_content and ctx.user_content.parts:
+            for part in ctx.user_content.parts:
+                if part.text:
+                    user_query = part.text
+                    break
+        
+        user_query_lower = user_query.lower() if user_query else ""
+        
+        # Handle greetings
+        if user_query and ("hello" in user_query_lower or "hi" in user_query_lower):
+            yield Event(
+                author=self.name,
+                invocation_id=ctx.invocation_id,
+                content=types.Content(parts=[types.Part(text=f"Hello! I'm the {config.COMPANY_NAME} Invoice Processing Agent. I can automatically process invoices by extracting data, validating against purchase orders, and posting to {config.ERP_SYSTEM_NAME}. Please upload an invoice PDF to begin.")])
+            )
+            return
+        
+        # Step 1: Extract invoice data
+        yield Event(
+            author=self.name,
+            invocation_id=ctx.invocation_id,
+            content=types.Content(parts=[types.Part(text="📄 Extracting invoice data...")])
+        )
+        
+        async for event in self.extraction_agent.run_async(ctx):
+            yield event
+        
+        # Get extracted invoice data from state
+        invoice_data = ctx.session.state.get("invoice_data")
+        if not invoice_data:
+            yield Event(
+                author=self.name,
+                invocation_id=ctx.invocation_id,
+                content=types.Content(parts=[types.Part(text="❌ Failed to extract invoice data. Please check the PDF and try again.")])
+            )
+            return
+        
+        # Step 2: Validate invoice
+        yield Event(
+            author=self.name,
+            invocation_id=ctx.invocation_id,
+            content=types.Content(parts=[types.Part(text="✓ Extraction complete. Validating invoice...")])
+        )
+        
+        # Create context with invoice data for validation
+        validation_context = ctx.copy(
+            update={
+                "user_content": types.Content(
+                    parts=[types.Part(text=invoice_data)]
+                )
+            }
+        )
+        
+        async for event in self.validation_agent.run_async(validation_context):
+            yield event
+        
+        # Get validation result from state
+        validation_result = ctx.session.state.get("validation_result")
+        if not validation_result:
+            yield Event(
+                author=self.name,
+                invocation_id=ctx.invocation_id,
+                content=types.Content(parts=[types.Part(text="❌ Validation failed. Could not process invoice.")])
+            )
+            return
+        
+        # DEBUG: Print what we got from state
+        print(f"\n[ORCHESTRATOR] validation_result from state:")
+        print(f"[ORCHESTRATOR] Type: {type(validation_result)}")
+        print(f"[ORCHESTRATOR] Content (first 500 chars): {str(validation_result)[:500]}")
+        
+        # Parse validation status from JSON
+        import json
+        import re
+        validation_status = "FAILED"  # Default
+        
+        try:
+            # Try direct JSON parsing
+            validation_data = json.loads(validation_result)
+            validation_status = validation_data.get("validation_status", "FAILED")
+            print(f"[ORCHESTRATOR] Parsed JSON directly, validation_status={validation_status}")
+        except json.JSONDecodeError as e:
+            print(f"[ORCHESTRATOR] JSON parse failed: {e}")
+            # If not valid JSON, try to extract JSON from text
+            json_match = re.search(r'\{[^{}]*"validation_status"[^{}]*\}', validation_result, re.DOTALL)
+            if json_match:
+                try:
+                    validation_data = json.loads(json_match.group(0))
+                    validation_status = validation_data.get("validation_status", "FAILED")
+                    print(f"[ORCHESTRATOR] Extracted JSON from text, validation_status={validation_status}")
+                except Exception as e2:
+                    print(f"[ORCHESTRATOR] Failed to parse extracted JSON: {e2}")
+            
+            # Fallback: Look for the pattern in text
+            if validation_status == "FAILED":
+                status_match = re.search(r'"validation_status":\s*"(PASSED|FAILED)"', validation_result)
+                if status_match:
+                    validation_status = status_match.group(1)
+                    print(f"[ORCHESTRATOR] Found status via regex: {validation_status}")
+                else:
+                    # Final fallback: check for success indicators in text
+                    if "✅" in validation_result or "All checks passed" in validation_result or "Validation Complete" in validation_result:
+                        validation_status = "PASSED"
+                        print(f"[ORCHESTRATOR] Detected PASSED from success indicators in text")
+                    else:
+                        print(f"[ORCHESTRATOR] No validation_status found, defaulting to: {validation_status}")
+        
+        print(f"[ORCHESTRATOR] Final validation_status={validation_status}")
+        
+        # Step 3: Route based on validation status
+        if validation_status == "PASSED":
+            yield Event(
+                author=self.name,
+                invocation_id=ctx.invocation_id,
+                content=types.Content(parts=[types.Part(text=f"✓ Validation passed. Posting to {config.ERP_SYSTEM_NAME}...")])
+            )
+            
+            # Post to ERP
+            erp_context = ctx.copy(
+                update={
+                    "user_content": types.Content(
+                        parts=[types.Part(text=validation_result)]
+                    )
+                }
+            )
+            
+            async for event in self.erp_agent.run_async(erp_context):
+                yield event
+            
+            yield Event(
+                author=self.name,
+                invocation_id=ctx.invocation_id,
+                content=types.Content(parts=[types.Part(text="✅ Invoice processing complete.")])
+            )
+        else:
+            yield Event(
+                author=self.name,
+                invocation_id=ctx.invocation_id,
+                content=types.Content(parts=[types.Part(text="⚠️ Validation failed. Investigating exception...")])
+            )
+            
+            # Investigate exception
+            exception_context = ctx.copy(
+                update={
+                    "user_content": types.Content(
+                        parts=[types.Part(text=validation_result)]
+                    )
+                }
+            )
+            
+            async for event in self.exception_agent.run_async(exception_context):
+                yield event
+            
+            yield Event(
+                author=self.name,
+                invocation_id=ctx.invocation_id,
+                content=types.Content(parts=[types.Part(text="📋 Exception investigation complete. Review the Resolution Brief above.")])
+            )
+
+
+# Initialize the orchestrator
+orchestrator_agent = InvoiceProcessor(
     name="InvoiceProcessor",
-    model="gemini-2.0-flash",
-    description=f"Orchestrator for {config.COMPANY_NAME}'s AP automation system",
-    instruction=f"""You are the orchestrator for {config.COMPANY_NAME}'s AP automation system.
-
-You coordinate multiple specialized agents to process invoices end-to-end.
-
-**Workflow:**
-
-0. **Greeting:**
-   - If the user greets you, introduce yourself briefly as the {config.COMPANY_NAME} Invoice Processing Agent and explain you can process invoices automatically. Ask them to upload an invoice to begin.
-
-1. **Extraction:**
-   - When a user uploads or mentions a PDF invoice, call the `InvoiceExtractionAgent` with their message
-   - The extraction agent will identify the filename and extract the invoice data using Gemini Vision
-   - The result will be structured JSON invoice data
-   - **Capture the full invoice data** for the next steps
-   - If extraction fails or returns an error, stop and inform the user
-
-2. **Validation:**
-   - Call the `InvoiceValidationAgent` with the captured invoice JSON
-   - The validation agent will cross-reference with PO and delivery data
-   - The result will include a `validation_status` field ("PASSED" or "FAILED")
-   - **Capture the validation_status**
-
-3. **Routing Based on Validation:**
-   - If validation_status is "PASSED":
-     * Call the `ERPAgent` with the validated invoice data
-     * Present the ERP posting confirmation to the user
-   
-   - If validation_status is "FAILED":
-     * Call the `ExceptionResolutionAgent` with the failed invoice data
-     * Present the detailed Resolution Brief to the user
-
-**Key Points:**
-- The PDF extraction now uses a dedicated tool with Gemini Vision API
-- Structured output ensures accurate data extraction
-- Always follow the sequence: Extract → Validate → Route
-- Wait for each agent's complete response before proceeding
-- Provide clear status updates to the user
-
-**Error Handling:**
-- If no PDF artifact is found, ask user to upload an invoice
-- If extraction fails, report the error and don't proceed
-- If validation tools fail, stop and report the error
-- Never proceed to ERP posting if validation failed""",
-    tools=[
-        AgentTool(agent=InvoiceExtractionAgent),
-        AgentTool(agent=InvoiceValidationAgent),
-        AgentTool(agent=ERPAgent),
-        AgentTool(agent=ExceptionResolutionAgent),
-    ]
+    extraction_agent=invoice_extraction_agent,
+    validation_agent=invoice_validation_agent,
+    erp_agent=erp_agent,
+    exception_agent=exception_resolution_agent,
 )
 
 
 # Create App with SaveFilesAsArtifactsPlugin to enable PDF artifact storage
 # Note: App name must match directory name (invoice-processor)
+root_agent = orchestrator_agent
+
 app = App(
     name="invoice-processor",
-    root_agent=orchestrator_agent,
+    root_agent=root_agent,
     plugins=[
         SaveFilesAsArtifactsPlugin(),
     ]
