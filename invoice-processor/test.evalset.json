@@ -1,0 +1,351 @@
+{
+  "eval_set_id": "test",
+  "name": "test",
+  "eval_cases": [
+    {
+      "eval_id": "case_1760939233405",
+      "conversation": [
+        {
+          "invocation_id": "e-039dad97-903d-48f4-85f7-6460228c4fa1",
+          "user_content": {
+            "parts": [
+              {
+                "text": "hi"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "Hello! I'm the Publix Invoice Processing Agent. I can automatically process invoices by extracting data, validating against purchase orders, and posting to SAP. Please upload an invoice PDF to begin."
+              }
+            ]
+          },
+          "intermediate_data": {},
+          "creation_timestamp": 1760938809.772324
+        },
+        {
+          "invocation_id": "e-786b1691-7ae1-4503-a005-3d4cb0eba357",
+          "user_content": {
+            "parts": [
+              {
+                "text": "[Uploaded Artifact: \"Invoice_PBSI250242_from_Designed_Maintenance_Services_Inc.pdf\"]"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "✅ Invoice processing complete."
+              }
+            ]
+          },
+          "intermediate_data": {
+            "invocation_events": [
+              {
+                "author": "InvoiceExtractionAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "adk-1be7c546-1a42-4c1a-8f5f-f71a28e5602e",
+                        "args": {
+                          "filename": "Invoice_PBSI250242_from_Designed_Maintenance_Services_Inc.pdf"
+                        },
+                        "name": "read_invoice_pdf"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "InvoiceExtractionAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "adk-1be7c546-1a42-4c1a-8f5f-f71a28e5602e",
+                        "name": "read_invoice_pdf",
+                        "response": {
+                          "status": "success",
+                          "invoice_data": {
+                            "invoice_number": "PBSI-250242",
+                            "vendor_name": "Designed Maintenance Services, Inc.",
+                            "invoice_date": "09/16/2025",
+                            "po_number": "8898327",
+                            "item_description": "MATERIALS REQUIRED TO\nCOMPLETE JOB\nINVOICE TO SUPPLY 2 HP\nMOTOR, TEFC, 1725 RPM, 56\nFRAME - RUSH ORDER",
+                            "quantity": 1.0,
+                            "unit_price": 640.0,
+                            "total_amount": 640.0
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              },
+              {
+                "author": "InvoiceValidationAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "adk-dcab6405-546a-4fe8-8129-9213e2bbf11e",
+                        "args": {
+                          "po_number": "8898327"
+                        },
+                        "name": "get_po_details"
+                      }
+                    },
+                    {
+                      "function_call": {
+                        "id": "adk-402ac80a-218e-4253-ad38-c05675be9161",
+                        "args": {
+                          "invoice_number": "PBSI-250242"
+                        },
+                        "name": "get_delivery_details"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "InvoiceValidationAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "adk-dcab6405-546a-4fe8-8129-9213e2bbf11e",
+                        "name": "get_po_details",
+                        "response": {
+                          "status": "success",
+                          "po_data": {
+                            "po_number": 8898327,
+                            "vendor_name": "Designed Maintenance Services, Inc.",
+                            "item_description": "MATERIALS REQUIRED TO COMPLETE JOB",
+                            "quantity": 1,
+                            "unit_price": 640.0,
+                            "total_amount": 640.0
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "function_response": {
+                        "id": "adk-402ac80a-218e-4253-ad38-c05675be9161",
+                        "name": "get_delivery_details",
+                        "response": {
+                          "status": "success",
+                          "delivery_data": {
+                            "invoice_number": "PBSI-250242",
+                            "po_number": 8898327,
+                            "status": "DELIVERED",
+                            "signed_by": "John Smith",
+                            "delivery_date": "10/16/2025"
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              },
+              {
+                "author": "ERPAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "adk-41f054ab-4694-4205-8ab0-33d5e740bbbd",
+                        "args": {
+                          "invoice_data": {
+                            "invoice_date": "09/16/2025",
+                            "vendor_name": "Designed Maintenance Services, Inc.",
+                            "invoice_number": "PBSI-250242",
+                            "unit_price": 640,
+                            "item_description": "MATERIALS REQUIRED TO\nCOMPLETE JOB\nINVOICE TO SUPPLY 2 HP\nMOTOR, TEFC, 1725 RPM, 56\nFRAME - RUSH ORDER",
+                            "total_amount": 640,
+                            "quantity": 1,
+                            "po_number": "8898327"
+                          }
+                        },
+                        "name": "post_invoice_to_erp"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "ERPAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "adk-41f054ab-4694-4205-8ab0-33d5e740bbbd",
+                        "name": "post_invoice_to_erp",
+                        "response": {
+                          "status": "success",
+                          "message": "✅ **SUCCESS**: Invoice PBSI-250242 for $640.00 has been posted to SAP for payment.\n\n**Vendor:** Designed Maintenance Services, Inc.\n**ERP Reference:** SAP-PBSI-250242-20251020014033\n**Posted At:** 2025-10-20 01:40:33",
+                          "erp_reference": "SAP-PBSI-250242-20251020014033",
+                          "posted_at": "2025-10-20T01:40:33.413812"
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              }
+            ]
+          },
+          "creation_timestamp": 1760938822.928379
+        },
+        {
+          "invocation_id": "e-6ba885c5-b685-4670-857a-dfb8f4d70465",
+          "user_content": {
+            "parts": [
+              {
+                "text": "[Uploaded Artifact: \"Publix Inv 41599 PO 8901307.pdf\"]"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "📋 Exception investigation complete. Review the Resolution Brief above."
+              }
+            ]
+          },
+          "intermediate_data": {
+            "invocation_events": [
+              {
+                "author": "InvoiceExtractionAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "adk-bc018bbd-87b3-45d0-98ce-6d9f70c42ae9",
+                        "args": {
+                          "filename": "Publix Inv 41599 PO 8901307.pdf"
+                        },
+                        "name": "read_invoice_pdf"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "InvoiceExtractionAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "adk-bc018bbd-87b3-45d0-98ce-6d9f70c42ae9",
+                        "name": "read_invoice_pdf",
+                        "response": {
+                          "status": "success",
+                          "invoice_data": {
+                            "invoice_number": "41599",
+                            "vendor_name": "Broward Electric Car & Equipment",
+                            "invoice_date": "2025-09-16",
+                            "po_number": "8901307",
+                            "item_description": "Brake Drum 4L Std EZ-GO Elec 1988+",
+                            "quantity": 4.0,
+                            "unit_price": 82.0,
+                            "total_amount": 315.86
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              },
+              {
+                "author": "InvoiceValidationAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "adk-19b42fa1-867c-4dbc-a99e-200e40c50419",
+                        "args": {
+                          "po_number": "8901307"
+                        },
+                        "name": "get_po_details"
+                      }
+                    },
+                    {
+                      "function_call": {
+                        "id": "adk-80905f75-dd86-46b2-b7de-cd6510d8b1fd",
+                        "args": {
+                          "invoice_number": "41599"
+                        },
+                        "name": "get_delivery_details"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "InvoiceValidationAgent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "adk-19b42fa1-867c-4dbc-a99e-200e40c50419",
+                        "name": "get_po_details",
+                        "response": {
+                          "status": "success",
+                          "po_data": {
+                            "po_number": 8901307,
+                            "vendor_name": "Broward Electric Car & Equipment",
+                            "item_description": "Brake Drum 4L Std EZ-GO Elec 1988+",
+                            "quantity": 4,
+                            "unit_price": 75.0,
+                            "total_amount": 300.0
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "function_response": {
+                        "id": "adk-80905f75-dd86-46b2-b7de-cd6510d8b1fd",
+                        "name": "get_delivery_details",
+                        "response": {
+                          "status": "success",
+                          "delivery_data": {
+                            "invoice_number": "41599",
+                            "po_number": 8901307,
+                            "status": "DELIVERED",
+                            "signed_by": "Jose Soto",
+                            "delivery_date": "09/16/2025"
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              }
+            ]
+          },
+          "creation_timestamp": 1760939096.575917
+        }
+      ],
+      "session_input": {
+        "app_name": "invoice-processor",
+        "user_id": "user"
+      },
+      "creation_timestamp": 1760939235.8760672
+    }
+  ],
+  "creation_timestamp": 1760939229.582207
+}

@@ -1,0 +1,37 @@
+{
+  "eval_set_id": "new",
+  "name": "new",
+  "eval_cases": [
+    {
+      "eval_id": "hi",
+      "conversation": [
+        {
+          "invocation_id": "e-10482b38-a7e8-42b6-94d4-1b42ba17a57c",
+          "user_content": {
+            "parts": [
+              {
+                "text": "hi"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "Hello! I'm the Publix Invoice Processing Agent. I can automatically process invoices by extracting data, validating against purchase orders, and posting to SAP. Please upload an invoice PDF to begin."
+              }
+            ]
+          },
+          "intermediate_data": {},
+          "creation_timestamp": 1760942689.309513
+        }
+      ],
+      "session_input": {
+        "app_name": "invoice-processor",
+        "user_id": "user"
+      },
+      "creation_timestamp": 1760942697.097024
+    }
+  ],
+  "creation_timestamp": 1760942697.090997
+}

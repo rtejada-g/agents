@@ -3,11 +3,11 @@ Configuration for Invoice Processor Agent
 """
 
 # Company Configuration
-COMPANY_NAME = "Global Retail Corp"
+COMPANY_NAME = "Publix"
 DEFAULT_COMPANY_NAME = "Global Retail Corp"
 
 # Company logo (URL or local path)
-COMPANY_LOGO = None  # Set to path/URL if available
+COMPANY_LOGO = "https://upload.wikimedia.org/wikipedia/commons/1/1e/Publix_Retail_Logo.png"  # Set to path/URL if available
 DEFAULT_LOGO = None
 
 # ERP System Configuration
