@@ -41,61 +41,63 @@ class InvoiceData(BaseModel):
 
 # --- PDF Extraction Tool ---
 
-async def read_invoice_pdf(tool_context: ToolContext, filename: str) -> Dict[str, Any]:
+async def read_invoice_pdf(tool_context: ToolContext, filename: Optional[str] = None) -> Dict[str, Any]:
     """
     Reads and extracts structured data from an uploaded invoice PDF artifact.
     
-    This tool:
-    1. Loads the PDF artifact from storage
-    2. Makes a direct Gemini API call with structured output schema
-    3. Returns extracted invoice data as JSON
+    This tool accesses PDF artifacts at SESSION scope (not invocation scope) to work
+    around multi-agent scope isolation issues.
+    
+    Process:
+    1. Accesses orchestrator-loaded PDF from context inline_data
+    2. Makes Gemini API call with structured output schema
+    3. Saves structured data to session state for orchestrator
+    4. Returns user-friendly summary for display
     
     Args:
-        tool_context: The tool context (provides access to artifacts)
-        filename: The PDF artifact filename (e.g., 'invoice.pdf')
+        tool_context: The tool context (provides access to artifacts and state)
+        filename: (Optional) Specific PDF filename (currently unused - PDF comes from context)
     
     Returns:
-        A dictionary with:
+        A dictionary with user-friendly display fields:
         - status: 'success' or 'error'
-        - invoice_data: Extracted invoice fields (if successful)
+        - invoice_number, vendor_name, total_amount, po_number (if successful)
         - error_message: Error description (if error)
     """
     print(f"\n{'='*80}")
-    print(f"[PDF_EXTRACT] Tool called with filename: '{filename}'")
-    print(f"[PDF_EXTRACT] Filename type: {type(filename)}")
-    print(f"[PDF_EXTRACT] Filename length: {len(filename)}")
+    print(f"[PDF_EXTRACT] Tool called")
     print(f"{'='*80}\n")
     
     try:
-        # First, list all available artifacts to see what's actually there
-        print(f"[PDF_EXTRACT] Listing all available artifacts...")
-        try:
-            available_artifacts = await tool_context.list_artifacts()
-            print(f"[PDF_EXTRACT] Available artifacts: {available_artifacts}")
-        except Exception as e:
-            print(f"[PDF_EXTRACT] Could not list artifacts: {e}")
+        # The orchestrator pre-loads the PDF and passes it in the context with inline_data
+        # We need to get the PDF from the invocation context's user message
+        # Access through the shared invocation context
+        from google.adk.agents import InvocationContext
         
-        # 1. Load the PDF artifact
-        print(f"[PDF_EXTRACT] Attempting to load artifact: '{filename}'")
-        pdf_artifact = await tool_context.load_artifact(filename=filename)
+        # Try to get the PDF from the current invocation context
+        # The orchestrator passed it in the user_content
+        pdf_artifact = None
+        actual_filename = "uploaded_invoice.pdf"
         
-        if not pdf_artifact or not pdf_artifact.inline_data:
-            print(f"[PDF_EXTRACT] ERROR: Artifact not found - '{filename}'")
-            print(f"[PDF_EXTRACT] pdf_artifact is None: {pdf_artifact is None}")
-            if pdf_artifact:
-                print(f"[PDF_EXTRACT] pdf_artifact.inline_data is None: {pdf_artifact.inline_data is None}")
-            
-            # Try to provide helpful error message
-            error_msg = f"PDF artifact '{filename}' not found."
-            if available_artifacts:
-                error_msg += f" Available artifacts: {', '.join(available_artifacts)}"
-            
-            return {
-                "status": "error",
-                "error_message": error_msg
-            }
+        # Check if there's inline_data in the context
+        # Note: This is a workaround - ideally we'd have direct access to context
+        # For now, try to access from tool_context internals
+        if hasattr(tool_context, '_invocation_context'):
+            ctx = tool_context._invocation_context
+            if ctx and ctx.user_content and ctx.user_content.parts:
+                for part in ctx.user_content.parts:
+                    if part.inline_data and part.inline_data.mime_type == 'application/pdf':
+                        pdf_artifact = part
+                        actual_filename = part.inline_data.display_name or "uploaded_invoice.pdf"
+                        print(f"[PDF_EXTRACT] Found PDF in context: {actual_filename}")
+                        break
         
-        print(f"[PDF_EXTRACT] Loaded PDF: {filename} ({pdf_artifact.inline_data.mime_type})")
+        if not pdf_artifact:
+            error_msg = "No PDF found in context. Please upload an invoice PDF."
+            print(f"[PDF_EXTRACT] ERROR: {error_msg}")
+            return {"status": "error", "error_message": error_msg}
+        
+        print(f"[PDF_EXTRACT] Successfully found PDF: {actual_filename} ({pdf_artifact.inline_data.mime_type})")
         
         # 2. Prepare Gemini API call with structured output
         extraction_prompt = """Extract all invoice data from this PDF document.
@@ -141,9 +143,18 @@ async def read_invoice_pdf(tool_context: ToolContext, filename: str) -> Dict[str
         
         print(f"[PDF_EXTRACT] Successfully extracted invoice: {invoice_data.get('invoice_number')}")
         
+        # 5. Save structured data to session state for orchestrator
+        tool_context.actions.state_delta["invoice_data_json"] = json.dumps(invoice_data)
+        print(f"[PDF_EXTRACT] Saved invoice data to session state")
+        
+        # 6. Return user-friendly display fields
         return {
             "status": "success",
-            "invoice_data": invoice_data
+            "invoice_number": invoice_data.get("invoice_number"),
+            "vendor_name": invoice_data.get("vendor_name"),
+            "total_amount": invoice_data.get("total_amount"),
+            "po_number": invoice_data.get("po_number"),
+            "invoice_date": invoice_data.get("invoice_date")
         }
         
     except json.JSONDecodeError as e:
@@ -207,10 +218,12 @@ def get_po_details(po_number: str) -> Dict[str, Any]:
         po_number: The PO number to look up (e.g., 'PO-10001')
     
     Returns:
-        A dictionary with:
+        A dictionary with user-friendly display fields:
         - status: 'success' or 'error'
-        - po_data: Dict with PO details (if found)
+        - po_number, vendor_name, total_amount, etc. (if found)
         - error_message: Error description (if error)
+        
+    Note: Full PO data is automatically available in tool result for agent processing
     
     Expected CSV schema:
     po_number,vendor_name,item_description,quantity,unit_price,total_amount
@@ -238,9 +251,15 @@ def get_po_details(po_number: str) -> Dict[str, Any]:
     po_details = po_row.iloc[0].to_dict()
     print(f"[GET_PO] Found PO: {po_details}")
     
+    # Return user-friendly format (full data is in result for agent to use)
     return {
         "status": "success",
-        "po_data": po_details
+        "po_number": str(po_details.get("po_number")),
+        "vendor_name": str(po_details.get("vendor_name")),
+        "item_description": str(po_details.get("item_description")),
+        "quantity": float(po_details.get("quantity", 0)),
+        "unit_price": float(po_details.get("unit_price", 0)),
+        "total_amount": float(po_details.get("total_amount", 0))
     }
 
 get_po_details_tool = FunctionTool(func=get_po_details)
@@ -256,10 +275,12 @@ def get_delivery_details(invoice_number: str) -> Dict[str, Any]:
         invoice_number: The invoice number to look up (e.g., 'INV-101')
     
     Returns:
-        A dictionary with:
+        A dictionary with user-friendly display fields:
         - status: 'success' or 'error'
-        - delivery_data: Dict with delivery details (if found)
+        - invoice_number, status, signed_by, delivery_date (if found)
         - error_message: Error description (if error)
+        
+    Note: Full delivery data is automatically available in tool result for agent processing
     
     Expected CSV schema:
     invoice_number,po_number,status,signed_by,delivery_date
@@ -287,12 +308,72 @@ def get_delivery_details(invoice_number: str) -> Dict[str, Any]:
     delivery_details = delivery_row.iloc[0].to_dict()
     print(f"[GET_DELIVERY] Found delivery: {delivery_details}")
     
+    # Return user-friendly format (full data is in result for agent to use)
     return {
         "status": "success",
-        "delivery_data": delivery_details
+        "invoice_number": str(delivery_details.get("invoice_number")),
+        "po_number": str(delivery_details.get("po_number")),
+        "delivery_status": str(delivery_details.get("status")),
+        "signed_by": str(delivery_details.get("signed_by")),
+        "delivery_date": str(delivery_details.get("delivery_date"))
     }
 
 get_delivery_details_tool = FunctionTool(func=get_delivery_details)
+
+
+# --- Validation Helper Tool ---
+
+def save_validation_result(
+    tool_context: ToolContext,
+    invoice_data: dict,
+    po_data: dict,
+    delivery_data: dict,
+    validation_status: str,
+    failure_reason: Optional[str] = None
+) -> Dict[str, Any]:
+    """
+    Saves complete validation result to session state.
+    
+    This helper tool allows the validation agent to persist structured data
+    while still outputting user-friendly messages.
+    
+    Args:
+        tool_context: The tool context for state access
+        invoice_data: Complete invoice data dict
+        po_data: Complete PO data dict
+        delivery_data: Complete delivery data dict
+        validation_status: "PASSED" or "FAILED"
+        failure_reason: Description of failure (if FAILED)
+    
+    Returns:
+        Confirmation message for agent
+    """
+    print(f"[SAVE_VALIDATION] Saving validation result with status: {validation_status}")
+    
+    # Build complete validation result
+    validation_result = {
+        **invoice_data,  # Include all invoice fields
+        "validation_status": validation_status,
+        "po_verified": po_data.get("status") == "success",
+        "delivery_confirmed": delivery_data.get("status") == "success",
+    }
+    
+    if failure_reason:
+        validation_result["failure_reason"] = failure_reason
+    
+    # Save to state for orchestrator
+    validation_json = json.dumps(validation_result)
+    tool_context.actions.state_delta["validation_result_json"] = validation_json
+    
+    print(f"[SAVE_VALIDATION] Saved validation result to state ({len(validation_json)} bytes)")
+    
+    return {
+        "status": "success",
+        "message": f"Validation result ({validation_status}) saved to state",
+        "validation_status": validation_status
+    }
+
+save_validation_result_tool = FunctionTool(func=save_validation_result)
 
 
 # --- Email Search Tools ---
@@ -440,6 +521,7 @@ __all__ = [
     'read_invoice_pdf_tool',
     'get_po_details_tool',
     'get_delivery_details_tool',
+    'save_validation_result_tool',
     'search_emails_tool',
     'post_invoice_to_erp_tool',
 ]
