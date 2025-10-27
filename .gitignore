@@ -5,6 +5,10 @@ __pycache__/
 *.so
 .Python
 
+# Bytecode cache
+**/__pycache__/
+*.pyc
+
 # Virtual environments
 venv/
 env/

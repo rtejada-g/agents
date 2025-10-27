@@ -3,11 +3,11 @@ Configuration for Invoice Processor Agent
 """
 
 # Company Configuration
-COMPANY_NAME = "Publix"
+COMPANY_NAME = "Panera"
 DEFAULT_COMPANY_NAME = "Global Retail Corp"
 
 # Company logo (URL or local path)
-COMPANY_LOGO = "https://upload.wikimedia.org/wikipedia/commons/1/1e/Publix_Retail_Logo.png"  # Set to path/URL if available
+COMPANY_LOGO = "https://1000logos.net/wp-content/uploads/2021/12/Panera-Bread-logo.png"  # Set to path/URL if available
 DEFAULT_LOGO = None
 
 # ERP System Configuration
