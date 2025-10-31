@@ -15,9 +15,14 @@ env/
 ENV/
 .venv/
 
-# Environment files (secrets)
+# Environment files (secrets) - NEVER commit these!
 .env
+.env.*
+!.env.example
 *.env.local
+*.env.production
+*.env.development
+*.env.test
 
 # Generated outputs
 output/
