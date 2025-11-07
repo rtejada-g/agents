@@ -1,0 +1,6 @@
+# Core ADK dependencies (installed from parent adk-python)
+# google-adk
+
+# Additional dependencies for aesthetic-to-routine agent
+pydantic>=2.0.0
+typing-extensions>=4.5.0

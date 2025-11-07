@@ -1,0 +1,221 @@
+{
+  "mappings": [
+    {
+      "aesthetic_id": "ethereal-glow",
+      "base_recipe": {
+        "steps": [
+          {
+            "category": "base",
+            "sub_category": "serum",
+            "priority": 1,
+            "note": "Radiance-boosting serum for luminous skin"
+          },
+          {
+            "category": "base",
+            "sub_category": "moisturizer",
+            "priority": 2,
+            "note": "Hydrating moisturizer for dewy finish"
+          },
+          {
+            "category": "cheek",
+            "sub_category": "highlighter",
+            "priority": 3,
+            "note": "Shimmer for ethereal glow"
+          },
+          {
+            "category": "other",
+            "sub_category": "setting spray",
+            "priority": 4,
+            "note": "Dewy finish setting spray"
+          }
+        ]
+      }
+    },
+    {
+      "aesthetic_id": "matte-perfection",
+      "base_recipe": {
+        "steps": [
+          {
+            "category": "base",
+            "sub_category": "foundation",
+            "priority": 1,
+            "note": "Long-wear matte foundation"
+          },
+          {
+            "category": "base",
+            "sub_category": "primer",
+            "priority": 2,
+            "note": "Smoothing primer base"
+          },
+          {
+            "category": "cheek",
+            "sub_category": "blush",
+            "priority": 3,
+            "note": "Natural matte blush"
+          },
+          {
+            "category": "lip",
+            "sub_category": "lipstick",
+            "priority": 4,
+            "note": "Matte lipstick"
+          }
+        ]
+      }
+    },
+    {
+      "aesthetic_id": "korean-glow",
+      "base_recipe": {
+        "steps": [
+          {
+            "category": "base",
+            "sub_category": "essence",
+            "priority": 1,
+            "note": "Hydrating essence for glass skin"
+          },
+          {
+            "category": "other",
+            "sub_category": "face mask",
+            "priority": 2,
+            "note": "Lifting and plumping mask"
+          },
+          {
+            "category": "base",
+            "sub_category": "moisturizer",
+            "priority": 3,
+            "note": "Deep hydration for plump skin"
+          },
+          {
+            "category": "other",
+            "sub_category": "setting spray",
+            "priority": 4,
+            "note": "Dewy finish spray"
+          }
+        ]
+      }
+    },
+    {
+      "aesthetic_id": "bold-definition",
+      "base_recipe": {
+        "steps": [
+          {
+            "category": "eye",
+            "sub_category": "eyeliner",
+            "priority": 1,
+            "note": "Precision gel eyeliner"
+          },
+          {
+            "category": "eye",
+            "sub_category": "mascara",
+            "priority": 2,
+            "note": "Volumizing mascara"
+          },
+          {
+            "category": "eye",
+            "sub_category": "eyeshadow",
+            "priority": 3,
+            "note": "Dramatic eye color"
+          },
+          {
+            "category": "lip",
+            "sub_category": "lipstick",
+            "priority": 4,
+            "note": "Bold lip color"
+          }
+        ]
+      }
+    },
+    {
+      "aesthetic_id": "fresh-faced",
+      "base_recipe": {
+        "steps": [
+          {
+            "category": "other",
+            "sub_category": "cleanser",
+            "priority": 1,
+            "note": "Gentle cleansing balm"
+          },
+          {
+            "category": "base",
+            "sub_category": "moisturizer",
+            "priority": 2,
+            "note": "Lightweight hydration"
+          },
+          {
+            "category": "base",
+            "sub_category": "primer",
+            "priority": 3,
+            "note": "Vitamin-enriched base"
+          },
+          {
+            "category": "lip",
+            "sub_category": "lipstick",
+            "priority": 4,
+            "note": "Natural lip color"
+          }
+        ]
+      }
+    },
+    {
+      "aesthetic_id": "romantic-rose",
+      "base_recipe": {
+        "steps": [
+          {
+            "category": "base",
+            "sub_category": "primer",
+            "priority": 1,
+            "note": "Smoothing primer"
+          },
+          {
+            "category": "cheek",
+            "sub_category": "blush",
+            "priority": 2,
+            "note": "Soft pink blush"
+          },
+          {
+            "category": "cheek",
+            "sub_category": "highlighter",
+            "priority": 3,
+            "note": "Rosy glow highlighter"
+          },
+          {
+            "category": "lip",
+            "sub_category": "lipstick",
+            "priority": 4,
+            "note": "Romantic rose lip color"
+          }
+        ]
+      }
+    },
+    {
+      "aesthetic_id": "purple-statement",
+      "base_recipe": {
+        "steps": [
+          {
+            "category": "base",
+            "sub_category": "foundation",
+            "priority": 1,
+            "note": "Flawless base for bold color"
+          },
+          {
+            "category": "cheek",
+            "sub_category": "contour",
+            "priority": 2,
+            "note": "Sculpting and highlighting"
+          },
+          {
+            "category": "eye",
+            "sub_category": "eyeshadow",
+            "priority": 3,
+            "note": "Complementary eye color"
+          },
+          {
+            "category": "lip",
+            "sub_category": "lipstick",
+            "priority": 4,
+            "note": "Bold purple lip"
+          }
+        ]
+      }
+    }
+  ]
+}

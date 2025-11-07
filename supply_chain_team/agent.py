@@ -1,6 +1,8 @@
 import logging
 import re
 from google.adk.agents import LlmAgent, BaseAgent
+from google.adk.agents.context_cache_config import ContextCacheConfig
+from google.adk.apps import App
 from google.adk.events import Event, EventActions
 from google.adk.runners import Runner
 from google.adk.sessions import InMemorySessionService
@@ -418,7 +420,21 @@ supplychain_agent = SupplyChainAgent(
     inventory_agent=inventory_agent,
     marketing_agent=marketing_agent,
 )
+
+# Export root_agent (required by agent loader)
 root_agent = supplychain_agent
+
+# Wrap in App with context caching enabled
+# This applies caching to ALL agents in the app (Forecasting, Inventory, Marketing)
+app = App(
+    name="supply_chain_team",
+    root_agent=supplychain_agent,
+    context_cache_config=ContextCacheConfig(
+        cache_intervals=10,      # Reuse cache for up to 10 conversation turns
+        ttl_seconds=1800,        # 30-minute TTL (cache expires after inactivity)
+        min_tokens=500           # Only cache if instruction + tools > 500 tokens
+    )
+)
 
 # Note: Evaluation metrics are configured through the UI when running evaluations,
 # not hardcoded in the agent. This allows flexibility to test different metrics

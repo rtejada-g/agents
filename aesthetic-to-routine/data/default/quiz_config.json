@@ -1,0 +1,43 @@
+{
+  "questions": [
+    {
+      "id": "skin_type",
+      "text": "What's your skin type?",
+      "type": "single_select",
+      "options": [
+        { "value": "dry", "label": "Dry" },
+        { "value": "oily", "label": "Oily" },
+        { "value": "combination", "label": "Combination" },
+        { "value": "normal", "label": "Normal" }
+      ],
+      "skippable": true
+    },
+    {
+      "id": "skin_tone",
+      "text": "Select your skin tone",
+      "type": "color_swatch",
+      "swatches": [
+        { "hex": "#F5D0C5", "label": "Fair" },
+        { "hex": "#E8B896", "label": "Light" },
+        { "hex": "#C68642", "label": "Medium" },
+        { "hex": "#8D5524", "label": "Tan" },
+        { "hex": "#613D2D", "label": "Deep" }
+      ],
+      "skippable": true
+    },
+    {
+      "id": "concerns",
+      "text": "What are your main concerns? (select all that apply)",
+      "type": "multi_select",
+      "options": [
+        { "value": "hydration", "label": "Hydration" },
+        { "value": "anti-aging", "label": "Anti-aging" },
+        { "value": "acne", "label": "Acne" },
+        { "value": "brightening", "label": "Brightening" },
+        { "value": "texture", "label": "Texture" },
+        { "value": "pores", "label": "Pores" }
+      ],
+      "skippable": true
+    }
+  ]
+}
