@@ -13,9 +13,9 @@ BRAND_DATA_SET = os.getenv("BRAND_DATA_SET", "default")
 # Company/Brand name for UI display
 COMPANY_NAME = os.getenv("COMPANY_NAME", "Beauty Co")
 
-# Routine configuration
-MAX_ROUTINE_STEPS = int(os.getenv("MAX_ROUTINE_STEPS", "5"))
-MIN_ROUTINE_STEPS = int(os.getenv("MIN_ROUTINE_STEPS", "3"))
+# Routine configuration - Smart bounds
+MAX_ROUTINE_STEPS = int(os.getenv("MAX_ROUTINE_STEPS", "10"))  # Raised to allow longer routines
+MIN_ROUTINE_STEPS = int(os.getenv("MIN_ROUTINE_STEPS", "4"))   # Minimum for a complete routine
 
 # Display configuration
 SHOW_TRENDING_TERMS = os.getenv("SHOW_TRENDING_TERMS", "true").lower() == "true"

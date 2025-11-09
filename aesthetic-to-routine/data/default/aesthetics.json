@@ -7,7 +7,9 @@
       "description": "Soft, luminous radiance with hydrated, glowing skin",
       "trending_terms": ["luminous skin", "dewy foundation", "nourishing skincare"],
       "image_filename": "aesthetic_ethereal_glow.jpg",
-      "popularity_score": 95
+      "popularity_score": 95,
+      "routine_types": ["skincare"],
+      "subcategories": ["AM", "PM"]
     },
     {
       "id": "matte-perfection",
@@ -16,7 +18,9 @@
       "description": "Flawless matte finish that lasts all day",
       "trending_terms": ["long-wear foundation", "matte finish", "oil-control"],
       "image_filename": "aesthetic_matte_perfection.jpg",
-      "popularity_score": 88
+      "popularity_score": 88,
+      "routine_types": ["makeup"],
+      "subcategories": ["everyday"]
     },
     {
       "id": "korean-glow",
@@ -25,7 +29,9 @@
       "description": "Glass skin with hydrated, dewy, plump finish",
       "trending_terms": ["glass skin", "essence", "hydrating mask"],
       "image_filename": "aesthetic_korean_glow.jpg",
-      "popularity_score": 92
+      "popularity_score": 92,
+      "routine_types": ["skincare"],
+      "subcategories": ["PM"]
     },
     {
       "id": "bold-definition",
@@ -34,7 +40,9 @@
       "description": "Dramatic eyes with precision and impact",
       "trending_terms": ["gel eyeliner", "volumizing mascara", "bold lip"],
       "image_filename": "aesthetic_bold_definition.jpg",
-      "popularity_score": 85
+      "popularity_score": 85,
+      "routine_types": ["makeup"],
+      "subcategories": ["glam"]
     },
     {
       "id": "fresh-faced",
@@ -43,7 +51,9 @@
       "description": "Minimal makeup, maximum skin health and natural beauty",
       "trending_terms": ["clean beauty", "natural glow", "skin first"],
       "image_filename": "aesthetic_fresh_faced.jpg",
-      "popularity_score": 90
+      "popularity_score": 90,
+      "routine_types": ["skincare", "makeup"],
+      "subcategories": ["AM", "everyday"]
     },
     {
       "id": "romantic-rose",
@@ -52,7 +62,9 @@
       "description": "Soft, romantic pinks and roses for a feminine touch",
       "trending_terms": ["pink blush", "rosy lips", "soft glam"],
       "image_filename": "aesthetic_romantic_rose.jpg",
-      "popularity_score": 87
+      "popularity_score": 87,
+      "routine_types": ["makeup"],
+      "subcategories": ["glam"]
     },
     {
       "id": "purple-statement",
@@ -61,7 +73,9 @@
       "description": "Make a statement with bold purple lips and dramatic color",
       "trending_terms": ["purple lipstick", "bold color", "statement lips"],
       "image_filename": "aesthetic_purple_statement.jpg",
-      "popularity_score": 83
+      "popularity_score": 83,
+      "routine_types": ["makeup"],
+      "subcategories": ["glam"]
     }
   ]
 }

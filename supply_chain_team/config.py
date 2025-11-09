@@ -2,9 +2,9 @@
 
 #Empty customer values will go to Default values
 
-CUSTOMER_NAME = "Pepsi"  # To be customized by the user if needed
+CUSTOMER_NAME = "GovTech Singapore"  # To be customized by the user if needed
 DEFAULT_NAME = "Enterprise Retail"
 
 # Customer Logo
-CUSTOMER_LOGO = "https://1000logos.net/wp-content/uploads/2025/10/PepsiCo-NEW-Logo.png"
+CUSTOMER_LOGO = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTIn45HafwRW745Qy4ulkBEQzxQU9RWolulg&s"
 DEFAULT_LOGO = "https://brandlogos.net/wp-content/uploads/2025/04/google_shopping-logo_brandlogos.net_dpbg9.png"

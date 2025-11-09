@@ -15,6 +15,7 @@ from google.adk.agents import LlmAgent, BaseAgent
 from google.adk.agents.callback_context import CallbackContext
 from google.adk.apps import App
 from google.adk.events import Event, EventActions
+from google.adk.tools import ToolContext
 from google.genai import types
 from pydantic import Field, ConfigDict
 from typing import AsyncGenerator, Any
@@ -28,7 +29,12 @@ from .tools import (
     search_products_tool,
     generate_product_copy_tool,
     generate_product_image_tool,
-    generate_why_copy_tool
+    generate_why_copy_tool,
+    search_products,
+    generate_product_copy,
+    generate_product_image,
+    generate_why_copy,
+    generate_application_instructions
 )
 
 
@@ -300,14 +306,19 @@ I'm here to help you discover your perfect personalized routine. Browse the aest
             content=types.Content(parts=[types.Part(text="✨ Creating your personalized routine...")])
         )
         
-        # STEP 3: Call search_products tool directly (no sub-agent to avoid loops)
-        from .tools import search_products
+        # STEP 3: Call search_products with smart routine building (PHASE 2)
+        # Determine routine type/subcategory (default to skincare AM for now)
+        # FUTURE: This will come from UI selection in Phase 3
+        routine_type = quiz_responses.get("routine_type", "skincare")
+        subcategory = quiz_responses.get("subcategory", "am")
         
         search_result = search_products(
             aesthetic_id=aesthetic_id,
             skin_type=quiz_responses.get("skin_type"),
             concerns=quiz_responses.get("concerns", []),
-            skin_tone=quiz_responses.get("skin_tone")
+            skin_tone=quiz_responses.get("skin_tone"),
+            routine_type=routine_type,
+            subcategory=subcategory
         )
         
         if search_result.get("status") != "success" or not search_result.get("products"):
@@ -328,8 +339,6 @@ I'm here to help you discover your perfect personalized routine. Browse the aest
         )
         
         # STEP 4: Call generate_product_copy tool directly
-        from .tools import generate_product_copy, generate_product_image, generate_why_copy, generate_application_instructions
-        
         copy_result = generate_product_copy(
             aesthetic_id=aesthetic_id,
             skin_type=quiz_responses.get("skin_type", ""),
@@ -346,8 +355,13 @@ I'm here to help you discover your perfect personalized routine. Browse the aest
         # Initialize routine steps list for progressive updates
         routine_steps = []
         
+        # Track previous step titles for progressive context
+        previous_step_titles = []
+        
         # STEP 5-7: Process each product progressively
-        for i, product in enumerate(enhanced_products[:config.MAX_ROUTINE_STEPS], 1):
+        # Note: search_products already filtered to optimal length based on template logic
+        total_steps = len(enhanced_products)
+        for i, product in enumerate(enhanced_products, 1):
             sku = product.get("sku", "")
             brand = product.get("brand", "")
             
@@ -427,30 +441,40 @@ I'm here to help you discover your perfect personalized routine. Browse the aest
             except Exception as e:
                 print(f"[ORCHESTRATOR] Instructions generation failed for {product.get('name')}: {e}")
             
-            # Generate AI-personalized image using title + full instruction for context
-            from google.adk.tools import ToolContext
+            # PHASE 2: Smart image generation - only generate if needs_image is True
             tool_ctx = ToolContext(ctx)
             
             ai_image_artifact_name = None
-            try:
-                image_result = await generate_product_image(
-                    tool_context=tool_ctx,
-                    product_sku=sku,
-                    product_name=product.get("name", ""),
-                    brand=brand,
-                    category=product.get("sub_category", product.get("category", "")),
-                    instruction=instruction_title,  # Main action for image
-                    full_instruction=instruction_full,  # Full context for prep hints (amount, technique)
-                    skin_type=quiz_responses.get("skin_type", ""),
-                    skin_tone=quiz_responses.get("skin_tone", "#F5D7C4"),
-                    concerns=quiz_responses.get("concerns", []),
-                    aesthetic_name=aesthetic_name
-                )
-                
-                if image_result.get("status") == "success":
-                    ai_image_artifact_name = image_result.get("artifact_name")
-            except Exception as e:
-                print(f"[ORCHESTRATOR] AI image generation failed for {product.get('name')}: {e}")
+            needs_image = product.get("needs_image", False)
+            image_priority = product.get("image_priority", "none")
+            
+            if needs_image:
+                print(f"[ORCHESTRATOR] Generating AI image for step {i} (priority: {image_priority})")
+                try:
+                    # PHASE 3: Pass progressive context
+                    image_result = await generate_product_image(
+                        tool_context=tool_ctx,
+                        product_sku=sku,
+                        product_name=product.get("name", ""),
+                        brand=brand,
+                        category=product.get("sub_category", product.get("category", "")),
+                        instruction=instruction_title,  # Main action for image
+                        full_instruction=instruction_full,  # Full context for prep hints (amount, technique)
+                        skin_type=quiz_responses.get("skin_type", ""),
+                        skin_tone=quiz_responses.get("skin_tone", "#F5D7C4"),
+                        concerns=quiz_responses.get("concerns", []),
+                        aesthetic_name=aesthetic_name,
+                        step_number=i,
+                        total_steps=total_steps,
+                        previous_steps=previous_step_titles.copy()  # Pass previous titles for context
+                    )
+                    
+                    if image_result.get("status") == "success":
+                        ai_image_artifact_name = image_result.get("artifact_name")
+                except Exception as e:
+                    print(f"[ORCHESTRATOR] AI image generation failed for {product.get('name')}: {e}")
+            else:
+                print(f"[ORCHESTRATOR] Skipping AI image for step {i} (priority: {image_priority})")
             
             # Generate why copy for this product
             why_text = product.get("why_this_base", "Perfect for your routine")
@@ -470,22 +494,35 @@ I'm here to help you discover your perfect personalized routine. Browse the aest
             except Exception as e:
                 print(f"[ORCHESTRATOR] Why copy generation failed for {product.get('name')}: {e}")
             
-            # Add completed step with artifact names
+            # Add completed step with artifact names and product metadata
             step = {
                 "step_number": i,
                 "category": product.get("step_category_display", product.get("category", "Beauty")),
                 "product": {
                     "name": product.get("name", ""),
                     "brand": brand,
+                    "sku": sku,
                     "brand_logo_artifact": brand_logo_artifact,
                     "product_image_artifact": product_image_artifact,
                     "ai_image_artifact": ai_image_artifact_name,
                     "title": instruction_title,  # Short action for title (matches image)
-                    "description": instruction_full,  # Full multi-step instruction for description
-                    "why": why_text
+                    "description": instruction_full,  # Full multi-step instruction for routine view
+                    "original_description": product.get("description", ""),  # Fix #4: Preserve product marketing copy
+                    "why": why_text,
+                    "skin_types": product.get("skin_types", []),
+                    "concerns": product.get("concerns", []),
+                    "sub_category": product.get("sub_category", ""),
+                    # PHASE 7: Add complete product metadata
+                    "price": product.get("price"),
+                    "category": product.get("category", ""),
+                    "sensory_descriptors": product.get("sensory_descriptors", {}),
+                    "ingredients_highlight": product.get("ingredients_highlight", "")
                 }
             }
             routine_steps.append(step)
+            
+            # PHASE 3: Track this step's title for next iteration's context
+            previous_step_titles.append(instruction_title)
             
             # DEBUG: Log artifact names
             print(f"[ORCHESTRATOR] Step {i} artifacts:")
@@ -493,13 +530,15 @@ I'm here to help you discover your perfect personalized routine. Browse the aest
             print(f"  - Product image: {product_image_artifact}")
             print(f"  - AI image: {ai_image_artifact_name}")
             
-            # Yield progressive update with this step
+            # PHASE 2: Yield progressive update with routine metadata
             custom_experience_data = {
                 "type": "routine_progress",
                 "aesthetic_id": aesthetic_id,
                 "aesthetic_name": aesthetic_name,
+                "routine_type": search_result.get("routine_type", "skincare"),
+                "subcategory": search_result.get("subcategory", "am"),
                 "steps": routine_steps,
-                "total_steps": config.MAX_ROUTINE_STEPS,
+                "total_steps": total_steps,
                 "current_step": i,
                 "quiz_responses": quiz_responses
             }
@@ -508,7 +547,7 @@ I'm here to help you discover your perfect personalized routine. Browse the aest
             yield Event(
                 author=self.name,
                 invocation_id=ctx.invocation_id,
-                content=types.Content(parts=[types.Part(text=f"✓ Step {i}/{config.MAX_ROUTINE_STEPS} complete")]),
+                content=types.Content(parts=[types.Part(text=f"✓ Step {i}/{total_steps} complete")]),
                 actions=EventActions(
                     agent_state={"custom_experience_data": custom_experience_data}
                 )
@@ -517,11 +556,13 @@ I'm here to help you discover your perfect personalized routine. Browse the aest
             # Small delay between steps to ensure progressive display
             await asyncio.sleep(0.2)
         
-        # Final completion event
+        # PHASE 2: Final completion event with routine metadata
         final_data = {
             "type": "routine_result",
             "aesthetic_id": aesthetic_id,
             "aesthetic_name": aesthetic_name,
+            "routine_type": search_result.get("routine_type", "skincare"),
+            "subcategory": search_result.get("subcategory", "am"),
             "steps": routine_steps,
             "quiz_responses": quiz_responses
         }

@@ -29,86 +29,6 @@ shared_client = genai.Client(vertexai=True, http_options=http_options)
 # Artifact Saving Tools (matching trend-to-market pattern)
 # ============================================================================
 
-async def save_brand_logo(
-    tool_context: ToolContext,
-    brand: str
-) -> Dict[str, Any]:
-    """
-    Saves a brand logo as an artifact.
-    Matches naming convention: brand_clinique.png (underscores, no "logo" suffix)
-    """
-    # Match orchestrator naming: underscores, not hyphens
-    brand_slug = brand.lower().replace(' ', '_').replace('.', '')
-    logo_filename = f"brand_{brand_slug}.png"
-    
-    # Path to logo in data folder
-    logo_path = os.path.join(
-        os.path.dirname(__file__),
-        f"data/{config.BRAND_DATA_SET}/images/brands/{logo_filename}"
-    )
-    
-    if not os.path.exists(logo_path):
-        print(f"[SAVE_LOGO] Logo not found: {logo_path}")
-        return {"status": "not_found", "brand": brand}
-    
-    try:
-        with open(logo_path, "rb") as f:
-            logo_bytes = f.read()
-        
-        logo_part = types.Part.from_bytes(data=logo_bytes, mime_type="image/png")
-        # Use same name as file for consistency
-        artifact_name = logo_filename
-        await tool_context.save_artifact(artifact_name, logo_part)
-        
-        print(f"[SAVE_LOGO] ✓ Saved logo for {brand}")
-        return {
-            "status": "success",
-            "artifact_name": artifact_name,
-            "brand": brand
-        }
-    except Exception as e:
-        print(f"[SAVE_LOGO] ✗ Error saving logo for {brand}: {e}")
-        return {"status": "error", "error": str(e), "brand": brand}
-
-
-async def save_product_image(
-    tool_context: ToolContext,
-    product_sku: str
-) -> Dict[str, Any]:
-    """
-    Saves a product image as an artifact.
-    Matches trend-to-market pattern (line 37-52).
-    """
-    # Path to product image in data folder
-    image_path = os.path.join(
-        os.path.dirname(__file__),
-        f"data/{config.BRAND_DATA_SET}/images/products/{product_sku}.jpg"
-    )
-    
-    if not os.path.exists(image_path):
-        print(f"[SAVE_PRODUCT_IMAGE] Image not found: {image_path}")
-        return {"status": "not_found", "sku": product_sku}
-    
-    try:
-        with open(image_path, "rb") as f:
-            image_bytes = f.read()
-        
-        image_part = types.Part.from_bytes(data=image_bytes, mime_type="image/jpeg")
-        artifact_name = f"product_{product_sku}.jpg"
-        await tool_context.save_artifact(artifact_name, image_part)
-        
-        print(f"[SAVE_PRODUCT_IMAGE] ✓ Saved product image for SKU {product_sku}")
-        return {
-            "status": "success",
-            "artifact_name": artifact_name,
-            "sku": product_sku
-        }
-    except Exception as e:
-        print(f"[SAVE_PRODUCT_IMAGE] ✗ Error saving product image for {product_sku}: {e}")
-        return {"status": "error", "error": str(e), "sku": product_sku}
-
-
-
 def load_json_data(filename: str) -> Dict[str, Any]:
     """Loads JSON data from the configured brand dataset."""
     data_path = os.path.join(
@@ -127,29 +47,82 @@ def load_json_data(filename: str) -> Dict[str, Any]:
 
 
 # ============================================================================
-# TOOL 1: Search Products (for Product Specialist)
+# EMBEDDED ROUTINE TEMPLATES (Phase 3: No external JSON needed)
+# ============================================================================
+
+ROUTINE_TEMPLATES = {
+    "skincare_am": {
+        "name": "Morning Skincare Routine",
+        "steps": [
+            {"category": "other", "sub_category": "cleanser", "display": "Cleanser", "required": True, "image_priority": "first"},
+            {"category": "base", "sub_category": "essence", "display": "Essence", "required": False, "image_priority": "none"},
+            {"category": "base", "sub_category": "serum", "display": "Serum", "required": True, "image_priority": "middle"},
+            {"category": "eye", "sub_category": "eye cream", "display": "Eye Care", "required": False, "image_priority": "none"},
+            {"category": "base", "sub_category": "moisturizer", "display": "Moisturizer", "required": True, "image_priority": "last"},
+        ]
+    },
+    "skincare_pm": {
+        "name": "Evening Skincare Routine",
+        "steps": [
+            {"category": "other", "sub_category": "cleanser", "display": "Double Cleanse", "required": True, "image_priority": "first"},
+            {"category": "base", "sub_category": "toner", "display": "Toner", "required": False, "image_priority": "none"},
+            {"category": "base", "sub_category": "serum", "display": "Treatment Serum", "required": True, "image_priority": "middle"},
+            {"category": "eye", "sub_category": "eye cream", "display": "Eye Repair", "required": False, "image_priority": "none"},
+            {"category": "base", "sub_category": "night cream", "display": "Night Cream", "required": True, "image_priority": "last"},
+        ]
+    },
+    "makeup_everyday": {
+        "name": "Everyday Makeup Look",
+        "steps": [
+            {"category": "base", "sub_category": "primer", "display": "Primer", "required": True, "image_priority": "first"},
+            {"category": "base", "sub_category": "foundation", "display": "Foundation", "required": True, "image_priority": "middle"},
+            {"category": "base", "sub_category": "concealer", "display": "Concealer", "required": False, "image_priority": "none"},
+            {"category": "cheek", "sub_category": "blush", "display": "Blush", "required": True, "image_priority": "middle"},
+            {"category": "eye", "sub_category": "mascara", "display": "Mascara", "required": True, "image_priority": "last"},
+        ]
+    },
+    "makeup_glam": {
+        "name": "Glam Makeup Look",
+        "steps": [
+            {"category": "base", "sub_category": "primer", "display": "Primer", "required": True, "image_priority": "first"},
+            {"category": "base", "sub_category": "foundation", "display": "Foundation", "required": True, "image_priority": "middle"},
+            {"category": "eye", "sub_category": "eyeshadow", "display": "Eyeshadow", "required": True, "image_priority": "middle"},
+            {"category": "eye", "sub_category": "eyeliner", "display": "Eyeliner", "required": True, "image_priority": "none"},
+            {"category": "eye", "sub_category": "mascara", "display": "Mascara", "required": True, "image_priority": "last"},
+        ]
+    }
+}
+
+
+# ============================================================================
+# TOOL 1: Search Products (SMART ROUTINE BUILDING - Phase 2)
 # ============================================================================
 
 def search_products(
     aesthetic_id: str,
     skin_type: Optional[str] = None,
     concerns: Optional[List[str]] = None,
-    skin_tone: Optional[str] = None
+    skin_tone: Optional[str] = None,
+    routine_type: Optional[str] = None,
+    subcategory: Optional[str] = None
 ) -> Dict[str, Any]:
     """
     Searches product catalog for matches based on aesthetic and preferences.
-    Used by Product Specialist agent.
+    PHASE 2: Now supports smart routine building with templates.
     
     Args:
         aesthetic_id: Selected aesthetic (e.g., "ethereal-glow")
         skin_type: User's skin type (e.g., "Dry")
         concerns: User's main concerns (e.g., ["Hydration", "Anti-Aging"])
         skin_tone: User's skin tone hex (e.g., "#F5D7C4")
+        routine_type: Type of routine ("skincare" or "makeup") - optional
+        subcategory: Routine subcategory ("am", "pm", "everyday", "glam") - optional
     
     Returns:
-        Dictionary with matched products list
+        Dictionary with matched products list + routine metadata
     """
-    print(f"[SEARCH_PRODUCTS] Aesthetic: {aesthetic_id}, Skin: {skin_type}, Concerns: {concerns}, Tone: {skin_tone}")
+    print(f"[SEARCH_PRODUCTS] Aesthetic: {aesthetic_id}, Skin: {skin_type}, Concerns: {concerns}")
+    print(f"[SEARCH_PRODUCTS] Routine: {routine_type}/{subcategory}")
     
     # Load data
     products_data = load_json_data("products.json")
@@ -178,23 +151,77 @@ def search_products(
     skin_type_lower = skin_type.lower() if skin_type else None
     concerns_lower = [c.lower() for c in concerns] if concerns else []
     
-    # DYNAMIC ROUTINE BUILDING: Build a routine based on quiz inputs
-    # Standard routine structure based on actual product data
-    # Products use: category="base/lip/eye/cheek/other" with sub_category
-    routine_steps = [
-        {"category": "other", "sub_category": "cleanser", "display": "Cleanser"},
-        {"category": "base", "sub_category": "serum", "display": "Serum"},
-        {"category": "base", "sub_category": "moisturizer", "display": "Moisturizer"},
-        {"category": "eye", "sub_category": "mascara", "display": "Eye"},
-        {"category": "base", "sub_category": "primer", "display": "Primer"},
-    ]
+    # PHASE 2: SMART ROUTINE BUILDING
+    # Determine routine template
+    template_key = None
+    if routine_type and subcategory:
+        template_key = f"{routine_type}_{subcategory}"
+    else:
+        # Default to skincare AM if not specified
+        template_key = "skincare_am"
+    
+    # Use embedded template
+    template = ROUTINE_TEMPLATES.get(template_key)
+    
+    if not template:
+        print(f"[SEARCH_PRODUCTS] Template {template_key} not found, using default skincare_am")
+        template = ROUTINE_TEMPLATES["skincare_am"]
+    
+    print(f"[SEARCH_PRODUCTS] Using template: {template.get('name')}")
+    routine_steps = template.get("steps", [])
+    
+    # PHASE 8: Smart routine building - PRESERVE TEMPLATE ORDER
+    # Calculate target length based on user complexity
+    num_concerns = len(concerns_lower) if concerns_lower else 0
+    complexity_bonus = min(num_concerns - 1, 2)  # 0-2 extra steps for multiple concerns
+    
+    # Base on routine type (PM/Glam get more steps)
+    routine_bonus = 0
+    if subcategory:
+        if subcategory.lower() in ['pm', 'glam']:
+            routine_bonus = 2
+        elif subcategory.lower() in ['am', 'everyday']:
+            routine_bonus = 1
+    
+    # Count required steps
+    num_required = sum(1 for s in routine_steps if s.get("required", False))
+    
+    # Calculate target routine length
+    target_length = num_required + complexity_bonus + routine_bonus
+    target_length = max(config.MIN_ROUTINE_STEPS, min(config.MAX_ROUTINE_STEPS, target_length))
+    
+    print(f"[SEARCH_PRODUCTS] Template has {len(routine_steps)} total steps ({num_required} required)")
+    print(f"[SEARCH_PRODUCTS] Target routine length: {target_length}")
+    
+    # Mark steps for inclusion while PRESERVING TEMPLATE ORDER
+    included_count = 0
+    for step in routine_steps:
+        if step.get("required", False):
+            # Always include required steps
+            step["include"] = True
+            included_count += 1
+        else:
+            # Include optional step if we have budget
+            if included_count < target_length:
+                step["include"] = True
+                included_count += 1
+            else:
+                step["include"] = False
+    
+    # Build final steps list (preserves template order)
+    final_steps = [s for s in routine_steps if s.get("include", False)]
+    
+    print(f"[SEARCH_PRODUCTS] Final routine: {included_count} steps in template order")
     
     matched_products = []
     
-    for step_config in routine_steps[:config.MAX_ROUTINE_STEPS]:
+    # Build routine from final steps
+    for step_config in final_steps:
         category = step_config["category"]
         sub_category = step_config.get("sub_category")
         display_name = step_config.get("display", category.title())
+        is_required = step_config.get("required", False)
+        image_priority = step_config.get("image_priority", "none")
         
         # Find matching products
         candidates = [
@@ -202,6 +229,26 @@ def search_products(
             if p.get("category", "").lower() == category.lower()
             and (not sub_category or p.get("sub_category", "").lower() == sub_category.lower())
         ]
+        
+        # Filter by routine type/subcategory (using new product schema fields)
+        if routine_type and subcategory and candidates:
+            # Filter by routine_type
+            type_matches = [
+                p for p in candidates
+                if p.get("routine_type", "").lower() == routine_type.lower()
+            ]
+            if type_matches:
+                candidates = type_matches
+            
+            # Filter by subcategory in best_for_subcategory array
+            if subcategory:
+                subcat_key = subcategory.upper() if routine_type == "skincare" else subcategory.replace("_", "/").title()
+                subcat_matches = [
+                    p for p in candidates
+                    if subcat_key in p.get("best_for_subcategory", [])
+                ]
+                if subcat_matches:
+                    candidates = subcat_matches
         
         # Filter by skin type (prioritize exact matches, fallback to "All")
         if skin_type_lower and candidates:
@@ -233,18 +280,24 @@ def search_products(
         if candidates:
             product = candidates[0].copy()
             product["step_category_display"] = display_name
+            product["needs_image"] = image_priority != "none"
+            product["image_priority"] = image_priority
             matched_products.append(product)
+        elif is_required:
+            # Log if required step has no match
+            print(f"[SEARCH_PRODUCTS] WARNING: No products found for REQUIRED step {category}/{sub_category}")
         else:
-            # Log if no match found for debugging
-            print(f"[SEARCH_PRODUCTS] No products found for {category}/{sub_category}")
+            print(f"[SEARCH_PRODUCTS] Skipping optional step {category}/{sub_category} (no matches)")
     
-    print(f"[SEARCH_PRODUCTS] Dynamically matched {len(matched_products)} products")
+    print(f"[SEARCH_PRODUCTS] Smart routine: {len(matched_products)} products")
     
     return {
         "status": "success",
         "aesthetic_name": aesthetic_name,
         "products": matched_products,
-        "product_count": len(matched_products)
+        "product_count": len(matched_products),
+        "routine_type": routine_type or "skincare",
+        "subcategory": subcategory or "am"
     }
 
 search_products_tool = FunctionTool(func=search_products)
@@ -354,11 +407,21 @@ async def generate_product_image(
     skin_type: str,
     skin_tone: str,
     concerns: List[str],
-    aesthetic_name: str
+    aesthetic_name: str,
+    step_number: int = 1,
+    total_steps: int = 1,
+    previous_steps: Optional[List[str]] = None
 ) -> Dict[str, Any]:
     """
     Generates personalized product application image using gemini-2.5-flash-image-preview.
     Uses the main instruction (title) for action, full instruction for prep context.
+    
+    Phase 3: Progressive image context - later images know what came before.
+    
+    Args:
+        step_number: Current step number (1-based)
+        total_steps: Total steps in routine
+        previous_steps: List of previous step titles for context
     """
     max_retries = 3
     retry_delay = 2  # seconds
@@ -374,7 +437,7 @@ async def generate_product_image(
         "lipstick": "lips",
         "mascara": "eyelashes",
         "eyeliner": "eyes",
-        "eyeshadow": "eyelids",
+        "eyeshadow": "eyelids across multiple zones",  # PHASE 6: Updated for detail
         "blush": "cheeks",
         "highlighter": "cheekbones",
         "contour": "face structure",
@@ -423,7 +486,25 @@ async def generate_product_image(
     if 'press' in full_lower or 'pat' in full_lower:
         prep_hints.append("pressed/patted in (absorbed, not sitting on surface)")
     
+    # PHASE 6: Special eyeshadow image generation
+    is_eyeshadow = "eyeshadow" in category_lower or "eyeshadow" in product_lower
+    if is_eyeshadow:
+        prep_hints.append("EYESHADOW - show APPLICATION TO MULTIPLE EYE ZONES: fingers or brush applying to inner corner (light shade), middle lid (medium shade), outer corner (dark shade), and blending into crease")
+        prep_hints.append("Show nuanced placement: different zones getting different shades, not just one flat color across the lid")
+    
     prep_context = " ".join(prep_hints) if prep_hints else "Show product being applied"
+    
+    # PHASE 3: Add progressive context
+    routine_context = ""
+    if step_number > 1 and previous_steps:
+        prev_steps_text = ", ".join(previous_steps[-2:])  # Last 2 steps for context
+        routine_context = f"""
+ROUTINE PROGRESSION CONTEXT:
+- This is step {step_number} of {total_steps} in a {aesthetic_name} routine
+- Previous steps: {prev_steps_text}
+- The skin should show the cumulative effect of previous applications
+- Maintain visual continuity with the routine's aesthetic
+"""
     
     prompt = f"""Create a REALISTIC, RELATABLE beauty routine step image:
 
@@ -431,9 +512,10 @@ MAIN ACTION TO SHOW: "{instruction}"
 
 FULL CONTEXT: "{full_instruction}"
 PREP NOTES: {prep_context}
-
+{routine_context}
 PRODUCT: {brand} {product_name}
 APPLICATION AREA: {app_area}
+STEP: {step_number} of {total_steps}
 
 CRITICAL STYLE REQUIREMENTS:
 - REALISTIC bathroom/vanity setting (NOT a studio shoot)
@@ -550,7 +632,44 @@ generate_product_image_tool = FunctionTool(func=generate_product_image)
 
 
 # ============================================================================
-# TOOL 4: Generate Why Copy (AI-powered, from IdeationAgent pattern)
+# ELC BRAND VOICE (Phase 3: Embedded for consistency)
+# ============================================================================
+
+ELC_BRAND_VOICE = """
+ESTÉE LAUDER COMPANIES BRAND VOICE GUIDELINES:
+
+CORE PRINCIPLES:
+- Premium yet accessible - aspirational without being exclusive
+- Expert authority - backed by science and innovation
+- Personal connection - "for YOU" not "for everyone"
+- Multi-brand celebration - proudly curate across our portfolio
+- Results-driven - specific benefits, not vague promises
+
+LANGUAGE PATTERNS:
+✓ USE: "achieve," "unlock," "discover," "reveal," "perfect," "curated," "tailored"
+✓ USE: Specific ingredient or technology references
+✓ USE: Personalized language ("your dry skin," "your ethereal glow")
+✓ AVOID: Generic superlatives ("amazing," "incredible," "perfect for all")
+✓ AVOID: Overly clinical or medical claims
+✓ AVOID: Aggressive selling ("must-have," "can't live without")
+
+TONE:
+- Confident expert, not pushy salesperson
+- Warm consultant, not distant scientist
+- Sophisticated friend, not luxury gatekeeper
+
+EXAMPLES BY BRAND:
+- Estée Lauder: Innovation meets elegance
+- Clinique: Science-backed simplicity
+- MAC: Bold artistry, inclusive creativity
+- Bobbi Brown: Natural beauty, effortless confidence
+- La Mer: Transformative luxury
+- Tom Ford: Unapologetic glamour
+- Jo Malone: Understated British sophistication
+"""
+
+# ============================================================================
+# TOOL 4: Generate Why Copy (AI-powered, with ELC Brand Voice)
 # ============================================================================
 
 async def generate_why_copy(
@@ -566,13 +685,16 @@ async def generate_why_copy(
     Generates a personalized, compelling one-liner explaining WHY this product
     is perfect for the user's specific needs.
     
-    Based on trend-to-market IdeationAgent pattern.
+    Phase 3: Embedded ELC brand voice for consistency.
     """
     print(f"[GENERATE_WHY] Creating why copy for {product_name}")
     
     concerns_text = ", ".join(concerns) if concerns else "skin health"
     
-    prompt = f"""In ONE sentence, explain why {brand} {product_name} is perfect for THIS specific user:
+    prompt = f"""{ELC_BRAND_VOICE}
+
+YOUR TASK:
+Write ONE sentence explaining why {brand} {product_name} is perfect for THIS specific user.
 
 USER PROFILE:
 - Skin type: {skin_type}
@@ -585,20 +707,23 @@ PRODUCT:
 {description}
 
 REQUIREMENTS:
-- Focus on the PERSONALIZED benefit for THIS user's specific needs
+- Follow ELC brand voice guidelines above
+- Focus on PERSONALIZED benefit for THIS user's specific needs
 - Connect to their chosen aesthetic ({aesthetic_name})
 - Be specific about why THIS product works for THEIR skin type/concerns
-- NOT generic marketing language
+- Honor the specific brand's tone ({brand})
 - One sentence, maximum 20 words
-- Conversational, expert tone
+- Expert consultant tone
 
-GOOD EXAMPLES:
+GOOD EXAMPLES (following brand voice):
 "Melts makeup while maintaining your dry skin's moisture barrier for that ethereal glow."
-"Gentle enough for sensitive eyes while delivering bold volume that completes your matte perfection look."
+"Clinically-proven peptides target fine lines on mature skin for a lifted, defined look."
+"Bold pigment glides smoothly over oily lids, staying crease-free through your glam night."
 
-BAD EXAMPLES (too generic - avoid):
-"A great product for healthy skin."
-"Perfect for anyone who wants beautiful results."
+BAD EXAMPLES (violate brand voice - avoid):
+"A great product for healthy skin." (too generic)
+"The most amazing serum you'll ever try!" (overselling)
+"Dermatologist-prescribed treatment for aging." (too clinical)
 
 Output ONLY the sentence, no preamble or quotes:"""
     
@@ -645,10 +770,36 @@ async def generate_application_instructions(
     """
     print(f"[GENERATE_INSTRUCTIONS] Creating instructions for {product_name}")
     
+    # PHASE 6: Special eyeshadow handling
+    is_eyeshadow = "eyeshadow" in category.lower() or "eyeshadow" in product_name.lower()
+    eyeshadow_guidance = ""
+    
+    if is_eyeshadow:
+        eyeshadow_guidance = """
+
+SPECIAL EYESHADOW REQUIREMENTS (CRITICAL):
+This is an EYESHADOW product - you MUST provide DETAILED, ZONE-BY-ZONE placement:
+
+- Specify DIFFERENT shades/colors for DIFFERENT eye zones
+- Zones to cover: inner corner, inner lid, middle lid, outer corner, crease, outer crease, brow bone
+- Include blending techniques between zones
+- Specify application order (typically: lightest to darkest)
+- Mention brush types if relevant (flat shader, blending brush, etc.)
+
+GOOD EYESHADOW EXAMPLE:
+TITLE: Apply lightest shade to inner corner and brow bone, sweep medium shade across lid, pack darkest shade onto outer corner and blend into crease
+FULL: Using a flat shader brush, apply the lightest shade to your inner corner and beneath the brow bone. Sweep the medium shade across your lid from lash line to crease using patting motions. Pack the darkest shade onto your outer corner and blend it into the crease using windshield wiper motions. Softly diffuse the edges where colors meet.
+
+BAD EYESHADOW EXAMPLE (TOO VAGUE - AVOID):
+TITLE: Apply eyeshadow to lids
+FULL: Apply eyeshadow. Blend well.
+"""
+    
     prompt = f"""Generate application instructions for {brand} {product_name}.
 
 Category: {category}
 Product: {description}
+{eyeshadow_guidance}
 
 OUTPUT TWO PARTS:
 
@@ -673,7 +824,7 @@ REQUIREMENTS:
 - Active verbs (massage, press, sweep, pat, blend)
 - Clear application areas
 - NO marketing language
-- Maximum 3 sentences for FULL
+- Maximum 3 sentences for FULL (4 for eyeshadow with zones)
 
 Generate the instructions:"""
     
