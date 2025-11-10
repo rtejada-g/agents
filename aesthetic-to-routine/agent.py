@@ -283,6 +283,7 @@ I'm here to help you discover your perfect personalized routine. Browse the aest
         try:
             request_data = json.loads(user_text)
             aesthetic_id = request_data.get("aesthetic_id")
+            aesthetic_name_override = request_data.get("aesthetic_name")  # Frontend can override name
             quiz_responses = request_data.get("quiz_responses", {})
             
             if not aesthetic_id:
@@ -318,7 +319,8 @@ I'm here to help you discover your perfect personalized routine. Browse the aest
             concerns=quiz_responses.get("concerns", []),
             skin_tone=quiz_responses.get("skin_tone"),
             routine_type=routine_type,
-            subcategory=subcategory
+            subcategory=subcategory,
+            aesthetic_name=aesthetic_name_override  # Pass custom name if provided
         )
         
         if search_result.get("status") != "success" or not search_result.get("products"):

@@ -1,0 +1,31 @@
+Month,Week,Week Date,Product Focus,SKU,Brand,Campaign Theme,Target Audience,Marketing Channel,Current Price,Decreased Promo Price,Demand Uplift (%),Current GrossMargin,New Gross New Margin
+November,1,2025-11-02,Advanced Night Repair,EL-ANR-001,Estee Lauder,Holiday Ready Skin: The Glow-Up,"Anti-aging, All skin types","Social Media, Email, Blog",$55.00,$51.00,18%,80%,78%
+November,1,2025-11-02,Double Wear Foundation,EL-DW-002,Estee Lauder,Flawless for Fall Festivities,"Oily, Combo, Normal skin","YouTube Tutorials, IG Reels",$52.00,$48.22,19%,80%,78%
+November,2,2025-11-09,Crème de la Mer,LM-CDLM-004,La Mer,The Ultimate Pre-Holiday Pampering,"Dry, Normal skin, Luxury buyers","Luxury Magazines, Influencer Gifting",$390.00,$361.63,15%,80%,78%
+November,2,2025-11-09,Vitamin Enriched Face Base,BB-VEFB-006,Bobbi Brown,The Perfect Canvas for Holiday Glam,"Makeup users, All skin types","TikTok, Makeup Artist blogs",$69.00,$63.98,40%,80%,78%
+November,3,2025-11-16,Studio Fix Fluid SPF 15,MAC-SFF-008,MAC,Black Friday Preview: Matte Perfection,"Oily, Combo, Normal skin","Email Exclusive, Social Teasers",$39.00,$36.16,50%,80%,78%
+November,3,2025-11-16,Eye Color Quad (Tom Ford),TF-ECQ-009,Tom Ford,Glimmer and Gather: Thanksgiving Glam,"Makeup lovers, Glam/Event","Pinterest, Instagram Looks",$95.00,$88.09,16%,80%,78%
+November,4,2025-11-23,Take The Day Off Cleansing Balm,CL-TDO-011,Clinique,Post-Feast Refresh,"All skin types, Makeup users","Skincare blogs, ""How-To"" videos",$44.00,$40.80,30%,80%,78%
+November,4,2025-11-23,Long-Wear Gel Eyeliner,BB-LWGE-010,Bobbi Brown,Black Friday Steal: The Perfect Wing,"All skin types, Glam/Event","Flash Sale emails, IG Stories",$37.00,$34.31,40%,80%,78%
+December,1,2025-12-07,English Pear & Freesia Cologne,JML-EPC-016,Jo Malone London,The Scent of Giving,"Gift shoppers, Fragrance lovers","Gift Guides, In-store Events",$168.00,$155.78,16%,80%,78%
+December,1,2025-12-07,Black Orchid Eau de Parfum,TF-BO-017,Tom Ford,An Unforgettable Gift,"Luxury buyers, Fragrance lovers","Email Campaigns, Magazine Ads",$125.00,$115.91,15%,80%,78%
+December,1,2025-12-07,Shimmer Brick Compact,BB-SBC-015,Bobbi Brown,Your Holiday Glow-To,"All skin types, Makeup lovers","Instagram Reels, TikTok",$52.20,$48.40,40%,80%,78%
+December,2,2025-12-14,M·A·Cximal Lipstick (Ruby Woo),MAC-RW-005,MAC,Paint the Town Red: Holiday Party Perfect,"Makeup lovers, Glam/Event","Influencer Collabs, IG Looks",$25.00,$23.18,50%,80%,78%
+December,2,2025-12-14,Pure Color Envy Lipstick,EL-PCE-012,Estee Lauder,Kiss-Proof Color for Mistletoe Moments,"All skin types, Makeup lovers","Email Gift Sets, Social Media",$42.00,$38.95,19%,80%,78%
+December,2,2025-12-14,The Lifting and Firming Mask,LM-LRM-024,La Mer,12 Days of Luxury: Countdown to Christmas,"Anti-aging, Luxury buyers",Social Media Countdown,$350.00,$324.54,15%,80%,78%
+December,3,2025-12-21,High Impact Mascara,CL-HM-018,Clinique,Eyes that Sparkle,"All skin types, Everyday makeup",Stocking Stuffer Guides,$27.00,$25.04,30%,80%,78%
+December,3,2025-12-21,Shade and Illuminate,TF-SL-025,Tom Ford,Sculpted for the Season,"Makeup lovers, Glam/Event",YouTube Contouring Tutorials,$85.00,$78.82,17%,80%,78%
+December,4,2025-12-28,Crushed Lip Color (Babe),BB-CB-022,Bobbi Brown,Last-Minute Gifting: Effortless Beauty,Everyday makeup users,Shop Now Social Ads,$32.00,$29.67,40%,80%,78%
+December,4,2025-12-28,Prep + Prime Fix+,MAC-PFP-014,MAC,Set for New Year's Eve,"All skin types, Makeup users","NYE Look Tutorials, Last-Chance Emails",$34.00,$31.53,50%,80%,78%
+January,1,2026-01-04,Moisture Surge 100H,CL-MS-003,Clinique,"New Year, New Hydration","All skin types, Hydration focus","New Year, New You Campaigns",$54.00,$50.07,30%,80%,78%
+January,1,2026-01-04,Dramatically Different Lotion+,CL-DML-007,Clinique,A Fresh Start for Your Skin,"Dry, Combo skin",Skincare Routine Builder online,$49.00,$45.44,29%,80%,78%
+January,1,2026-01-04,Perfectly Clean Cleanser,EL-PCFC-026,Estee Lauder,Detox and Refresh,"All, Normal, Combo skin",Skincare Sunday Social Series,$32.00,$29.67,19%,80%,78%
+January,2,2026-01-11,Checks and Balances Face Wash,OR-CBFW-027,Origins,Find Your Balance in 2026,"Combo, Oily, Normal, Dry skin","Wellness blogs, resolutions content",$39.00,$36.16,18%,80%,78%
+January,2,2026-01-11,Clarifying Lotion 2,CL-CL2-028,Clinique,"Exfoliate the Old, Reveal the New","Dry, Combo skin",New Routine blog posts,$40.00,$37.09,27%,80%,78%
+January,3,2026-01-18,Advanced Night Repair Eye Creme,EL-ANRE-029,Estee Lauder,Bright Eyes for a Bright New Year,"All skin types, Dark circles concern",Before/After social campaigns,$76.00,$70.47,18%,80%,78%
+January,3,2026-01-18,All About Eyes™,CL-AAE-030,Clinique,Banish Winter Puffiness,"All skin types, Puffiness concern",Morning routine videos,$39.00,$36.16,30%,80%,78%
+January,3,2026-01-18,Super Spot Remover™,OR-SSR-033,Origins,Resolution: Clear Skin,"Acne-prone, Oily skin","Targeted social ads, skincare forums",$20.00,$18.55,20%,80%,78%
+January,4,2026-01-25,The SPF 50 UV Protecting Fluid,LM-SPF50-031,La Mer,Protect Your Resolution (Winter Sun),"All skin types, Anti-aging",Educational content on winter SPF,$125.00,$115.91,16%,80%,78%
+January,4,2026-01-25,Futurist Hydra Rescue Makeup,EL-FHR-034,Estee Lauder,Hydration and Coverage for Dry Winter,"Normal, Dry, Combo skin",Winter Makeup tutorials,$55.00,$51.00,17%,80%,78%
+January,4,2026-01-25,Studio Fix 24-Hour Concealer,MAC-SFC-035,MAC,Cover and Conquer in the Cold,All skin types,How-to guides for winter skin,$30.00,$27.82,50%,80%,78%
+January,4,2026-01-25,Skin Corrector Stick,BB-SCS-036,Bobbi Brown,A Bright Start to Your Day,"All skin types, Dark circles concern",Quick-tip makeup videos,$31.50,$29.21,40%,80%,78%

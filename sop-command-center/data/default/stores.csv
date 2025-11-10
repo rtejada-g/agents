@@ -1,0 +1,24 @@
+Brand,Synthetic ID,Store Name,Address,Neighborhood,Borough,Latitude,Longitude,Weekly_Capacity_Units,Throughput_Score
+Sephora,SEPH-NYC-001,Sephora Times Square,1535 Broadway,Theater District,Manhattan,40.759,-73.9852,2000,0.95
+Sephora,SEPH-NYC-002,Sephora Union Square,40 E 14th St,Union Square,Manhattan,40.7343,-73.9912,1800,0.92
+Sephora,SEPH-NYC-003,Sephora SoHo,557 Broadway,SoHo,Manhattan,40.7237,-73.9982,1600,0.88
+Sephora,SEPH-NYC-004,Sephora 34th Street,112 W 34th St,Herald Square,Manhattan,40.7502,-73.9892,1900,0.90
+Sephora,SEPH-NYC-005,Sephora Columbus Circle,10 Columbus Circle,Columbus Circle,Manhattan,40.7681,-73.9821,1700,0.91
+Sephora,SEPH-NYC-006,Sephora 5th Avenue,580 5th Ave,Midtown East,Manhattan,40.7564,-73.9795,1850,0.93
+Sephora,SEPH-NYC-007,Sephora Meatpacking,21-27 9th Ave,Meatpacking District,Manhattan,40.7403,-74.0057,1400,0.85
+Sephora,SEPH-NYC-008,Sephora Upper East Side,144 E 86th St,Upper East Side,Manhattan,40.7787,-73.9556,1550,0.87
+Sephora,SEPH-NYC-009,Sephora Upper West Side,2103 Broadway,Upper West Side,Manhattan,40.7813,-73.9817,1650,0.89
+Sephora,SEPH-NYC-010,Sephora Financial District,185 Broadway,Financial District,Manhattan,40.7105,-74.0096,1300,0.82
+Sephora,SEPH-NYC-011,Sephora Hudson Yards,20 Hudson Yards,Hudson Yards,Manhattan,40.7536,-74.0009,1750,0.94
+Sephora,SEPH-NYC-012,Sephora 42nd & Madison,300 Madison Ave,Midtown East,Manhattan,40.7525,-73.9793,1500,0.86
+Sephora,SEPH-NYC-013,Sephora 520 Madison,520 Madison Ave,Midtown East,Manhattan,40.7603,-73.9745,1600,0.88
+Sephora,SEPH-NYC-014,Sephora Lincoln Square,1865 Broadway,Lincoln Square,Manhattan,40.77,-73.9821,1700,0.90
+Sephora,SEPH-NYC-015,Sephora Harlem,100 W 125th St,Harlem,Manhattan,40.8082,-73.9468,1200,0.78
+Sephora,SEPH-NYC-016,Sephora Williamsburg,241 Bedford Ave,Williamsburg,Brooklyn,40.7162,-73.9597,1450,0.84
+Sephora,SEPH-NYC-017,Sephora Downtown Brooklyn,210 Joralemon St,Downtown Brooklyn,Brooklyn,40.6924,-73.9903,1350,0.81
+Sephora,SEPH-NYC-018,Sephora Atlantic Terminal,625 Atlantic Ave,Fort Greene,Brooklyn,40.6836,-73.9757,1550,0.86
+MAC,MAC-NYC-001,MAC SoHo,506 Broadway,SoHo,Manhattan,40.7223,-73.999,800,0.83
+MAC,MAC-NYC-002,MAC Columbus Circle,10 Columbus Circle,Columbus Circle,Manhattan,40.7681,-73.9821,900,0.87
+MAC,MAC-NYC-003,MAC Harlem,202 W 125th St,Harlem,Manhattan,40.8095,-73.9498,650,0.75
+MAC,MAC-NYC-004,MAC Queens Center,90-15 Queens Blvd,Elmhurst,Queens,40.7333,-73.8714,700,0.79
+MAC,MAC-NYC-005,MAC World Trade Center,185 Greenwich St,Financial District,Manhattan,40.7118,-74.0116,750,0.80

@@ -1,0 +1,1114 @@
+[
+  {
+    "sku": "EL-ANR-001",
+    "name": "Advanced Night Repair Synchronized Multi-Recovery Complex",
+    "brand": "Estee Lauder",
+    "category": "base",
+    "sub_category": "serum",
+    "routine_type": "skincare",
+    "best_for_subcategory": [
+      "PM"
+    ],
+    "price": 55.0,
+    "description": "A powerful nighttime renewal serum for radiant, younger-looking skin. Instantly adds radiance. Hydrates. Reduces the look of lines and wrinkles.",
+    "sensory_descriptors": {
+      "texture": "Lightweight, silky",
+      "finish": "Radiant",
+      "scent": "Unscented",
+      "application": "Absorbs quickly"
+    },
+    "skin_types": [
+      "all"
+    ],
+    "concerns": [
+      "anti-aging",
+      "hydration",
+      "brightening",
+      "texture"
+    ],
+    "ingredients_highlight": "Hyaluronic Acid, Chronolux\u2122 Power Signal Technology",
+    "best_for_aesthetic": "Ethereal Glow, Korean Glow, Fresh Faced"
+  },
+  {
+    "sku": "EL-DW-002",
+    "name": "Double Wear Stay-in-Place Makeup",
+    "brand": "Estee Lauder",
+    "category": "base",
+    "sub_category": "foundation",
+    "routine_type": "makeup",
+    "best_for_subcategory": [
+      "Everyday/Natural",
+      "Glam/Event"
+    ],
+    "price": 52.0,
+    "description": "A 24-hour long-wearing foundation with a flawless, natural, matte finish that unifies uneven skin tone and covers imperfections with buildable coverage.",
+    "sensory_descriptors": {
+      "texture": "Lightweight liquid",
+      "finish": "Matte",
+      "scent": "Unscented",
+      "application": "Smooth, buildable"
+    },
+    "skin_types": [
+      "oily",
+      "combination",
+      "normal"
+    ],
+    "concerns": [
+      "acne",
+      "pores",
+      "texture"
+    ],
+    "ingredients_highlight": "SPF 10",
+    "best_for_aesthetic": "Matte Perfection, Bold Definition"
+  },
+  {
+    "sku": "CL-MS-003",
+    "name": "Moisture Surge 100H Auto-Replenishing Hydrator",
+    "brand": "Clinique",
+    "category": "base",
+    "sub_category": "moisturizer",
+    "routine_type": "skincare",
+    "best_for_subcategory": [
+      "AM",
+      "PM"
+    ],
+    "price": 54.0,
+    "description": "An oil-free gel-cream moisturizer with exclusive aloe bio-ferment and hyaluronic acid that sinks into skin for deep, lasting hydration.",
+    "sensory_descriptors": {
+      "texture": "Gel-cream",
+      "finish": "Dewy",
+      "scent": "Unscented",
+      "application": "Lightweight and refreshing"
+    },
+    "skin_types": [
+      "all"
+    ],
+    "concerns": [
+      "hydration",
+      "dryness"
+    ],
+    "ingredients_highlight": "Aloe Bio-Ferment, Hyaluronic Acid, Vitamin C and E",
+    "best_for_aesthetic": "Ethereal Glow, Korean Glow, Fresh Faced"
+  },
+  {
+    "sku": "LM-CDLM-004",
+    "name": "Cr\u00e8me de la Mer",
+    "brand": "La Mer",
+    "category": "base",
+    "sub_category": "moisturizer",
+    "routine_type": "skincare",
+    "best_for_subcategory": [
+      "PM"
+    ],
+    "price": 390.0,
+    "description": "A luxuriously rich cream that thoroughly soothes, moisturizes, and helps heal dryness, so skin looks naturally vibrant and restored.",
+    "sensory_descriptors": {
+      "texture": "Rich cream",
+      "finish": "Luminous",
+      "scent": "Slightly herbal",
+      "application": "Requires warming to activate"
+    },
+    "skin_types": [
+      "dry",
+      "normal"
+    ],
+    "concerns": [
+      "anti-aging",
+      "hydration",
+      "sensitivity"
+    ],
+    "ingredients_highlight": "Miracle Broth\u2122, Lime Tea",
+    "best_for_aesthetic": "Ethereal Glow"
+  },
+  {
+    "sku": "MAC-RW-005",
+    "name": "M\u00b7A\u00b7Cximal Silky Matte Lipstick in Ruby Woo",
+    "brand": "MAC",
+    "category": "lip",
+    "sub_category": "lipstick",
+    "routine_type": "makeup",
+    "best_for_subcategory": [
+      "Glam/Event"
+    ],
+    "price": 25.0,
+    "description": "An iconic, vivid blue-red lipstick with a silky matte finish that provides 12 hours of full-coverage color.",
+    "sensory_descriptors": {
+      "texture": "Creamy",
+      "finish": "Matte",
+      "scent": "Vanilla",
+      "application": "Smooth glide"
+    },
+    "skin_types": [
+      "all"
+    ],
+    "concerns": [],
+    "ingredients_highlight": "",
+    "best_for_aesthetic": "Bold Definition, Romantic Rose"
+  },
+  {
+    "sku": "BB-VEFB-006",
+    "name": "Vitamin Enriched Face Base",
+    "brand": "Bobbi Brown",
+    "category": "base",
+    "sub_category": "primer",
+    "routine_type": "makeup",
+    "best_for_subcategory": [
+      "Everyday/Natural",
+      "Glam/Event"
+    ],
+    "price": 69.0,
+    "description": "A bestselling multivitamin-enriched moisturizing primer for the face that instantly nourishes, plumps, and preps skin with healthy hydration to improve the look of foundation.",
+    "sensory_descriptors": {
+      "texture": "Rich but lightweight cream",
+      "finish": "Natural",
+      "scent": "Grapefruit and Geranium",
+      "application": "Absorbs quickly"
+    },
+    "skin_types": [
+      "all"
+    ],
+    "concerns": [
+      "hydration",
+      "texture"
+    ],
+    "ingredients_highlight": "Vitamins B, C, and E, Hyaluronic Acid, Shea Butter",
+    "best_for_aesthetic": "Ethereal Glow, Fresh Faced, Matte Perfection"
+  },
+  {
+    "sku": "CL-DML-007",
+    "name": "Dramatically Different Moisturizing Lotion+",
+    "brand": "Clinique",
+    "category": "base",
+    "sub_category": "moisturizer",
+    "routine_type": "skincare",
+    "best_for_subcategory": [
+      "AM",
+      "PM"
+    ],
+    "price": 49.0,
+    "description": "A dermatologist-developed face moisturizer that softens, smooths, and improves the look of skin, leaving it glowing.",
+    "sensory_descriptors": {
+      "texture": "Silky lotion",
+      "finish": "Natural",
+      "scent": "Unscented",
+      "application": "Absorbs quickly"
+    },
+    "skin_types": [
+      "very dry",
+      "dry",
+      "combination"
+    ],
+    "concerns": [
+      "dryness",
+      "hydration"
+    ],
+    "ingredients_highlight": "Hyaluronic Acid, Sunflower Seed Cake, Barley Extract & Cucumber Fruit Extract",
+    "best_for_aesthetic": "Fresh Faced"
+  },
+  {
+    "sku": "MAC-SFF-008",
+    "name": "Studio Fix Fluid SPF 15",
+    "brand": "MAC",
+    "category": "base",
+    "sub_category": "foundation",
+    "routine_type": "makeup",
+    "best_for_subcategory": [
+      "Everyday/Natural",
+      "Glam/Event"
+    ],
+    "price": 39.0,
+    "description": "A modern foundation that combines a natural matte finish and medium to full buildable coverage with broad spectrum UVA/UVB SPF 15 protection.",
+    "sensory_descriptors": {
+      "texture": "Lightweight liquid",
+      "finish": "Matte",
+      "scent": "Unscented",
+      "application": "Smooth, blendable"
+    },
+    "skin_types": [
+      "oily",
+      "combination",
+      "normal"
+    ],
+    "concerns": [
+      "acne",
+      "pores",
+      "texture"
+    ],
+    "ingredients_highlight": "SPF 15",
+    "best_for_aesthetic": "Matte Perfection"
+  },
+  {
+    "sku": "TF-ECQ-009",
+    "name": "Eye Color Quad",
+    "brand": "Tom Ford",
+    "category": "eye",
+    "sub_category": "eyeshadow",
+    "routine_type": "makeup",
+    "best_for_subcategory": [
+      "Glam/Event"
+    ],
+    "price": 95.0,
+    "description": "A palette of four coordinated eyeshadows in sparkling to matte finishes designed to create soft to bold iconic Tom Ford eyes.",
+    "sensory_descriptors": {
+      "texture": "Powder",
+      "finish": "Varies (shimmer, satin, matte)",
+      "scent": "Unscented",
+      "application": "Pigmented, blendable"
+    },
+    "skin_types": [
+      "all"
+    ],
+    "concerns": [],
+    "ingredients_highlight": "",
+    "best_for_aesthetic": "Bold Definition, Romantic Rose"
+  },
+  {
+    "sku": "BB-LWGE-010",
+    "name": "Long-Wear Gel Eyeliner",
+    "brand": "Bobbi Brown",
+    "category": "eye",
+    "sub_category": "eyeliner",
+    "routine_type": "makeup",
+    "best_for_subcategory": [
+      "Glam/Event"
+    ],
+    "price": 37.0,
+    "description": "A long-wearing, water-resistant gel eyeliner that gives you the look of a liquid liner with the ease and feel of a gel formula.",
+    "sensory_descriptors": {
+      "texture": "Gel",
+      "finish": "Matte",
+      "scent": "Unscented",
+      "application": "Precise, smooth glide"
+    },
+    "skin_types": [
+      "all"
+    ],
+    "concerns": [],
+    "ingredients_highlight": "",
+    "best_for_aesthetic": "Bold Definition"
+  },
+  {
+    "sku": "CL-TDO-011",
+    "name": "Take The Day Off Cleansing Balm",
+    "brand": "Clinique",
+    "category": "other",
+    "sub_category": "cleanser",
+    "routine_type": "skincare",
+    "best_for_subcategory": [
+      "PM"
+    ],
+    "price": 44.0,
+    "description": "A lightweight makeup remover that quickly dissolves tenacious eye and face makeups, including those with sunscreen.",
+    "sensory_descriptors": {
+      "texture": "Solid balm to oil",
+      "finish": "Clean",
+      "scent": "Unscented",
+      "application": "Melts on skin"
+    },
+    "skin_types": [
+      "all"
+    ],
+    "concerns": [
+      "makeup removal"
+    ],
+    "ingredients_highlight": "Safflower Seed Oil",
+    "best_for_aesthetic": "Fresh Faced"
+  },
+  {
+    "sku": "EL-PCE-012",
+    "name": "Pure Color Envy Sculpting Lipstick",
+    "brand": "Estee Lauder",
+    "category": "lip",
+    "sub_category": "lipstick",
+    "routine_type": "makeup",
+    "best_for_subcategory": [
+      "Everyday/Natural",
+      "Glam/Event"
+    ],
+    "price": 42.0,
+    "description": "A lipstick that glides on effortlessly, covering lips in a fade-resistant, neutral or bold color that complements all skin tones.",
+    "sensory_descriptors": {
+      "texture": "Creamy",
+      "finish": "Satin",
+      "scent": "Unscented",
+      "application": "Smooth, full coverage"
+    },
+    "skin_types": [
+      "all"
+    ],
+    "concerns": [],
+    "ingredients_highlight": "Time-Release Moisture Complex",
+    "best_for_aesthetic": "Romantic Rose, Bold Definition"
+  },
+  {
+    "sku": "LM-TL-013",
+    "name": "The Treatment Lotion",
+    "brand": "La Mer",
+    "category": "base",
+    "sub_category": "essence",
+    "routine_type": "skincare",
+    "best_for_subcategory": [
+      "AM",
+      "PM"
+    ],
+    "price": 190.0,
+    "description": "A silky, fast-absorbing watery lotion that visibly awakens the complexion and drives moisture deep into the skin to improve texture and even tone.",
+    "sensory_descriptors": {
+      "texture": "Watery lotion",
+      "finish": "Hydrated",
+      "scent": "Slightly oceanic",
+      "application": "Lightweight, absorbs quickly"
+    },
+    "skin_types": [
+      "all"
+    ],
+    "concerns": [
+      "hydration",
+      "texture",
+      "pores"
+    ],
+    "ingredients_highlight": "Miracle Broth\u2122, The Revitalizing Ferment",
+    "best_for_aesthetic": "Korean Glow"
+  },
+  {
+    "sku": "MAC-PFP-014",
+    "name": "Prep + Prime Fix+",
+    "brand": "MAC",
+    "category": "other",
+    "sub_category": "setting spray",
+    "routine_type": "makeup",
+    "best_for_subcategory": [
+      "Everyday/Natural",
+      "Glam/Event"
+    ],
+    "price": 34.0,
+    "description": "A lightweight mist of water packed with vitamins and minerals, infused with a blend of green tea, chamomile and cucumber to gently soothe and refresh the skin.",
+    "sensory_descriptors": {
+      "texture": "Fine mist",
+      "finish": "Dewy",
+      "scent": "Herbal",
+      "application": "Refreshing"
+    },
+    "skin_types": [
+      "all"
+    ],
+    "concerns": [
+      "hydration"
+    ],
+    "ingredients_highlight": "Green Tea, Chamomile, Cucumber",
+    "best_for_aesthetic": "Ethereal Glow, Korean Glow, Fresh Faced"
+  },
+  {
+    "sku": "BB-SBC-015",
+    "name": "Shimmer Brick Compact",
+    "brand": "Bobbi Brown",
+    "category": "cheek",
+    "sub_category": "highlighter",
+    "routine_type": "makeup",
+    "best_for_subcategory": [
+      "Everyday/Natural",
+      "Glam/Event"
+    ],
+    "price": 52.2,
+    "description": "A shimmering, brush-on powder that creates a soft, warm pink glow.",
+    "sensory_descriptors": {
+      "texture": "Pressed powder",
+      "finish": "Shimmer",
+      "scent": "Unscented",
+      "application": "Buildable glow"
+    },
+    "skin_types": [
+      "all"
+    ],
+    "concerns": [],
+    "ingredients_highlight": "Superfine pigments",
+    "best_for_aesthetic": "Ethereal Glow, Romantic Rose"
+  },
+  {
+    "sku": "JML-EPC-016",
+    "name": "English Pear & Freesia Cologne",
+    "brand": "Jo Malone London",
+    "category": "other",
+    "sub_category": "fragrance",
+    "routine_type": "skincare",
+    "best_for_subcategory": [
+      "AM",
+      "PM"
+    ],
+    "price": 168.0,
+    "description": "A sensuous freshness of just-ripe pears wrapped in a bouquet of white freesias, and mellowed by amber, patchouli and woods.",
+    "sensory_descriptors": {
+      "texture": "Liquid spray",
+      "finish": "N/A",
+      "scent": "Fruity and floral",
+      "application": "Light mist"
+    },
+    "skin_types": [
+      "all"
+    ],
+    "concerns": [],
+    "ingredients_highlight": "Pear, White Freesia, Patchouli",
+    "best_for_aesthetic": "Romantic Rose, Fresh Faced"
+  },
+  {
+    "sku": "TF-BO-017",
+    "name": "Black Orchid Eau de Parfum",
+    "brand": "Tom Ford",
+    "category": "other",
+    "sub_category": "fragrance",
+    "routine_type": "skincare",
+    "best_for_subcategory": [
+      "PM"
+    ],
+    "price": 125.0,
+    "description": "A luxurious and sensual fragrance of rich, dark accords and an alluring potion of black orchids and spice.",
+    "sensory_descriptors": {
+      "texture": "Liquid spray",
+      "finish": "N/A",
+      "scent": "Warm floral",
+      "application": "Potent, long-lasting"
+    },
+    "skin_types": [
+      "all"
+    ],
+    "concerns": [],
+    "ingredients_highlight": "Black Orchid, Black Truffle, Patchouli",
+    "best_for_aesthetic": "Bold Definition"
+  },
+  {
+    "sku": "CL-HM-018",
+    "name": "High Impact Mascara",
+    "brand": "Clinique",
+    "category": "eye",
+    "sub_category": "mascara",
+    "routine_type": "makeup",
+    "best_for_subcategory": [
+      "Everyday/Natural",
+      "Glam/Event"
+    ],
+    "price": 27.0,
+    "description": "A mascara that delivers ultimate volume and length for a lusher, plusher, and bolder look.",
+    "sensory_descriptors": {
+      "texture": "Creamy",
+      "finish": "Natural",
+      "scent": "Unscented",
+      "application": "Clump-free"
+    },
+    "skin_types": [
+      "all"
+    ],
+    "concerns": [],
+    "ingredients_highlight": "",
+    "best_for_aesthetic": "Fresh Faced, Bold Definition"
+  },
+  {
+    "sku": "MAC-SP-019",
+    "name": "M\u00b7A\u00b7Cximal Silky Matte Lipstick in Smoked Purple",
+    "brand": "MAC",
+    "category": "lip",
+    "sub_category": "lipstick",
+    "routine_type": "makeup",
+    "best_for_subcategory": [
+      "Glam/Event"
+    ],
+    "price": 25.0,
+    "description": "A deep, cool-toned purple lipstick with a silky matte finish that delivers 12 hours of full-coverage colour and eight hours of moisture.",
+    "sensory_descriptors": {
+      "texture": "Silky-smooth",
+      "finish": "Matte",
+      "scent": "Vanilla",
+      "application": "Smooth glide"
+    },
+    "skin_types": [
+      "all"
+    ],
+    "concerns": [],
+    "ingredients_highlight": "Cocoa and Shea Butter",
+    "best_for_aesthetic": "Purple Statement"
+  },
+  {
+    "sku": "EL-PCDML-021",
+    "name": "Pure Color Desire Matte Lipstick in 414 Prove It",
+    "brand": "Estee Lauder",
+    "category": "lip",
+    "sub_category": "lipstick",
+    "routine_type": "makeup",
+    "best_for_subcategory": [
+      "Glam/Event"
+    ],
+    "price": 42.0,
+    "description": "A dark purple lipstick with a velvety matte finish, offering intense pigmentation and long-lasting wear without drying the lips.",
+    "sensory_descriptors": {
+      "texture": "Lightweight",
+      "finish": "Matte",
+      "scent": "Unscented",
+      "application": "Full coverage in one swipe"
+    },
+    "skin_types": [
+      "all"
+    ],
+    "concerns": [],
+    "ingredients_highlight": "",
+    "best_for_aesthetic": "Purple Statement"
+  },
+  {
+    "sku": "BB-CB-022",
+    "name": "Crushed Lip Color in Babe",
+    "brand": "Bobbi Brown",
+    "category": "lip",
+    "sub_category": "lipstick",
+    "routine_type": "makeup",
+    "best_for_subcategory": [
+      "Everyday/Natural"
+    ],
+    "price": 32.0,
+    "description": "A soft, matte pigment that glides on comfortably, delivering a stained, just-kissed effect in a rosy pink shade.",
+    "sensory_descriptors": {
+      "texture": "Balmy",
+      "finish": "Satin-matte",
+      "scent": "Unscented",
+      "application": "Buildable"
+    },
+    "skin_types": [
+      "all"
+    ],
+    "concerns": [],
+    "ingredients_highlight": "Vitamins E and C, Beeswax",
+    "best_for_aesthetic": "Romantic Rose, Fresh Faced"
+  },
+  {
+    "sku": "CL-CNP-023",
+    "name": "Cheek Pop in Pink Pop",
+    "brand": "Clinique",
+    "category": "cheek",
+    "sub_category": "blush",
+    "routine_type": "makeup",
+    "best_for_subcategory": [
+      "Everyday/Natural",
+      "Glam/Event"
+    ],
+    "price": 30.0,
+    "description": "A vibrant yet natural-looking cheek color with a silky-smooth formula that stays true and wears beautifully.",
+    "sensory_descriptors": {
+      "texture": "Silky powder",
+      "finish": "Natural",
+      "scent": "Unscented",
+      "application": "Seamless, buildable"
+    },
+    "skin_types": [
+      "all"
+    ],
+    "concerns": [],
+    "ingredients_highlight": "",
+    "best_for_aesthetic": "Romantic Rose, Fresh Faced"
+  },
+  {
+    "sku": "LM-LRM-024",
+    "name": "The Lifting and Firming Mask",
+    "brand": "La Mer",
+    "category": "other",
+    "sub_category": "face mask",
+    "routine_type": "skincare",
+    "best_for_subcategory": [
+      "PM"
+    ],
+    "price": 350.0,
+    "description": "A luxurious cream mask that helps to uplift the look of the face and neck, and visibly plump and firm the skin.",
+    "sensory_descriptors": {
+      "texture": "Rich cream",
+      "finish": "Plumped",
+      "scent": "Slightly herbal",
+      "application": "Leave-on"
+    },
+    "skin_types": [
+      "all"
+    ],
+    "concerns": [
+      "anti-aging",
+      "firmness"
+    ],
+    "ingredients_highlight": "Miracle Broth\u2122, The Concentrated Lifting Ferment",
+    "best_for_aesthetic": "Korean Glow"
+  },
+  {
+    "sku": "TF-SL-025",
+    "name": "Shade and Illuminate",
+    "brand": "Tom Ford",
+    "category": "cheek",
+    "sub_category": "contour",
+    "routine_type": "makeup",
+    "best_for_subcategory": [
+      "Glam/Event"
+    ],
+    "price": 85.0,
+    "description": "A duo of highlighting and shading creams designed to make sculpting and contouring the face remarkably simple.",
+    "sensory_descriptors": {
+      "texture": "Cream",
+      "finish": "Natural",
+      "scent": "Unscented",
+      "application": "Blendable, buildable"
+    },
+    "skin_types": [
+      "all"
+    ],
+    "concerns": [],
+    "ingredients_highlight": "",
+    "best_for_aesthetic": "Bold Definition, Ethereal Glow"
+  },
+  {
+    "sku": "EL-PCFC-026",
+    "name": "Perfectly Clean Multi-Action Foam Cleanser/Purifying Mask",
+    "brand": "Estee Lauder",
+    "category": "other",
+    "sub_category": "cleanser",
+    "routine_type": "skincare",
+    "best_for_subcategory": [
+      "AM",
+      "PM"
+    ],
+    "price": 32.0,
+    "description": "A refreshing foam that cleanses gently yet thoroughly. The creamy formula rapidly lathers into a rich foaming cleanser that gently removes makeup and other impurities without drying. Can also be used twice a week as a 3-minute purifying mask.",
+    "sensory_descriptors": {
+      "texture": "Creamy foam",
+      "finish": "Clean, luminous",
+      "scent": "Fresh",
+      "application": "Lathers richly"
+    },
+    "skin_types": [
+      "all",
+      "normal",
+      "combination"
+    ],
+    "concerns": [
+      "pores",
+      "makeup removal"
+    ],
+    "ingredients_highlight": "Gentiana Lutea (Gentian) Root Extract, Algae Extract, Sodium Hyaluronate",
+    "best_for_aesthetic": "Fresh Faced"
+  },
+  {
+    "sku": "OR-CBFW-027",
+    "name": "Checks and Balances\u2122 Frothy Face Wash",
+    "brand": "Origins",
+    "category": "other",
+    "sub_category": "cleanser",
+    "routine_type": "skincare",
+    "best_for_subcategory": [
+      "AM",
+      "PM"
+    ],
+    "price": 39.0,
+    "description": "A gentle, frothy face wash that balances dry and oily areas. It easily rinses away makeup, impurities, and surface oils, leaving skin comfortably clean.",
+    "sensory_descriptors": {
+      "texture": "Frothy cream",
+      "finish": "Balanced, clean",
+      "scent": "Invigorating Mint",
+      "application": "Lathers easily"
+    },
+    "skin_types": [
+      "combination",
+      "oily",
+      "normal",
+      "dry"
+    ],
+    "concerns": [
+      "pores",
+      "acne"
+    ],
+    "ingredients_highlight": "Broad Leaf Kelp Extract, Wheat Protein, Tourmaline",
+    "best_for_aesthetic": "Fresh Faced"
+  },
+  {
+    "sku": "CL-CL2-028",
+    "name": "Clarifying Lotion 2 for Dry Combination Skin",
+    "brand": "Clinique",
+    "category": "base",
+    "sub_category": "toner",
+    "routine_type": "skincare",
+    "best_for_subcategory": [
+      "AM",
+      "PM"
+    ],
+    "price": 40.0,
+    "description": "A dermatologist-developed liquid exfoliating lotion that sweeps away dulling flakes and excess oil, revealing smoother, clearer skin. Preps skin for moisturizer.",
+    "sensory_descriptors": {
+      "texture": "Liquid",
+      "finish": "Refreshed, clean",
+      "scent": "Unscented",
+      "application": "Apply with cotton ball"
+    },
+    "skin_types": [
+      "dry",
+      "combination"
+    ],
+    "concerns": [
+      "dullness",
+      "pores",
+      "texture"
+    ],
+    "ingredients_highlight": "Witch Hazel, Acetyl Glucosamine, Sodium Hyaluronate",
+    "best_for_aesthetic": "Fresh Faced"
+  },
+  {
+    "sku": "EL-ANRE-029",
+    "name": "Advanced Night Repair Eye Supercharged Gel-Creme",
+    "brand": "Estee Lauder",
+    "category": "eye",
+    "sub_category": "eye cream",
+    "routine_type": "skincare",
+    "best_for_subcategory": [
+      "AM",
+      "PM"
+    ],
+    "price": 76.0,
+    "description": "A lightweight gel-creme that helps brighten the look of dark circles in just two weeks and targets other initial signs of aging. Fights visible signs of free radical damage.",
+    "sensory_descriptors": {
+      "texture": "Lightweight gel-creme",
+      "finish": "Hydrated, radiant",
+      "scent": "Unscented",
+      "application": "Absorbs quickly"
+    },
+    "skin_types": [
+      "all"
+    ],
+    "concerns": [
+      "dark circles",
+      "anti-aging",
+      "hydration",
+      "puffiness"
+    ],
+    "ingredients_highlight": "Hyaluronic Acid, Chronolux\u2122 Power Signal Technology, Night Peptide",
+    "best_for_aesthetic": "Ethereal Glow, Korean Glow"
+  },
+  {
+    "sku": "CL-AAE-030",
+    "name": "All About Eyes\u2122",
+    "brand": "Clinique",
+    "category": "eye",
+    "sub_category": "eye cream",
+    "routine_type": "skincare",
+    "best_for_subcategory": [
+      "AM",
+      "PM"
+    ],
+    "price": 39.0,
+    "description": "A lightweight, cream-gel formula that diminishes the appearance of puffiness, undereye circles, and fine lines. Helps hold eye makeup in place.",
+    "sensory_descriptors": {
+      "texture": "Cream-gel",
+      "finish": "Natural",
+      "scent": "Unscented",
+      "application": "Lightweight"
+    },
+    "skin_types": [
+      "all"
+    ],
+    "concerns": [
+      "puffiness",
+      "dark circles"
+    ],
+    "ingredients_highlight": "Caffeine, Green Tea Extract, Mulberry Root Extract",
+    "best_for_aesthetic": "Fresh Faced, Everyday/Natural"
+  },
+  {
+    "sku": "LM-SPF50-031",
+    "name": "The SPF 50 UV Protecting Fluid",
+    "brand": "La Mer",
+    "category": "base",
+    "sub_category": "sunscreen",
+    "routine_type": "skincare",
+    "best_for_subcategory": [
+      "AM"
+    ],
+    "price": 125.0,
+    "description": "A soothing, lightweight daily sunscreen that defends skin against everyday exposure to UV rays. Designed to be worn over moisturizer or under makeup, it infuses skin with the cell-renewing energies of Miracle Broth\u2122.",
+    "sensory_descriptors": {
+      "texture": "Lightweight fluid",
+      "finish": "Natural",
+      "scent": "Slightly oceanic",
+      "application": "Absorbs quickly"
+    },
+    "skin_types": [
+      "all"
+    ],
+    "concerns": [
+      "sun protection",
+      "anti-aging"
+    ],
+    "ingredients_highlight": "Miracle Broth\u2122",
+    "best_for_aesthetic": "Ethereal Glow, Korean Glow"
+  },
+  {
+    "sku": "CL-SPF50-032",
+    "name": "Broad Spectrum SPF 50 Sunscreen Face Cream",
+    "brand": "Clinique",
+    "category": "base",
+    "sub_category": "sunscreen",
+    "routine_type": "skincare",
+    "best_for_subcategory": [
+      "AM"
+    ],
+    "price": 36.0,
+    "description": "An oil-free face sunscreen with innovative SolarSmart technology that stabilizes high-level protection against the aging and burning effects of UVA and UVB rays.",
+    "sensory_descriptors": {
+      "texture": "Cream",
+      "finish": "Natural",
+      "scent": "Unscented",
+      "application": "Smooth"
+    },
+    "skin_types": [
+      "all"
+    ],
+    "concerns": [
+      "sun protection"
+    ],
+    "ingredients_highlight": "SolarSmart\u2122 Technology, Antioxidants",
+    "best_for_aesthetic": "Fresh Faced, Everyday/Natural"
+  },
+  {
+    "sku": "OR-SSR-033",
+    "name": "Super Spot Remover\u2122 Acne Treatment Gel",
+    "brand": "Origins",
+    "category": "base",
+    "sub_category": "treatment",
+    "routine_type": "skincare",
+    "best_for_subcategory": [
+      "PM"
+    ],
+    "price": 20.0,
+    "description": "An acne treatment gel with 1.5% salicylic acid that helps clear blemishes and discourages new ones from forming. Instantly helps correct discoloration from past breakouts.",
+    "sensory_descriptors": {
+      "texture": "Gel",
+      "finish": "Clear",
+      "scent": "Slightly medicinal",
+      "application": "Targeted dab-on"
+    },
+    "skin_types": [
+      "acne-prone",
+      "oily",
+      "combination"
+    ],
+    "concerns": [
+      "acne"
+    ],
+    "ingredients_highlight": "Salicylic Acid, Saw Palmetto, Red Algae",
+    "best_for_aesthetic": "Matte Perfection"
+  },
+  {
+    "sku": "EL-FHR-034",
+    "name": "Futurist Hydra Rescue Moisturizing Makeup SPF 45",
+    "brand": "Estee Lauder",
+    "category": "base",
+    "sub_category": "foundation",
+    "routine_type": "makeup",
+    "best_for_subcategory": [
+      "Everyday/Natural"
+    ],
+    "price": 55.0,
+    "description": "A flawless foundation with breathable coverage and a radiant finish. Infused with IonCharged Water, plus probiotic technology and chia-seed extract, it hydrates, soothes, and protects.",
+    "sensory_descriptors": {
+      "texture": "Lightweight liquid",
+      "finish": "Radiant, dewy",
+      "scent": "Unscented",
+      "application": "Buildable coverage"
+    },
+    "skin_types": [
+      "normal",
+      "dry",
+      "combination"
+    ],
+    "concerns": [
+      "hydration",
+      "uneven skin tone"
+    ],
+    "ingredients_highlight": "Chia-Seed Extract, Probiotic Technology, SPF 45",
+    "best_for_aesthetic": "Ethereal Glow, Korean Glow, Fresh Faced"
+  },
+  {
+    "sku": "MAC-SFC-035",
+    "name": "Studio Fix 24-Hour Smooth Wear Concealer",
+    "brand": "MAC",
+    "category": "base",
+    "sub_category": "concealer",
+    "routine_type": "makeup",
+    "best_for_subcategory": [
+      "Everyday/Natural",
+      "Glam/Event"
+    ],
+    "price": 30.0,
+    "description": "A lightweight fluid concealer that provides seamless coverage, blurs imperfections, and offers all-day comfortable wear. The formula wears for up to 24 hours while providing medium-to-full buildable coverage.",
+    "sensory_descriptors": {
+      "texture": "Fluid",
+      "finish": "Natural matte",
+      "scent": "Unscented",
+      "application": "Smooth, blendable"
+    },
+    "skin_types": [
+      "all"
+    ],
+    "concerns": [
+      "acne",
+      "dark circles",
+      "uneven skin tone"
+    ],
+    "ingredients_highlight": "",
+    "best_for_aesthetic": "Matte Perfection, Bold Definition, Everyday/Natural"
+  },
+  {
+    "sku": "BB-SCS-036",
+    "name": "Skin Corrector Stick",
+    "brand": "Bobbi Brown",
+    "category": "base",
+    "sub_category": "corrector",
+    "routine_type": "makeup",
+    "best_for_subcategory": [
+      "Everyday/Natural",
+      "Glam/Event"
+    ],
+    "price": 31.5,
+    "description": "A glide-on stick that color-corrects dark circles and camouflages dark spots with skin-true coverage for instant brightening and concealer prep. Delivers 12 hours of non-creasing, color-true wear.",
+    "sensory_descriptors": {
+      "texture": "Creamy stick",
+      "finish": "Natural",
+      "scent": "Unscented",
+      "application": "Blends seamlessly"
+    },
+    "skin_types": [
+      "all"
+    ],
+    "concerns": [
+      "dark circles",
+      "discoloration"
+    ],
+    "ingredients_highlight": "Coffee Seed Extract, Salicornia",
+    "best_for_aesthetic": "Everyday/Natural, Glam/Event"
+  },
+  {
+    "sku": "MAC-PPTP-037",
+    "name": "Prep + Prime Transparent Finishing Powder",
+    "brand": "MAC",
+    "category": "base",
+    "sub_category": "setting powder",
+    "routine_type": "makeup",
+    "best_for_subcategory": [
+      "Glam/Event"
+    ],
+    "price": 33.0,
+    "description": "A silky, colorless finishing powder that provides an invisible way to set makeup and reduce shine. Optically minimizes the look of pores and imperfections for a smooth, velvety finish.",
+    "sensory_descriptors": {
+      "texture": "Fine, loose powder",
+      "finish": "Velvety matte",
+      "scent": "Unscented",
+      "application": "Lightweight"
+    },
+    "skin_types": [
+      "all"
+    ],
+    "concerns": [
+      "pores",
+      "texture"
+    ],
+    "ingredients_highlight": "Corn Starch, Silica",
+    "best_for_aesthetic": "Matte Perfection, Bold Definition"
+  },
+  {
+    "sku": "MAC-EX9-038",
+    "name": "Eye Shadow x 9 in 'Amber Times Nine'",
+    "brand": "MAC",
+    "category": "eye",
+    "sub_category": "eyeshadow",
+    "routine_type": "makeup",
+    "best_for_subcategory": [
+      "Everyday/Natural"
+    ],
+    "price": 45.0,
+    "description": "A well-edited palette of nine amber-hued eyeshadows offering a range of textures from matte to satin to frost. The saturated, soft, and smooth shades are packaged in one compact for easy portability.",
+    "sensory_descriptors": {
+      "texture": "Powder",
+      "finish": "Varies (matte, satin, frost)",
+      "scent": "Unscented",
+      "application": "Pigmented, blendable"
+    },
+    "skin_types": [
+      "all"
+    ],
+    "concerns": [],
+    "ingredients_highlight": "",
+    "best_for_aesthetic": "Fresh Faced, Romantic Rose, Everyday/Natural"
+  },
+  {
+    "sku": "BB-LEQ-039",
+    "name": "Luxe Eye Shadow Quad in 'Midnight Toast'",
+    "brand": "Bobbi Brown",
+    "category": "eye",
+    "sub_category": "eyeshadow",
+    "routine_type": "makeup",
+    "best_for_subcategory": [
+      "Glam/Event"
+    ],
+    "price": 60.0,
+    "description": "An eyeshadow quad that illuminates eyes with a multidimensional metallic finish in four mix-and-match shades. The velvety, chromatic pigments glide on and blend easily for all-day wear.",
+    "sensory_descriptors": {
+      "texture": "Velvety powder",
+      "finish": "Multidimensional metallic",
+      "scent": "Unscented",
+      "application": "Effortless, buildable"
+    },
+    "skin_types": [
+      "all"
+    ],
+    "concerns": [],
+    "ingredients_highlight": "Chromatic pigments",
+    "best_for_aesthetic": "Bold Definition, Glam/Event"
+  },
+  {
+    "sku": "TF-BTS-040",
+    "name": "Better Than Sex Volumizing Mascara",
+    "brand": "Too Faced",
+    "category": "eye",
+    "sub_category": "mascara",
+    "routine_type": "makeup",
+    "best_for_subcategory": [
+      "Glam/Event"
+    ],
+    "price": 29.0,
+    "description": "An intensely black, volumizing mascara with an hourglass-shaped brush that separates, coats, and curls each lash to voluptuous perfection. One coat provides defined, longer lashes, with buildable intensity.",
+    "sensory_descriptors": {
+      "texture": "Creamy",
+      "finish": "Volumized, lengthened",
+      "scent": "Unscented",
+      "application": "Clump-free"
+    },
+    "skin_types": [
+      "all"
+    ],
+    "concerns": [],
+    "ingredients_highlight": "Acacia Senegal Tree Extract, Peptides",
+    "best_for_aesthetic": "Bold Definition, Glam/Event"
+  },
+  {
+    "sku": "MAC-EBS-041",
+    "name": "Eye Brows Styler",
+    "brand": "MAC",
+    "category": "eye",
+    "sub_category": "brow",
+    "routine_type": "makeup",
+    "best_for_subcategory": [
+      "Everyday/Natural",
+      "Glam/Event"
+    ],
+    "price": 24.0,
+    "description": "A self-propelling, self-sharpening, brow-defining tool with a spoolie on one end. It offers extreme color precision in one dynamic, microfine pencil that emulates fine hair-like strokes.",
+    "sensory_descriptors": {
+      "texture": "Waxy pencil",
+      "finish": "Natural matte",
+      "scent": "Unscented",
+      "application": "Precise"
+    },
+    "skin_types": [
+      "all"
+    ],
+    "concerns": [],
+    "ingredients_highlight": "",
+    "best_for_aesthetic": "Everyday/Natural, Glam/Event"
+  }
+]

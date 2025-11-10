@@ -1,0 +1,44 @@
+Original_Promo_ID,Alternate_SKU,Alternate_Product_Name,Reason,Price_Adjustment_Percent,Expected_Uplift_Percent,Inventory_Availability
+2025-11-02_EL-ANR-001,CL-MS-003,Moisture Surge 100H,Similar hydration benefits with better stock,0,15,High
+2025-11-02_EL-ANR-001,LM-TL-013,The Treatment Lotion,Premium alternative with same brand family,+5,12,Medium
+2025-11-02_EL-DW-002,MAC-SFF-008,Studio Fix Fluid SPF 15,Comparable matte foundation in stock,-10,19,High
+2025-11-02_EL-DW-002,EL-FHR-034,Futurist Hydra Rescue,Same brand hydrating foundation,0,16,Medium
+2025-11-09_LM-CDLM-004,CL-MS-003,Moisture Surge 100H,High-performance alternative at lower price,-75,20,High
+2025-11-09_LM-CDLM-004,LM-TL-013,The Treatment Lotion,Same luxury brand essence,- 50,14,High
+2025-11-09_BB-VEFB-006,EL-FHR-034,Futurist Hydra Rescue,Hydrating foundation alternative,0,15,High
+2025-11-09_BB-VEFB-006,CL-MS-003,Moisture Surge 100H,Hydrating base alternative,-35,18,High
+2025-11-16_MAC-SFF-008,EL-DW-002,Double Wear Foundation,Premium matte foundation,+20,17,Medium
+2025-11-16_MAC-SFF-008,EL-FHR-034,Futurist Hydra Rescue,Foundation with SPF protection,+30,14,High
+2025-11-16_TF-ECQ-009,BB-LEQ-039,Luxe Eye Shadow Quad,Luxury eyeshadow alternative,-30,15,High
+2025-11-16_TF-ECQ-009,MAC-EX9-038,Eye Shadow x 9,More shades at lower price,-50,20,High
+2025-11-23_CL-TDO-011,EL-PCFC-026,Perfectly Clean Cleanser,Multi-action cleansing alternative,-25,28,High
+2025-11-23_CL-TDO-011,OR-CBFW-027,Checks and Balances Wash,Balancing cleanser in stock,-10,25,High
+2025-11-23_BB-LWGE-010,MAC-EBS-041,Eye Brows Styler,Precision eye definition,-35,38,High
+2025-11-23_BB-LWGE-010,CL-HM-018,High Impact Mascara,Complete eye look alternative,-25,35,High
+2025-12-07_JML-EPC-016,TF-BO-017,Black Orchid EDP,Bold fragrance alternative,-25,14,Medium
+2025-12-07_TF-BO-017,JML-EPC-016,English Pear & Freesia,Lighter fragrance option,+25,13,High
+2025-12-07_BB-SBC-015,TF-SL-025,Shade and Illuminate,Professional highlighting option,+40,38,Medium
+2025-12-14_MAC-RW-005,EL-PCE-012,Pure Color Envy Lipstick,Premium bold lip color,+40,45,High
+2025-12-14_MAC-RW-005,BB-CB-022,Crushed Lip Color,Everyday lip alternative,+20,42,High
+2025-12-14_EL-PCE-012,MAC-RW-005,Ruby Woo Lipstick,Iconic bold lip,-40,22,High
+2025-12-14_EL-PCE-012,BB-CB-022,Crushed Lip Color,Natural lip alternative,-25,16,High
+2025-12-14_LM-LRM-024,LM-CDLM-004,Crème de la Mer,Intensive moisture alternative,+10,14,Medium
+2025-12-14_LM-LRM-024,EL-ANR-001,Advanced Night Repair,Anti-aging serum option,-85,18,High
+2025-12-21_CL-HM-018,TF-BTS-040,Better Than Sex Mascara,Volumizing mascara upgrade,+5,28,High
+2025-12-21_TF-SL-025,BB-SBC-015,Shimmer Brick Compact,Natural glow alternative,-40,15,High
+2025-12-28_BB-CB-022,EL-PCE-012,Pure Color Envy Lipstick,Bold lip upgrade,+25,35,Medium
+2025-12-28_BB-CB-022,CL-CNP-023,Cheek Pop Blush,Complete rosy look,-5,38,High
+2025-12-28_MAC-PFP-014,MAC-PPTP-037,Transparent Finishing Powder,Setting product alternative,0,48,High
+2026-01-04_CL-MS-003,CL-DML-007,Dramatically Different Lotion,Same brand moisturizer,-10,28,High
+2026-01-04_CL-MS-003,EL-ANR-001,Advanced Night Repair,Premium serum upgrade,0,25,Medium
+2026-01-04_CL-DML-007,CL-MS-003,Moisture Surge 100H,Gel-cream upgrade,+10,27,High
+2026-01-04_EL-PCFC-026,CL-TDO-011,Take The Day Off Balm,Makeup removal alternative,+25,17,High
+2026-01-11_OR-CBFW-027,EL-PCFC-026,Perfectly Clean Cleanser,Multi-purpose cleanser,-15,16,High
+2026-01-11_CL-CL2-028,LM-TL-013,The Treatment Lotion,Premium essence upgrade,+325,22,Low
+2026-01-18_EL-ANRE-029,CL-AAE-030,All About Eyes,Eye treatment alternative,-50,28,High
+2026-01-18_CL-AAE-030,EL-ANRE-029,Advanced Night Repair Eye,Premium eye treatment,+50,26,Medium
+2026-01-18_OR-SSR-033,CL-CL2-028,Clarifying Lotion 2,Exfoliating alternative,+50,18,High
+2026-01-25_LM-SPF50-031,CL-SPF50-032,Broad Spectrum SPF 50,SPF protection alternative,-70,15,High
+2026-01-25_EL-FHR-034,EL-DW-002,Double Wear Foundation,Long-wear foundation,-5,16,High
+2026-01-25_MAC-SFC-035,BB-SCS-036,Skin Corrector Stick,Correction alternative,+5,48,High
+2026-01-25_BB-SCS-036,MAC-SFC-035,Studio Fix Concealer,Full coverage alternative,-5,38,High

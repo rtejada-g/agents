@@ -104,7 +104,8 @@ def search_products(
     concerns: Optional[List[str]] = None,
     skin_tone: Optional[str] = None,
     routine_type: Optional[str] = None,
-    subcategory: Optional[str] = None
+    subcategory: Optional[str] = None,
+    aesthetic_name: Optional[str] = None
 ) -> Dict[str, Any]:
     """
     Searches product catalog for matches based on aesthetic and preferences.
@@ -117,6 +118,7 @@ def search_products(
         skin_tone: User's skin tone hex (e.g., "#F5D7C4")
         routine_type: Type of routine ("skincare" or "makeup") - optional
         subcategory: Routine subcategory ("am", "pm", "everyday", "glam") - optional
+        aesthetic_name: Override aesthetic name (for custom aesthetics) - optional
     
     Returns:
         Dictionary with matched products list + routine metadata
@@ -137,15 +139,22 @@ def search_products(
     
     products = products_data["products"]
     
-    # Get aesthetic name
-    aesthetic_name = aesthetic_id.replace("-", " ").title()
-    if aesthetics_data and "aesthetics" in aesthetics_data:
+    # Get aesthetic name (use override if provided, for custom aesthetics)
+    if aesthetic_name:
+        # Use the provided name (e.g., from custom aesthetic input)
+        pass
+    elif aesthetics_data and "aesthetics" in aesthetics_data:
+        # Look up in aesthetics data
         aesthetic_obj = next(
             (a for a in aesthetics_data["aesthetics"] if a["id"] == aesthetic_id),
             None
         )
         if aesthetic_obj:
-            aesthetic_name = aesthetic_obj.get("title", aesthetic_obj.get("name", aesthetic_name))
+            aesthetic_name = aesthetic_obj.get("title", aesthetic_obj.get("name"))
+    
+    # Fallback if still no name
+    if not aesthetic_name:
+        aesthetic_name = aesthetic_id.replace("-", " ").title()
     
     # Normalize filters
     skin_type_lower = skin_type.lower() if skin_type else None
@@ -506,6 +515,39 @@ ROUTINE PROGRESSION CONTEXT:
 - Maintain visual continuity with the routine's aesthetic
 """
     
+    # PHASE 14: Enhanced prompt for specific product types
+    product_specific_rules = ""
+    
+    if "mascara" in category_lower or "mascara" in product_lower:
+        product_specific_rules = """
+MASCARA-SPECIFIC RULES (CRITICAL):
+- Show EXACTLY ONE mascara wand
+- Show EXACTLY ONE hand holding the wand
+- Show application to ONE eye only (the other eye is natural/untouched OR already has mascara)
+- Natural hand position: wand held near the eye being worked on
+- The wand should be at the lashes, in mid-stroke
+- NO second mascara, NO second wand, NO both hands holding products
+"""
+    elif "foundation" in category_lower or "foundation" in product_lower:
+        product_specific_rules = """
+FOUNDATION-SPECIFIC RULES (CRITICAL):
+- Show natural blending motion with fingertips, brush, or sponge
+- Hands should be in NATURAL blending position (not awkwardly placed on face)
+- Show the blending action in progress (stippling, sweeping, or pressing)
+- Product should be partially blended (not sitting as thick patches)
+- Fingers/tools should be actively working the product into skin
+"""
+    elif is_eyeshadow:
+        product_specific_rules = """
+EYESHADOW-SPECIFIC RULES (CRITICAL):
+- BOTH eyes MUST be visible and MUST have IDENTICAL makeup
+- Show application to ONE eye while the OTHER eye is already completed with matching look
+- OR show a moment where both eyes already have the same eyeshadow placement
+- NO asymmetry between left and right eyes
+- Each eye should have the same colors in the same zones
+- The completed eye(s) should show multiple shades: lighter on inner corner, medium on lid, darker on outer corner
+"""
+    
     prompt = f"""Create a REALISTIC, RELATABLE beauty routine step image:
 
 MAIN ACTION TO SHOW: "{instruction}"
@@ -516,6 +558,8 @@ PREP NOTES: {prep_context}
 PRODUCT: {brand} {product_name}
 APPLICATION AREA: {app_area}
 STEP: {step_number} of {total_steps}
+
+{product_specific_rules}
 
 CRITICAL STYLE REQUIREMENTS:
 - REALISTIC bathroom/vanity setting (NOT a studio shoot)
@@ -536,16 +580,18 @@ ACTION & PRODUCT TEXTURE:
 - Hands IN MOTION, not static
 - Product texture MUST respect prep notes above (e.g., if "warmed", show translucent/absorbed, NOT thick cream)
 - Natural hand gestures (not perfectly manicured model hands)
+- Realistic hand COUNT: most products use ONE hand at a time
 
 SKIN REQUIREMENTS (CRITICAL):
 - Skin tone: {skin_tone} (EXACT hex match - this is critical for consistency)
 - Skin type: {skin_type} (show realistic texture)
 - Same skin tone MUST be used across all routine steps
-- Imperfect is perfect - slight asymmetry, natural expressions
+- Imperfect is perfect - slight asymmetry in face, natural expressions
 - Focus on the APPLICATION, not beauty/glamour
 
 ABSOLUTELY FORBIDDEN:
-- NO TEXT OR CAPTIONS on the image (image only, no words)
+- NO TEXT, LABELS, CAPTIONS, OR WORDS ON THE IMAGE (completely blank image, NO "Step X of Y", NO product names, NO instructions)
+- NO step numbers or counters
 - NO marketing/advertising aesthetics
 - NO professional model poses
 - NO perfect studio lighting
@@ -553,8 +599,10 @@ ABSOLUTELY FORBIDDEN:
 - NO stock photo look
 - NO symmetrical, posed compositions
 - NO thick white cream if product is a serum/oil/essence (these are lightweight and barely visible)
+- NO unrealistic hand positions or awkward gestures
+- NO multiple products when only one should be used
 
-Generate ONE realistic, relatable application image of a woman in her actual routine."""
+Generate ONE realistic, relatable application image of a woman in her actual routine with NO TEXT ANYWHERE."""
     
     for attempt in range(max_retries):
         print(f"[{time.time()}] Generating image for {product_name} (Attempt {attempt + 1}/{max_retries})...")
