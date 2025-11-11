@@ -396,9 +396,55 @@ Your preferences have been synced from your unified profile. Browse the aestheti
         # Track previous step titles for progressive context
         previous_step_titles = []
         
-        # STEP 5-7: Process each product progressively
-        # Note: search_products already filtered to optimal length based on template logic
+        # HYBRID OPTIMIZATION: Pre-batch cheap calls, then progressive with per-product parallelization
+        # This balances speed (~10-15s instead of 7-12s) with UX (progressive rendering restored)
+        
         total_steps = len(enhanced_products)
+        tool_ctx = ToolContext(ctx)
+        
+        print(f"[ORCHESTRATOR] 🚀 Starting hybrid generation for {total_steps} products...")
+        
+        # BATCH 1: Pre-generate ALL application instructions in parallel (cheap, 1-2s total)
+        print(f"[ORCHESTRATOR] Pre-generating instructions for all products...")
+        instruction_tasks = []
+        for product in enhanced_products:
+            task = generate_application_instructions(
+                product_name=product.get("name", ""),
+                brand=product.get("brand", ""),
+                category=product.get("category", ""),
+                description=product.get("description", "")
+            )
+            instruction_tasks.append(task)
+        
+        # Wait for all instructions to complete
+        instructions_results = await asyncio.gather(*instruction_tasks, return_exceptions=True)
+        
+        # Store instructions indexed by product
+        instructions_map = {}
+        for i, (product, result) in enumerate(zip(enhanced_products, instructions_results)):
+            if isinstance(result, Exception):
+                print(f"[ORCHESTRATOR] Instructions failed for {product.get('name')}: {result}")
+                instructions_map[i] = {
+                    "title": product.get("description", ""),
+                    "full_instruction": product.get("description", "")
+                }
+            elif result.get("status") == "success":
+                instructions_map[i] = {
+                    "title": result.get("title", product.get("description", "")),
+                    "full_instruction": result.get("full_instruction", product.get("description", ""))
+                }
+            else:
+                instructions_map[i] = {
+                    "title": product.get("description", ""),
+                    "full_instruction": product.get("description", "")
+                }
+        
+        print(f"[ORCHESTRATOR] ✓ Instructions ready. Now generating products progressively...")
+        
+        # PROGRESSIVE GENERATION: For each product, parallelize image + why, then yield
+        # This shows steps as they complete while still being faster than pure serial
+        previous_step_titles = []
+        
         for i, product in enumerate(enhanced_products, 1):
             sku = product.get("sku", "")
             brand = product.get("brand", "")
@@ -407,16 +453,83 @@ Your preferences have been synced from your unified profile. Browse the aestheti
             yield Event(
                 author=self.name,
                 invocation_id=ctx.invocation_id,
-                content=types.Content(parts=[types.Part(text=f"✨ Step {i}/{config.MAX_ROUTINE_STEPS}: {product.get('name')}...")])
+                content=types.Content(parts=[types.Part(text=f"✨ Step {i}/{total_steps}: {product.get('name')}...")])
             )
             
-            # Small delay to ensure event is flushed to frontend
-            await asyncio.sleep(0.1)
+            # Parallel tasks for THIS product only
+            product_tasks = []
+            task_types = []
+            
+            # Task 1: Image generation (if needed)
+            needs_image = product.get("needs_image", False)
+            if needs_image:
+                # Load actual product image for visual reference
+                product_image_part = None
+                try:
+                    image_path = os.path.join(
+                        os.path.dirname(__file__),
+                        f"data/{config.BRAND_DATA_SET}/images/products/product_{sku}.jpg"
+                    )
+                    if os.path.exists(image_path):
+                        with open(image_path, "rb") as f:
+                            product_image_part = types.Part.from_bytes(
+                                data=f.read(),
+                                mime_type="image/jpeg"
+                            )
+                except Exception as e:
+                    print(f"[ORCHESTRATOR] Image load failed for {sku}: {e}")
+                
+                image_task = generate_product_image(
+                    tool_context=tool_ctx,
+                    product_sku=sku,
+                    product_name=product.get("name", ""),
+                    brand=brand,
+                    category=product.get("sub_category", product.get("category", "")),
+                    instruction=instructions_map[i-1]["title"],
+                    full_instruction=instructions_map[i-1]["full_instruction"],
+                    skin_type=quiz_responses.get("skin_type", ""),
+                    skin_tone=quiz_responses.get("skin_tone", "#F5D7C4"),
+                    concerns=quiz_responses.get("concerns", []),
+                    aesthetic_name=aesthetic_name,
+                    step_number=i,
+                    total_steps=total_steps,
+                    previous_steps=previous_step_titles.copy(),
+                    product_image_part=product_image_part
+                )
+                product_tasks.append(image_task)
+                task_types.append("image")
+            
+            # Task 2: Why copy generation
+            why_task = generate_why_copy(
+                product_name=product.get("name", ""),
+                brand=brand,
+                description=product.get("description", ""),
+                skin_type=quiz_responses.get("skin_type", ""),
+                concerns=quiz_responses.get("concerns", []),
+                skin_tone=quiz_responses.get("skin_tone", ""),
+                aesthetic_name=aesthetic_name
+            )
+            product_tasks.append(why_task)
+            task_types.append("why")
+            
+            # Execute image + why in parallel for THIS product
+            results = await asyncio.gather(*product_tasks, return_exceptions=True)
+            
+            # Extract results
+            ai_image_artifact_name = None
+            why_text = product.get("why_this_base", "Perfect for your routine")
+            
+            for task_type, result in zip(task_types, results):
+                if isinstance(result, Exception):
+                    print(f"[ORCHESTRATOR] {task_type} failed for {product.get('name')}: {result}")
+                elif task_type == "image" and result.get("status") == "success":
+                    ai_image_artifact_name = result.get("artifact_name")
+                elif task_type == "why" and result.get("status") == "success":
+                    why_text = result.get("why_text", why_text)
             
             # Save brand logo as artifact
             brand_logo_artifact = None
             try:
-                # Match actual filename format: brand_bobbi_brown.png (underscores, not hyphens)
                 brand_slug = brand.lower().replace(' ', '_').replace('.', '')
                 logo_filename = f"brand_{brand_slug}.png"
                 logo_path = os.path.join(
@@ -428,20 +541,15 @@ Your preferences have been synced from your unified profile. Browse the aestheti
                     with open(logo_path, "rb") as f:
                         logo_bytes = f.read()
                     logo_part = types.Part.from_bytes(data=logo_bytes, mime_type="image/png")
-                    # Use same name as file for consistency
                     artifact_name = logo_filename
                     await callback_ctx.save_artifact(artifact_name, logo_part)
                     brand_logo_artifact = artifact_name
-                    print(f"[ORCHESTRATOR] ✓ Saved logo for {brand}")
-                else:
-                    print(f"[ORCHESTRATOR] Logo not found: {logo_path}")
             except Exception as e:
                 print(f"[ORCHESTRATOR] Logo save failed for {brand}: {e}")
             
             # Save product image as artifact (if exists)
             product_image_artifact = None
             try:
-                # Match actual filename format: product_CL-TDO-011.jpg
                 image_filename = f"product_{sku}.jpg"
                 image_path = os.path.join(
                     os.path.dirname(__file__),
@@ -455,82 +563,15 @@ Your preferences have been synced from your unified profile. Browse the aestheti
                     artifact_name = f"product_{sku}.jpg"
                     await callback_ctx.save_artifact(artifact_name, image_part)
                     product_image_artifact = artifact_name
-                    print(f"[ORCHESTRATOR] ✓ Saved product image for {sku}")
-                else:
-                    print(f"[ORCHESTRATOR] Product image not found: {image_path}")
             except Exception as e:
                 print(f"[ORCHESTRATOR] Product image save failed for {sku}: {e}")
             
-            # Generate application instructions for this product FIRST (needed for image prompt)
-            instruction_title = product.get("description", "")
-            instruction_full = product.get("description", "")
+            # Get instruction from pre-generated map
+            instruction_title = instructions_map[i-1]["title"]
+            instruction_full = instructions_map[i-1]["full_instruction"]
             
-            try:
-                instructions_result = await generate_application_instructions(
-                    product_name=product.get("name", ""),
-                    brand=brand,
-                    category=product.get("category", ""),
-                    description=product.get("description", "")
-                )
-                
-                if instructions_result.get("status") == "success":
-                    instruction_title = instructions_result.get("title", instruction_title)
-                    instruction_full = instructions_result.get("full_instruction", instruction_full)
-            except Exception as e:
-                print(f"[ORCHESTRATOR] Instructions generation failed for {product.get('name')}: {e}")
-            
-            # PHASE 2: Smart image generation - only generate if needs_image is True
-            tool_ctx = ToolContext(ctx)
-            
-            ai_image_artifact_name = None
-            needs_image = product.get("needs_image", False)
-            image_priority = product.get("image_priority", "none")
-            
-            if needs_image:
-                print(f"[ORCHESTRATOR] Generating AI image for step {i} (priority: {image_priority})")
-                try:
-                    # PHASE 3: Pass progressive context
-                    image_result = await generate_product_image(
-                        tool_context=tool_ctx,
-                        product_sku=sku,
-                        product_name=product.get("name", ""),
-                        brand=brand,
-                        category=product.get("sub_category", product.get("category", "")),
-                        instruction=instruction_title,  # Main action for image
-                        full_instruction=instruction_full,  # Full context for prep hints (amount, technique)
-                        skin_type=quiz_responses.get("skin_type", ""),
-                        skin_tone=quiz_responses.get("skin_tone", "#F5D7C4"),
-                        concerns=quiz_responses.get("concerns", []),
-                        aesthetic_name=aesthetic_name,
-                        step_number=i,
-                        total_steps=total_steps,
-                        previous_steps=previous_step_titles.copy()  # Pass previous titles for context
-                    )
-                    
-                    if image_result.get("status") == "success":
-                        ai_image_artifact_name = image_result.get("artifact_name")
-                except Exception as e:
-                    print(f"[ORCHESTRATOR] AI image generation failed for {product.get('name')}: {e}")
-            else:
-                print(f"[ORCHESTRATOR] Skipping AI image for step {i} (priority: {image_priority})")
-            
-            # Generate why copy for this product
-            why_text = product.get("why_this_base", "Perfect for your routine")
-            try:
-                why_result = await generate_why_copy(
-                    product_name=product.get("name", ""),
-                    brand=product.get("brand", ""),
-                    description=product.get("description", ""),
-                    skin_type=quiz_responses.get("skin_type", ""),
-                    concerns=quiz_responses.get("concerns", []),
-                    skin_tone=quiz_responses.get("skin_tone", ""),
-                    aesthetic_name=aesthetic_name
-                )
-                
-                if why_result.get("status") == "success":
-                    why_text = why_result.get("why_text", why_text)
-            except Exception as e:
-                print(f"[ORCHESTRATOR] Why copy generation failed for {product.get('name')}: {e}")
+            # Track this step's title for next iteration
+            previous_step_titles.append(instruction_title)
             
             # Add completed step with artifact names and product metadata
             step = {
@@ -543,14 +584,13 @@ Your preferences have been synced from your unified profile. Browse the aestheti
                     "brand_logo_artifact": brand_logo_artifact,
                     "product_image_artifact": product_image_artifact,
                     "ai_image_artifact": ai_image_artifact_name,
-                    "title": instruction_title,  # Short action for title (matches image)
-                    "description": instruction_full,  # Full multi-step instruction for routine view
-                    "original_description": product.get("description", ""),  # Fix #4: Preserve product marketing copy
+                    "title": instruction_title,
+                    "description": instruction_full,
+                    "original_description": product.get("description", ""),
                     "why": why_text,
                     "skin_types": product.get("skin_types", []),
                     "concerns": product.get("concerns", []),
                     "sub_category": product.get("sub_category", ""),
-                    # PHASE 7: Add complete product metadata
                     "price": product.get("price"),
                     "category": product.get("category", ""),
                     "sensory_descriptors": product.get("sensory_descriptors", {}),
@@ -559,16 +599,7 @@ Your preferences have been synced from your unified profile. Browse the aestheti
             }
             routine_steps.append(step)
             
-            # PHASE 3: Track this step's title for next iteration's context
-            previous_step_titles.append(instruction_title)
-            
-            # DEBUG: Log artifact names
-            print(f"[ORCHESTRATOR] Step {i} artifacts:")
-            print(f"  - Brand logo: {brand_logo_artifact}")
-            print(f"  - Product image: {product_image_artifact}")
-            print(f"  - AI image: {ai_image_artifact_name}")
-            
-            # PHASE 2: Yield progressive update with routine metadata
+            # Yield progressive update with routine metadata
             custom_experience_data = {
                 "type": "routine_progress",
                 "aesthetic_id": aesthetic_id,
@@ -581,7 +612,6 @@ Your preferences have been synced from your unified profile. Browse the aestheti
                 "quiz_responses": quiz_responses
             }
             
-            # This event contains the updated routine with this new step
             yield Event(
                 author=self.name,
                 invocation_id=ctx.invocation_id,
@@ -590,9 +620,6 @@ Your preferences have been synced from your unified profile. Browse the aestheti
                     agent_state={"custom_experience_data": custom_experience_data}
                 )
             )
-            
-            # Small delay between steps to ensure progressive display
-            await asyncio.sleep(0.2)
         
         # PHASE 2: Final completion event with routine metadata
         final_data = {

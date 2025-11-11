@@ -184,13 +184,16 @@ def search_products(
     num_concerns = len(concerns_lower) if concerns_lower else 0
     complexity_bonus = min(num_concerns - 1, 2)  # 0-2 extra steps for multiple concerns
     
-    # Base on routine type (PM/Glam get more steps)
+    # Base on routine type (PM/Glam get more steps, AM/Everyday stay minimal)
     routine_bonus = 0
     if subcategory:
-        if subcategory.lower() in ['pm', 'glam']:
-            routine_bonus = 2
-        elif subcategory.lower() in ['am', 'everyday']:
-            routine_bonus = 1
+        subcat_lower = subcategory.lower()
+        if subcat_lower in ['am', 'everyday']:
+            routine_bonus = 0  # Keep minimal - 4-5 steps
+        elif subcat_lower == 'pm':
+            routine_bonus = 1  # Add 1 optional step - 5-6 steps
+        elif subcat_lower == 'glam':
+            routine_bonus = 2  # Add 2 optional steps - 6-7 steps
     
     # Count required steps
     num_required = sum(1 for s in routine_steps if s.get("required", False))
@@ -419,11 +422,13 @@ async def generate_product_image(
     aesthetic_name: str,
     step_number: int = 1,
     total_steps: int = 1,
-    previous_steps: Optional[List[str]] = None
+    previous_steps: Optional[List[str]] = None,
+    product_image_part: Optional[types.Part] = None
 ) -> Dict[str, Any]:
     """
     Generates personalized product application image using gemini-2.5-flash-image-preview.
     Uses the main instruction (title) for action, full instruction for prep context.
+    CRITICAL: Uses actual product image as visual reference for consistency.
     
     Phase 3: Progressive image context - later images know what came before.
     
@@ -431,6 +436,7 @@ async def generate_product_image(
         step_number: Current step number (1-based)
         total_steps: Total steps in routine
         previous_steps: List of previous step titles for context
+        product_image_part: Actual product image for visual reference (CRITICAL)
     """
     max_retries = 3
     retry_delay = 2  # seconds
@@ -516,6 +522,22 @@ ROUTINE PROGRESSION CONTEXT:
 """
     
     # PHASE 14: Enhanced prompt for specific product types
+    # CRITICAL: Product visual reference
+    product_visual_context = ""
+    if product_image_part:
+        product_visual_context = """
+PRODUCT VISUAL REFERENCE (CRITICAL):
+- An image of the actual product is provided
+- The generated image MUST show THIS EXACT PRODUCT being applied
+- Match the product's: color, packaging design, shape, size, brand aesthetic
+- The product in the application image should be VISUALLY IDENTICAL to the reference
+- This ensures consistency between the product thumbnail and application image
+"""
+    else:
+        product_visual_context = """
+NOTE: No product image provided - generate based on typical {brand} {product_name} appearance
+"""
+    
     product_specific_rules = ""
     
     if "mascara" in category_lower or "mascara" in product_lower:
@@ -548,7 +570,8 @@ EYESHADOW-SPECIFIC RULES (CRITICAL):
 - The completed eye(s) should show multiple shades: lighter on inner corner, medium on lid, darker on outer corner
 """
     
-    prompt = f"""Create a REALISTIC, RELATABLE beauty routine step image:
+    # Build multimodal prompt
+    prompt_text = f"""Create a REALISTIC, RELATABLE beauty routine step image:
 
 MAIN ACTION TO SHOW: "{instruction}"
 
@@ -558,6 +581,8 @@ PREP NOTES: {prep_context}
 PRODUCT: {brand} {product_name}
 APPLICATION AREA: {app_area}
 STEP: {step_number} of {total_steps}
+
+{product_visual_context}
 
 {product_specific_rules}
 
@@ -574,6 +599,14 @@ SCENE COMPOSITION:
 - Natural bathroom lighting (soft, diffused, NOT editorial)
 - Simple background (mirror, sink edge - keep it realistic)
 - Casual, intimate perspective (like a bathroom selfie angle)
+
+PRODUCT VISIBILITY (NATURAL & OPTIONAL):
+- The product MAY be visible if it's natural (e.g., holding applicator with compact nearby on vanity)
+- The product does NOT need to be visible if it would be awkward or forced
+- If shown: only in natural positions (in hand, on vanity edge, on lap)
+- NEVER overlay product unnaturally on face/body or floating in air
+- Focus is on the APPLICATION ACTION, not showcasing the product
+- It's perfectly fine if product is out of frame or behind hands
 
 ACTION & PRODUCT TEXTURE:
 - Show the EXACT action: {instruction}
@@ -609,8 +642,18 @@ Generate ONE realistic, relatable application image of a woman in her actual rou
         start_time = time.time()
         
         try:
-            text_part = types.Part.from_text(text=prompt)
-            contents = types.Content(role="user", parts=[text_part])
+            # Build multimodal content: product image + text prompt
+            parts = []
+            
+            # Add product image first if provided (CRITICAL for visual consistency)
+            if product_image_part:
+                parts.append(product_image_part)
+                parts.append(types.Part.from_text(text="[Product image for reference - match this product's appearance exactly]"))
+            
+            # Add text prompt
+            parts.append(types.Part.from_text(text=prompt_text))
+            
+            contents = types.Content(role="user", parts=parts)
             
             print(f"[{time.time()}] [{product_name}] Sending request to GenAI API...")
             
