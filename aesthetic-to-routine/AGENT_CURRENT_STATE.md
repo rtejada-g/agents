@@ -373,11 +373,30 @@ npm run dev
 ✅ **AI Imagery**: Realistic application photos
 ✅ **Custom Aesthetics**: User can enter free-text aesthetics
 ✅ **UDP Storytelling**: Demonstrates unified data platform value through personalized greetings, pre-populated preferences, and multi-source messaging
-✅ **Trending Tags**: Display behavioral data on aesthetic tiles (#hashtag format)
+✅ **Trending Tags**: Display behavioral data on aesthetic tiles (#hashtag format, increased size to 0.85rem label / 0.95rem hashtags)
 ✅ **Consolidated Quiz**: Single-page modal for streamlined UX
+✅ **Carousel Interactions**: Smooth drag/click distinction with 5px threshold
+✅ **Customer Profile Loading**: Backend serves profile, frontend consumes (with timing caveat - see Known Issues)
+
+### Recent Enhancements
+
+**UI/UX Improvements:**
+- **Trending Tags Typography**: Increased from default to 0.85rem (label) and 0.95rem bold (hashtags) for better readability
+- **Carousel Click Handling**: Added 5px drag threshold to prevent position jumps when clicking cards
+- **Smooth Scroll**: Auto-resume carousel scrolling after 3 seconds of inactivity
+
+**UDP Integration:**
+- **Customer Profile**: Loads from `customer_profile.json` (simulates unified CDP data)
+- **Personalized Greeting**: Shows "Welcome Back, [Name]" with tailored subtitle
+- **Pre-Populated Quiz**: Auto-fills preferences from profile (skin type, concerns, skin tone)
+- **Completion Messaging**: References unified data sources in final routine message
+
+### Known Issues
+⚠️ **Customer Profile Auto-Load Timing**: Profile loads when switching to chat view but not immediately on custom experience mount. Root cause: Zustand store session loading happens after component initialization. Workaround: Click wrench button to trigger profile load.
 
 ### Pending Improvements
-⏳ **Multi-Agent Refactor**: Split orchestrator into specialized agents for parallel execution
+⏳ **Multi-Agent Refactor**: Split orchestrator into specialized agents for parallel execution (performance optimization)
 ⏳ **Adaptive Routine Length**: Vary step count based on user complexity (currently ~5 steps for all)
 ⏳ **Routine History**: Browse previously generated routines within session
 ⏳ **Enhanced Personalization**: Leverage purchase history for brand-specific recommendations
+⏳ **Speed Optimization**: Analyze ADK execution flow to identify bottlenecks in routine generation (30-45s currently)
