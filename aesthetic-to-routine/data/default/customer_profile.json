@@ -1,0 +1,48 @@
+{
+  "profile_id": "demo_elc_customer",
+  "customer_name": "Sarah",
+  "data_source": "unified_cdp",
+  "unified_at": "2025-01-10T00:00:00Z",
+  "preferences": {
+    "skin_type": "Dry",
+    "concerns": ["Hydration", "Anti-Aging"],
+    "skin_tone": "#F5D7C4"
+  },
+  "purchase_history": [
+    {
+      "brand": "Estee Lauder",
+      "category": "serum",
+      "product_name": "Advanced Night Repair",
+      "purchase_date": "2024-11-15",
+      "satisfaction_score": 4.5
+    },
+    {
+      "brand": "Clinique",
+      "category": "moisturizer",
+      "product_name": "Moisture Surge",
+      "purchase_date": "2024-10-20",
+      "satisfaction_score": 5.0
+    },
+    {
+      "brand": "La Mer",
+      "category": "moisturizer",
+      "product_name": "Crème de la Mer",
+      "purchase_date": "2024-09-05",
+      "satisfaction_score": 5.0
+    }
+  ],
+  "brand_affinity": ["Estee Lauder", "Clinique", "La Mer"],
+  "behavioral_data": {
+    "preferred_routine_time": "PM",
+    "aesthetic_interests": ["Ethereal Glow", "Korean Glow"],
+    "trending_engagement": ["glass skin", "hydration", "dewy finish"]
+  },
+  "skin_scan_history": [
+    {
+      "scan_date": "2024-12-01",
+      "confirmed_type": "Dry",
+      "hydration_level": 45,
+      "concerns_detected": ["fine lines", "dehydration"]
+    }
+  ]
+}

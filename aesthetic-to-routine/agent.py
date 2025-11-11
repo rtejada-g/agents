@@ -18,7 +18,7 @@ from google.adk.events import Event, EventActions
 from google.adk.tools import ToolContext
 from google.genai import types
 from pydantic import Field, ConfigDict
-from typing import AsyncGenerator, Any
+from typing import AsyncGenerator, Any, Dict
 from typing_extensions import override
 import json
 import os
@@ -36,6 +36,34 @@ from .tools import (
     generate_why_copy,
     generate_application_instructions
 )
+
+
+# ============================================================================
+# CUSTOMER PROFILE LOADER (UDP Story)
+# ============================================================================
+
+def load_customer_profile() -> Dict[str, Any]:
+    """Load customer profile from unified CDP for pre-population."""
+    profile_path = os.path.join(
+        os.path.dirname(__file__),
+        f"data/{config.BRAND_DATA_SET}/customer_profile.json"
+    )
+    try:
+        with open(profile_path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"[CUSTOMER_PROFILE] Failed to load: {e}")
+        # Return default profile if file doesn't exist
+        return {
+            "customer_name": "there",
+            "preferences": {
+                "skin_type": "Normal",
+                "concerns": ["Hydration"],
+                "skin_tone": "#F5D7C4"
+            },
+            "brand_affinity": [],
+            "purchase_history": []
+        }
 
 
 # ============================================================================
@@ -268,14 +296,22 @@ class AestheticToRoutineOrchestrator(BaseAgent):
         
         user_text_lower = user_text.lower()
         
-        # STEP 1: Handle greeting
+        # STEP 1: Handle greeting - Load and return customer profile for pre-population
         if "hello" in user_text_lower or "hi" in user_text_lower:
+            # Load customer profile from unified CDP
+            customer_profile = load_customer_profile()
+            customer_name = customer_profile.get("customer_name", "there")
+            
+            # Return profile data in agent_state for frontend to use
             yield Event(
                 author=self.name,
                 invocation_id=ctx.invocation_id,
-                content=types.Content(parts=[types.Part(text=f"""Welcome to {config.COMPANY_NAME}! ✨
+                content=types.Content(parts=[types.Part(text=f"""Welcome back, {customer_name}! ✨
 
-I'm here to help you discover your perfect personalized routine. Browse the aesthetics above and select one that resonates with you!""")])
+Your preferences have been synced from your unified profile. Browse the aesthetics below and I'll create a personalized routine based on your skin type, purchase history, and preferences.""")]),
+                actions=EventActions(
+                    agent_state={"customer_profile": customer_profile}
+                )
             )
             return
         
@@ -573,14 +609,36 @@ I'm here to help you discover your perfect personalized routine. Browse the aest
         concerns = quiz_responses.get("concerns", [])
         main_concern = concerns[0] if concerns else "skin"
         
+        # Load customer profile for UDP messaging
+        customer_profile = load_customer_profile()
+        brand_affinity = customer_profile.get("brand_affinity", [])
+        purchase_history = customer_profile.get("purchase_history", [])
+        
+        # Count unique brands in routine
+        unique_brands = set(step.get("product", {}).get("brand", "") for step in routine_steps)
+        num_brands = len(unique_brands)
+        
+        # Build UDP story message
+        udp_details = []
+        udp_details.append(f"• Your saved preferences ({skin_type} skin, {main_concern} priority)")
+        if purchase_history:
+            loved_brand = purchase_history[0].get("brand", "")
+            udp_details.append(f"• Purchase history (you loved {loved_brand} products)")
+        udp_details.append(f"• Product catalog across {num_brands} ELC brands")
+        if brand_affinity:
+            udp_details.append(f"• Brand affinity patterns")
+        
+        udp_message = "\n".join(udp_details)
+        
         yield Event(
             author=self.name,
             invocation_id=ctx.invocation_id,
             content=types.Content(parts=[types.Part(text=f"""✨ Your {aesthetic_name} routine is ready!
 
-I've curated a {len(routine_steps)}-step routine featuring products from across our premium brands, specifically chosen for {skin_type} skin and {main_concern} concerns.
+I've curated a {len(routine_steps)}-step routine by unifying data from:
+{udp_message}
 
-Each product image and recommendation was AI-generated just for you, reflecting your unique skin profile.""")]),
+Each recommendation is AI-personalized using our Unified Data Platform, combining your profile, product intelligence, and behavioral insights.""")]),
             actions=EventActions(
                 agent_state={"custom_experience_data": final_data}
             )
@@ -589,7 +647,7 @@ Each product image and recommendation was AI-generated just for you, reflecting 
 
 # Initialize orchestrator
 orchestrator = AestheticToRoutineOrchestrator(
-    name="AestheticToRoutineOrchestrator",
+    name="Orchestrator",
     product_agent=product_specialist_agent,
     brand_agent=brand_voice_agent,
     image_agent=image_generation_agent,

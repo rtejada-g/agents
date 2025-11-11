@@ -734,21 +734,49 @@ async def generate_why_copy(
     is perfect for the user's specific needs.
     
     Phase 3: Embedded ELC brand voice for consistency.
+    UDP Enhancement: References unified customer data sources.
     """
     print(f"[GENERATE_WHY] Creating why copy for {product_name}")
     
     concerns_text = ", ".join(concerns) if concerns else "skin health"
+    
+    # Load customer profile for UDP context
+    from . import config
+    profile_path = os.path.join(
+        os.path.dirname(__file__),
+        f"data/{config.BRAND_DATA_SET}/customer_profile.json"
+    )
+    
+    udp_context = ""
+    try:
+        with open(profile_path, 'r', encoding='utf-8') as f:
+            customer_profile = json.load(f)
+            purchase_history = customer_profile.get("purchase_history", [])
+            brand_affinity = customer_profile.get("brand_affinity", [])
+            
+            # Add UDP context if available
+            if purchase_history or brand_affinity:
+                udp_context = "\nUNIFIED DATA PLATFORM CONTEXT (use subtly in copy):\n"
+                if brand in brand_affinity:
+                    udp_context += f"- Customer has high affinity for {brand} products\n"
+                if purchase_history:
+                    loved_products = [p for p in purchase_history if p.get("satisfaction_score", 0) >= 4.5]
+                    if loved_products:
+                        udp_context += f"- Customer loved similar products (rated 4.5+)\n"
+    except:
+        pass
     
     prompt = f"""{ELC_BRAND_VOICE}
 
 YOUR TASK:
 Write ONE sentence explaining why {brand} {product_name} is perfect for THIS specific user.
 
-USER PROFILE:
-- Skin type: {skin_type}
-- Skin tone: {skin_tone}
-- Concerns: {concerns_text}
+USER PROFILE (from Unified Customer Data Platform):
+- Confirmed skin type: {skin_type} (from skin scans + purchase history)
+- Active concerns: {concerns_text} (from preference profile)
 - Desired aesthetic: {aesthetic_name}
+- Skin tone: {skin_tone}
+{udp_context}
 
 PRODUCT:
 {brand} {product_name}
@@ -895,12 +923,20 @@ Generate the instructions:"""
             elif line.startswith('FULL:'):
                 full_instruction = line.replace('FULL:', '').strip()
         
-        # Fallback if parsing fails
+        # Fallback if parsing fails - FIX: Don't duplicate content
         if not title or not full_instruction:
-            # Use full text as fallback
-            sentences = text.split('.')
-            title = sentences[0].strip() + '.' if sentences else text
-            full_instruction = text
+            sentences = [s.strip() for s in text.split('.') if s.strip()]
+            
+            if not title and sentences:
+                # Use first sentence as title
+                title = sentences[0] + '.'
+            elif not title:
+                # Last resort: create generic title from category
+                title = f"Apply {product_name}"
+            
+            if not full_instruction:
+                # Use all sentences for full instruction
+                full_instruction = '. '.join(sentences) + '.' if sentences else description
         
         print(f"[GENERATE_INSTRUCTIONS] ✓ Title: {title[:50]}...")
         print(f"[GENERATE_INSTRUCTIONS] ✓ Full: {full_instruction[:50]}...")

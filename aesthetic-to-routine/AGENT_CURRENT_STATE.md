@@ -365,16 +365,19 @@ npm run dev
 ## Success Criteria
 
 ### Current Status
-✅ **Functional**: Generates complete routines with images  
-✅ **Polished UI**: Executive-ready presentation  
-✅ **Dual-View**: Toggle between custom and technical views  
-✅ **Personalized**: Skin type + concerns drive recommendations  
-✅ **Multi-Brand**: Spans entire ELC portfolio  
-✅ **AI Imagery**: Realistic application photos  
-✅ **Custom Aesthetics**: User can enter free-text aesthetics  
+✅ **Functional**: Generates complete routines with images
+✅ **Polished UI**: Executive-ready presentation
+✅ **Dual-View**: Toggle between custom and technical views
+✅ **Personalized**: Skin type + concerns drive recommendations
+✅ **Multi-Brand**: Spans entire ELC portfolio
+✅ **AI Imagery**: Realistic application photos
+✅ **Custom Aesthetics**: User can enter free-text aesthetics
+✅ **UDP Storytelling**: Demonstrates unified data platform value through personalized greetings, pre-populated preferences, and multi-source messaging
+✅ **Trending Tags**: Display behavioral data on aesthetic tiles (#hashtag format)
+✅ **Consolidated Quiz**: Single-page modal for streamlined UX
 
-### Future Goals
-⏳ **Multi-Agent**: Refactor for parallel execution and specialization  
-⏳ **Adaptive Length**: Routines vary based on user complexity  
-⏳ **Routine History**: View past routines within session  
-⏳ **Trending Tags**: Display social proof on aesthetic tiles  
+### Pending Improvements
+⏳ **Multi-Agent Refactor**: Split orchestrator into specialized agents for parallel execution
+⏳ **Adaptive Routine Length**: Vary step count based on user complexity (currently ~5 steps for all)
+⏳ **Routine History**: Browse previously generated routines within session
+⏳ **Enhanced Personalization**: Leverage purchase history for brand-specific recommendations
